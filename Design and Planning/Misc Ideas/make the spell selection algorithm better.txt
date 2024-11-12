@@ -1,0 +1,8 @@
+Use a dictionary to link CurrentManaAmounts to a specific prefix
+
+e.g. Dictionary<CurrentManaAmount, SpellPrefix> map = new Dictionary<CurrentManaAmount, SpellPrefix>();
+
+then add to dict with 
+map.Add(new CurrentManaAmount(1,0,0,1,1), [PrefixName]);
+
+etc
