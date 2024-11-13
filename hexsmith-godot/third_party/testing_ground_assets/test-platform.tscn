@@ -1,0 +1,20 @@
+[gd_scene load_steps=3 format=3 uid="uid://cesliqrxfdtgy"]
+
+[ext_resource type="Texture2D" uid="uid://73c5rgico80h" path="res://third_party/testing_ground_assets/platformertiles.png" id="1_eywiq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c3och"]
+size = Vector2(96, 32)
+
+[node name="Test platform" type="AnimatableBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_c3och")
+one_way_collision = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+rotation = 1.5708
+texture = ExtResource("1_eywiq")
+region_enabled = true
+region_rect = Rect2(128, 0, 32, 96)
