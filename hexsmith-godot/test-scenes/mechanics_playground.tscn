@@ -50,4 +50,5 @@ rotation = -1.5708
 shape = SubResource("WorldBoundaryShape2D_5pgev")
 
 [node name="Test platform" parent="." instance=ExtResource("3_byg2d")]
-position = Vector2(-63, -75)
+position = Vector2(-8, -98)
+scale = Vector2(1, 0.518938)
