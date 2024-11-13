@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6n0innec11mx"
-path="res://.godot/imported/JumpUpAndDownAttack.png-6f5acc13e42c5a062c4207fcac34211e.ctex"
+uid="uid://dg2n3i81pgi1h"
+path="res://.godot/imported/HairSpritesheet.png-c0be0191ace34e4549c8df5eded5bf65.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://third_party/testing_ground_assets/test_character_spritesheet/JumpUpAndDownAttack.png"
-dest_files=["res://.godot/imported/JumpUpAndDownAttack.png-6f5acc13e42c5a062c4207fcac34211e.ctex"]
+source_file="res://third_party/testing_ground_assets/test_character_spritesheet/HairSpritesheet.png"
+dest_files=["res://.godot/imported/HairSpritesheet.png-c0be0191ace34e4549c8df5eded5bf65.ctex"]
 
 [params]
 

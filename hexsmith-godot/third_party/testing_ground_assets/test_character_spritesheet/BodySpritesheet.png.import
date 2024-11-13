@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfil7s1j7vn8u"
-path="res://.godot/imported/AttackAnimation.png-0f09655c409cc4e692fed88caf245ee4.ctex"
+uid="uid://c11nd67la3n7p"
+path="res://.godot/imported/BodySpritesheet.png-18e59cb3831453d996a827facb368e38.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://third_party/testing_ground_assets/test_character_spritesheet/AttackAnimation.png"
-dest_files=["res://.godot/imported/AttackAnimation.png-0f09655c409cc4e692fed88caf245ee4.ctex"]
+source_file="res://third_party/testing_ground_assets/test_character_spritesheet/BodySpritesheet.png"
+dest_files=["res://.godot/imported/BodySpritesheet.png-18e59cb3831453d996a827facb368e38.ctex"]
 
 [params]
 

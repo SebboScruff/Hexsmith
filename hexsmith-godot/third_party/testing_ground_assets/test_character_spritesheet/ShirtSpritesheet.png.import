@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjomruejqbafg"
-path="res://.godot/imported/deathAnimation.png-2213b743c9b7f05f6c6d9b51bbb9c480.ctex"
+uid="uid://0lyc0aatal6b"
+path="res://.godot/imported/ShirtSpritesheet.png-fcfc93484a22d99f9feba376693a888a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://third_party/testing_ground_assets/test_character_spritesheet/deathAnimation.png"
-dest_files=["res://.godot/imported/deathAnimation.png-2213b743c9b7f05f6c6d9b51bbb9c480.ctex"]
+source_file="res://third_party/testing_ground_assets/test_character_spritesheet/ShirtSpritesheet.png"
+dest_files=["res://.godot/imported/ShirtSpritesheet.png-fcfc93484a22d99f9feba376693a888a.ctex"]
 
 [params]
 
