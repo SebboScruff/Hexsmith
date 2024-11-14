@@ -1,13 +1,10 @@
 extends CharacterBody2D
 
 
-const SPEED = 300.0
+const SPEED = 150.0
 const JUMP_VELOCITY = -400.0
 
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
-@onready var hair_sprite: AnimatedSprite2D = $HairSprite
-@onready var shirt_sprite: AnimatedSprite2D = $ShirtSprite
-@onready var trouser_sprite: AnimatedSprite2D = $TrouserSprite
 
 func _physics_process(delta: float) -> void:
 	# Add the gravity.
@@ -20,17 +17,21 @@ func _physics_process(delta: float) -> void:
 
 	var direction := Input.get_axis("overworld_move_left", "overworld_move_right")
 	
-	#Sprite Animation
-	if direction < 0:
+	#Sprite Animation:
+	# Flip depending on Movement Direction
+	if direction > 0:
 		body_sprite.flip_h = false
-		hair_sprite.flip_h = false
-		shirt_sprite.flip_h = false
-		trouser_sprite.flip_h = false
-	elif direction > 0:
+	elif direction < 0:
 		body_sprite.flip_h = true
-		hair_sprite.flip_h = true
-		shirt_sprite.flip_h = true
-		trouser_sprite.flip_h = true
+		
+	#Then determine animations
+	if is_on_floor():
+		if direction == 0:
+			body_sprite.play("idle")
+		else:
+			body_sprite.play("run")
+	else:
+		body_sprite.play("jump_whole")
 		
 	# Movement
 	if direction:
