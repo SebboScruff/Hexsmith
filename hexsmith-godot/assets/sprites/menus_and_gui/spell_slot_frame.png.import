@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bhnj52ci1micl"
-path="res://.godot/imported/mana_bar_frame.png-fc0b762709ca4280ac654aad3e23efc5.ctex"
+path="res://.godot/imported/spell_slot_frame.png-01e4c7d3a1a785b282e4803ae771c326.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/mana_bar_frame.png"
-dest_files=["res://.godot/imported/mana_bar_frame.png-fc0b762709ca4280ac654aad3e23efc5.ctex"]
+source_file="res://assets/sprites/menus_and_gui/spell_slot_frame.png"
+dest_files=["res://.godot/imported/spell_slot_frame.png-01e4c7d3a1a785b282e4803ae771c326.ctex"]
 
 [params]
 

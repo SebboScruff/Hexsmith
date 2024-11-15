@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://0jg2rod428bj"
-path="res://.godot/imported/mana_bar.png-e6bbc28d62c7d6271761130f4712f179.ctex"
+uid="uid://rvreceorq8gv"
+path="res://.godot/imported/spell_slot_icon.png-87cbb30d9a7b15e303ea5c6bb99935c8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/mana_bar.png"
-dest_files=["res://.godot/imported/mana_bar.png-e6bbc28d62c7d6271761130f4712f179.ctex"]
+source_file="res://assets/sprites/menus_and_gui/spell_slot_icon.png"
+dest_files=["res://.godot/imported/spell_slot_icon.png-87cbb30d9a7b15e303ea5c6bb99935c8.ctex"]
 
 [params]
 
