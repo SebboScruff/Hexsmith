@@ -1,6 +1,6 @@
 [gd_scene load_steps=25 format=3 uid="uid://bhapy03ndyqo8"]
 
-[ext_resource type="Script" path="res://characters/player/player_controller.gd" id="1_nvfm5"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d1o63"]

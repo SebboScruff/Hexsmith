@@ -1,7 +1,7 @@
 [gd_scene load_steps=10 format=4 uid="uid://b026oh5eny5o2"]
 
 [ext_resource type="TileSet" uid="uid://cx22yeu87jm6g" path="res://test-scenes/test-scene-tilemap.tres" id="1_c3vxp"]
-[ext_resource type="PackedScene" uid="uid://bhapy03ndyqo8" path="res://characters/player/player.tscn" id="1_jdw74"]
+[ext_resource type="PackedScene" uid="uid://bhapy03ndyqo8" path="res://scene_prefabs/characters/player/player.tscn" id="1_jdw74"]
 [ext_resource type="PackedScene" uid="uid://cesliqrxfdtgy" path="res://third_party/testing_ground_assets/test-platform.tscn" id="3_byg2d"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_hhvqs"]
@@ -11,6 +11,21 @@ polygon = PackedVector2Array(-302, -30, -223, -31, -223, -78, -146, -79, -145, -
 polygon = PackedVector2Array(-526, -45, -527, 224, 512, 224, 512, -129, 386, -130, 384, 175, 304, 175, 305, 114, 212, 112, 208, 158, -432, 159, -431, -47)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5pgev"]
+
+[sub_resource type="Animation" id="Animation_ve7yp"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(347, -106)]
+}
 
 [sub_resource type="Animation" id="Animation_dkygm"]
 resource_name = "vertical_move"
@@ -27,21 +42,6 @@ tracks/0/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [Vector2(347, -106), Vector2(347, 166)]
-}
-
-[sub_resource type="Animation" id="Animation_ve7yp"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(347, -106)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_8y04q"]
