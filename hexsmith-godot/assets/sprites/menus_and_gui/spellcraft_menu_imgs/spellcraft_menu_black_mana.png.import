@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bq8346tx7io7g"
-path="res://.godot/imported/hp_bar_frame.png-cf0058d4d4f03ed7c71e08060bd21d33.ctex"
+uid="uid://dq1xvw8pk2b38"
+path="res://.godot/imported/spellcraft_menu_black_mana.png-8ccc1b7ff683198770584ae4e9d079a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/hp_bar_frame.png"
-dest_files=["res://.godot/imported/hp_bar_frame.png-cf0058d4d4f03ed7c71e08060bd21d33.ctex"]
+source_file="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_black_mana.png"
+dest_files=["res://.godot/imported/spellcraft_menu_black_mana.png-8ccc1b7ff683198770584ae4e9d079a2.ctex"]
 
 [params]
 

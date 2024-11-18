@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://0jg2rod428bj"
-path="res://.godot/imported/mana_bar.png-e6bbc28d62c7d6271761130f4712f179.ctex"
+path="res://.godot/imported/mana_bar.png-af3eef09c7b34520beef380b5cca617d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/mana_bar.png"
-dest_files=["res://.godot/imported/mana_bar.png-e6bbc28d62c7d6271761130f4712f179.ctex"]
+source_file="res://assets/sprites/menus_and_gui/overworld_hud_imgs/mana_bar.png"
+dest_files=["res://.godot/imported/mana_bar.png-af3eef09c7b34520beef380b5cca617d.ctex"]
 
 [params]
 

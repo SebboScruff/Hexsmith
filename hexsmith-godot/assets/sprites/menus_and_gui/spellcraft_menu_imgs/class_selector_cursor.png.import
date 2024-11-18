@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dhmu3mcksydtt"
-path="res://.godot/imported/hp_bar.png-a0d8243430eb0943bef0246d707aacbe.ctex"
+uid="uid://fcsp26ow5825"
+path="res://.godot/imported/class_selector_cursor.png-4f9844e8c03e9abf0e12f51f89aa17ac.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/hp_bar.png"
-dest_files=["res://.godot/imported/hp_bar.png-a0d8243430eb0943bef0246d707aacbe.ctex"]
+source_file="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/class_selector_cursor.png"
+dest_files=["res://.godot/imported/class_selector_cursor.png-4f9844e8c03e9abf0e12f51f89aa17ac.ctex"]
 
 [params]
 

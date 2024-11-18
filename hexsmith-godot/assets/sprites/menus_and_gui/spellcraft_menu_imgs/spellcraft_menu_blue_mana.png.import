@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rvreceorq8gv"
-path="res://.godot/imported/spell_slot_icon.png-87cbb30d9a7b15e303ea5c6bb99935c8.ctex"
+uid="uid://dprj4mn87m7ux"
+path="res://.godot/imported/spellcraft_menu_blue_mana.png-453314b311c674ba8ba0d176394190a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/spell_slot_icon.png"
-dest_files=["res://.godot/imported/spell_slot_icon.png-87cbb30d9a7b15e303ea5c6bb99935c8.ctex"]
+source_file="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_blue_mana.png"
+dest_files=["res://.godot/imported/spellcraft_menu_blue_mana.png-453314b311c674ba8ba0d176394190a2.ctex"]
 
 [params]
 

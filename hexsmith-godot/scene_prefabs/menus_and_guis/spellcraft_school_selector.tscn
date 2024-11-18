@@ -1,0 +1,146 @@
+[gd_scene load_steps=7 format=3 uid="uid://bnfhcx8ia5jqy"]
+
+[ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/spellcraft_school_selector.gd" id="1_e4ye7"]
+[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="1_n1qsa"]
+[ext_resource type="Texture2D" uid="uid://fcsp26ow5825" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/class_selector_cursor.png" id="3_qtafi"]
+[ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/class_selection_cursor.gd" id="4_y6xu7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8mmty"]
+size = Vector2(381, 648)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uk4at"]
+radius = 16.0312
+
+[node name="SpellcraftSchoolSelector" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_e4ye7")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="select_telumancy_zone" type="TextureRect" parent="HBoxContainer"]
+self_modulate = Color(0.533333, 0, 0.533333, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_n1qsa")
+
+[node name="telumancy_collision_area" type="Area2D" parent="HBoxContainer/select_telumancy_zone"]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/select_telumancy_zone/telumancy_collision_area"]
+position = Vector2(190.5, 324)
+shape = SubResource("RectangleShape2D_8mmty")
+
+[node name="Label" type="Label" parent="HBoxContainer/select_telumancy_zone"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "TELUMANCY
+(WEAPON SPELLS)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="select_motomancy_zone" type="TextureRect" parent="HBoxContainer"]
+self_modulate = Color(0, 0.533333, 0.533333, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_n1qsa")
+
+[node name="motomancy_collision_area" type="Area2D" parent="HBoxContainer/select_motomancy_zone"]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/select_motomancy_zone/motomancy_collision_area"]
+position = Vector2(190.5, 324)
+shape = SubResource("RectangleShape2D_8mmty")
+
+[node name="Label" type="Label" parent="HBoxContainer/select_motomancy_zone"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "MOTOMANCY
+(MOBILITY SPELLS)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="select_instrumancy_zone" type="TextureRect" parent="HBoxContainer"]
+self_modulate = Color(0.533333, 0.533333, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+texture = ExtResource("1_n1qsa")
+
+[node name="instrumancy_collision_area" type="Area2D" parent="HBoxContainer/select_instrumancy_zone"]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/select_instrumancy_zone/instrumancy_collision_area"]
+position = Vector2(190.5, 324)
+shape = SubResource("RectangleShape2D_8mmty")
+
+[node name="Label" type="Label" parent="HBoxContainer/select_instrumancy_zone"]
+layout_mode = 1
+anchors_preset = 14
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_top = -11.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "INSTRUMANCY
+(UTILITY SPELLS)"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="class_selection_cursor" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_qtafi")
+script = ExtResource("4_y6xu7")
+
+[node name="cursor_collision_object" type="Area2D" parent="class_selection_cursor"]
+collision_layer = 8
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="class_selection_cursor/cursor_collision_object"]
+position = Vector2(16, 16)
+shape = SubResource("CircleShape2D_uk4at")
+
+[connection signal="area_entered" from="class_selection_cursor/cursor_collision_object" to="." method="_on_cursor_collision_object_area_entered"]

@@ -1,11 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://d3e57kxopdxv5"]
+[gd_scene load_steps=14 format=3 uid="uid://d3e57kxopdxv5"]
 
 [ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/hud_manager.gd" id="1_154uy"]
-[ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/hp_bar.png" id="2_6a5qc"]
-[ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/hp_bar_frame.png" id="3_es4at"]
-[ext_resource type="Texture2D" uid="uid://0jg2rod428bj" path="res://assets/sprites/menus_and_gui/mana_bar.png" id="4_pew84"]
-[ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/spell_slot_frame.png" id="5_t6ijn"]
-[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/spell_slot_icon.png" id="6_namyp"]
+[ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="2_6a5qc"]
+[ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar_frame.png" id="3_es4at"]
+[ext_resource type="Texture2D" uid="uid://0jg2rod428bj" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/mana_bar.png" id="4_pew84"]
+[ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_frame.png" id="5_t6ijn"]
+[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="6_namyp"]
+[ext_resource type="PackedScene" uid="uid://bnfhcx8ia5jqy" path="res://scene_prefabs/menus_and_guis/spellcraft_school_selector.tscn" id="7_bys04"]
+[ext_resource type="Texture2D" uid="uid://dkrrhj20ngflq" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_red_mana.png" id="7_fkkxa"]
+[ext_resource type="Texture2D" uid="uid://dprj4mn87m7ux" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_blue_mana.png" id="8_kikgm"]
+[ext_resource type="Texture2D" uid="uid://jm3f4ipjlcag" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_green_mana.png" id="9_u46kl"]
+[ext_resource type="Texture2D" uid="uid://dt48cv805ctha" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_white_mana.png" id="10_ywe7d"]
+[ext_resource type="Texture2D" uid="uid://dq1xvw8pk2b38" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_black_mana.png" id="11_m4bia"]
+[ext_resource type="Texture2D" uid="uid://d0432x205sstq" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_grey_mana.png" id="12_ilaas"]
 
 [node name="PlayerHUD" type="CanvasLayer"]
 script = ExtResource("1_154uy")
@@ -180,7 +187,6 @@ layout_mode = 2
 texture = ExtResource("6_namyp")
 
 [node name="spellcraft_hud" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -201,6 +207,10 @@ layout_mode = 2
 
 [node name="school_selector_container" type="CenterContainer" parent="spellcraft_hud/VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SpellcraftSchoolSelector" parent="spellcraft_hud/VBoxContainer/school_selector_container" instance=ExtResource("7_bys04")]
+layout_mode = 2
 
 [node name="add_mana_prompt_container" type="CenterContainer" parent="spellcraft_hud/VBoxContainer"]
 layout_mode = 2
@@ -210,9 +220,8 @@ layout_mode = 2
 columns = 3
 
 [node name="add_red_mana_img" type="TextureRect" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid"]
-self_modulate = Color(1, 0, 0, 1)
 layout_mode = 2
-texture = ExtResource("2_6a5qc")
+texture = ExtResource("7_fkkxa")
 
 [node name="add_red_hotkey" type="Label" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid/add_red_mana_img"]
 layout_mode = 1
@@ -226,9 +235,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="add_blue_mana_img" type="TextureRect" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid"]
-self_modulate = Color(0, 0, 1, 1)
 layout_mode = 2
-texture = ExtResource("2_6a5qc")
+texture = ExtResource("8_kikgm")
 
 [node name="add_blue_hotkey" type="Label" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid/add_blue_mana_img"]
 layout_mode = 1
@@ -243,9 +251,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="add_green_mana_img" type="TextureRect" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid"]
-self_modulate = Color(0, 1, 0, 1)
 layout_mode = 2
-texture = ExtResource("2_6a5qc")
+texture = ExtResource("9_u46kl")
 
 [node name="add_green_hotkey" type="Label" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid/add_green_mana_img"]
 layout_mode = 1
@@ -260,7 +267,7 @@ vertical_alignment = 1
 
 [node name="add_white_mana_img" type="TextureRect" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid"]
 layout_mode = 2
-texture = ExtResource("2_6a5qc")
+texture = ExtResource("10_ywe7d")
 
 [node name="add_white_hotkey" type="Label" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid/add_white_mana_img"]
 self_modulate = Color(0, 0, 0, 1)
@@ -275,9 +282,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="add_black_mana_img" type="TextureRect" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid"]
-self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
-texture = ExtResource("2_6a5qc")
+texture = ExtResource("11_m4bia")
 
 [node name="add_black_hotkey" type="Label" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid/add_black_mana_img"]
 layout_mode = 1
@@ -291,9 +297,8 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="add_grey_mana_img" type="TextureRect" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid"]
-self_modulate = Color(0.533333, 0.533333, 0.533333, 1)
 layout_mode = 2
-texture = ExtResource("2_6a5qc")
+texture = ExtResource("12_ilaas")
 
 [node name="add_grey_hotkey" type="Label" parent="spellcraft_hud/VBoxContainer/add_mana_prompt_container/add_mana_prompt_grid/add_grey_mana_img"]
 layout_mode = 1
