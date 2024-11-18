@@ -1,8 +1,9 @@
-[gd_scene load_steps=26 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=27 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
+[ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d1o63"]
 atlas = ExtResource("2_mr4py")
@@ -201,3 +202,5 @@ shape = SubResource("RectangleShape2D_0o7oo")
 
 [node name="SpellcraftManager" type="Node" parent="."]
 script = ExtResource("3_ckdda")
+
+[node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]

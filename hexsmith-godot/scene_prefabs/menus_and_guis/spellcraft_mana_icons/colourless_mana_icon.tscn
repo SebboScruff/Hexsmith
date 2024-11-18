@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://d24wp4jeciwcg"]
+
+[ext_resource type="Texture2D" uid="uid://d0432x205sstq" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_grey_mana.png" id="1_pu7fg"]
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_a3pha"]
+frame_0/texture = ExtResource("1_pu7fg")
+
+[node name="ColourlessManaIcon" type="TextureRect"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+texture = SubResource("AnimatedTexture_a3pha")
+stretch_mode = 5

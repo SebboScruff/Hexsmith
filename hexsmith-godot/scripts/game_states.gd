@@ -1,0 +1,8 @@
+class_name States
+
+enum GAME_STATES{
+	LOADING,
+	OVERWORLD,
+	SPELLCRAFTING,
+	PAUSED
+}

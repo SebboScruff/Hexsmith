@@ -1,0 +1,246 @@
+[gd_scene load_steps=7 format=3 uid="uid://du76kdtuspo1d"]
+
+[ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="1_wtwt1"]
+[ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar_frame.png" id="2_5bi6e"]
+[ext_resource type="Texture2D" uid="uid://0jg2rod428bj" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/mana_bar.png" id="3_jrrj7"]
+[ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_frame.png" id="4_df2xn"]
+[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="5_32mu5"]
+[ext_resource type="PackedScene" uid="uid://dcuql0xn2dtnn" path="res://scene_prefabs/menus_and_guis/crosshair.tscn" id="6_dmpeq"]
+
+[node name="overworld_hud" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="mana_hp_panelcontainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 100.0
+offset_bottom = 56.0
+scale = Vector2(3.83255, 3.83255)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="mana_hp_panelcontainer"]
+layout_mode = 2
+
+[node name="hp_centercontainer" type="CenterContainer" parent="mana_hp_panelcontainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="hp_bar" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/hp_centercontainer"]
+layout_mode = 2
+value = 67.0
+fill_mode = 3
+texture_under = ExtResource("1_wtwt1")
+texture_over = ExtResource("2_5bi6e")
+texture_progress = ExtResource("1_wtwt1")
+tint_under = Color(0.378232, 7.18953e-07, 1.92523e-07, 1)
+tint_progress = Color(1, 0.231373, 0.172549, 1)
+
+[node name="mana_centercontainer" type="CenterContainer" parent="mana_hp_panelcontainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="mana_bars_vbox" type="VBoxContainer" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer"]
+layout_mode = 2
+
+[node name="mana_bar_red" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 67.0
+texture_under = ExtResource("3_jrrj7")
+texture_progress = ExtResource("3_jrrj7")
+tint_under = Color(0.407843, 0, 0.0588235, 1)
+tint_progress = Color(1, 0, 0, 1)
+
+[node name="mana_bar_blue" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 67.0
+texture_under = ExtResource("3_jrrj7")
+texture_progress = ExtResource("3_jrrj7")
+tint_under = Color(0, 0.0588235, 0.407843, 1)
+tint_progress = Color(0, 0, 1, 1)
+
+[node name="mana_bar_green" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 67.0
+texture_under = ExtResource("3_jrrj7")
+texture_progress = ExtResource("3_jrrj7")
+tint_under = Color(0.0588235, 0.407843, 0, 1)
+tint_progress = Color(0, 1, 0, 1)
+
+[node name="mana_bar_white" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 67.0
+texture_under = ExtResource("3_jrrj7")
+texture_progress = ExtResource("3_jrrj7")
+tint_under = Color(0.666667, 0.666667, 0.666667, 1)
+
+[node name="mana_bar_black" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+value = 67.0
+texture_under = ExtResource("3_jrrj7")
+texture_progress = ExtResource("3_jrrj7")
+tint_under = Color(0.266667, 0.266667, 0.266667, 1)
+tint_progress = Color(0, 0, 0, 1)
+
+[node name="minimap_panelcontainer" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -298.0
+offset_bottom = 151.0
+grow_horizontal = 0
+
+[node name="placeholder_label" type="Label" parent="minimap_panelcontainer"]
+layout_mode = 2
+text = "PLACEHOLDER
+MINIMAP HERE
+EVENTUALLY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="spell_slots_container" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -102.0
+offset_right = 48.0
+offset_bottom = 102.0
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="spell_slots_container"]
+z_index = -2
+layout_mode = 2
+
+[node name="spell_slots_grid" type="GridContainer" parent="spell_slots_container"]
+layout_mode = 2
+
+[node name="spell_slot_1_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="spell_slot_2_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_2_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_2_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_2_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_2_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="spell_slot_3_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_3_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_3_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_3_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_3_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="spell_slot_4_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_4_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_4_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_4_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_4_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="item_slots_container" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -48.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Panel" type="Panel" parent="item_slots_container"]
+z_index = -2
+layout_mode = 2
+
+[node name="spell_slots_grid" type="GridContainer" parent="item_slots_container"]
+layout_mode = 2
+columns = 3
+
+[node name="spell_slot_1_container" type="CenterContainer" parent="item_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_1_frame" type="TextureRect" parent="item_slots_container/spell_slots_grid/spell_slot_1_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_1_icon" type="TextureRect" parent="item_slots_container/spell_slots_grid/spell_slot_1_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="spell_slot_2_container" type="CenterContainer" parent="item_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_2_frame" type="TextureRect" parent="item_slots_container/spell_slots_grid/spell_slot_2_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_2_icon" type="TextureRect" parent="item_slots_container/spell_slots_grid/spell_slot_2_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="spell_slot_3_container" type="CenterContainer" parent="item_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_3_frame" type="TextureRect" parent="item_slots_container/spell_slots_grid/spell_slot_3_container"]
+layout_mode = 2
+texture = ExtResource("4_df2xn")
+
+[node name="spell_slot_3_icon" type="TextureRect" parent="item_slots_container/spell_slots_grid/spell_slot_3_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("5_32mu5")
+
+[node name="Crosshair" parent="." instance=ExtResource("6_dmpeq")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 1
+grow_vertical = 1

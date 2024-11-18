@@ -1,7 +1,9 @@
-extends Node
 # Global Game State Manager:
 # Used to monitor pause states, save-load system
 # story progression and events, etc.
+extends Node
 
-enum PLAY_STATES{OVERWORLD, SPELLCRAFT, PAUSED} 
-var current_play_state : PLAY_STATES
+@export var current_game_state : States.GAME_STATES
+
+func _init() -> void:
+	current_game_state = States.GAME_STATES.OVERWORLD
