@@ -13,6 +13,11 @@ const JUMP_VELOCITY = -400.0
 
 # Child Node References
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
+@onready var player_hud: CanvasLayer = $PlayerHUD
+# NOTE: Overworld is index 0; Spellcraft is index 1; Pause is index 2
+# TODO Clean this up in a way that removes the 'magic numbers' aspect.
+@export var hud_manager : HudManager = player_hud as HudManager
+
 
 ## START OF FUNCTIONS
 
@@ -25,31 +30,41 @@ func _input(event: InputEvent) -> void:
 	match(gsm.current_game_state):
 		States.GAME_STATES.OVERWORLD:
 			if(event.is_action_pressed("global_pause")):
-				print("TODO Change to PAUSE Menu")
+				gsm.change_game_state(States.GAME_STATES.PAUSED)
+				hud_manager.change_active_menu(2)
 			elif(event.is_action_pressed("toggle_spellcraft_menu")):
-				print("TODO Change to SPELLCRAFT Menu")
+				gsm.change_game_state(States.GAME_STATES.SPELLCRAFTING)
+				hud_manager.change_active_menu(1)
 		
 		States.GAME_STATES.SPELLCRAFTING:
 			if(event.is_action_pressed("spellcraft_open_spellbook")):
-				print("TODO Change to PAUSE Menu; Spellbook Tab")
+				gsm.change_game_state(States.GAME_STATES.PAUSED)
+				# TODO Extend this to specifically open the pause menu ON the Spellbook tab
+				hud_manager.change_active_menu(2)
 			elif(event.is_action_pressed("toggle_spellcraft_menu")):
-				print("TODO Return to Overworld")
+				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+				hud_manager.change_active_menu(0)
 		
 		States.GAME_STATES.PAUSED:
 			if(event.is_action_pressed("global_pause")):
-				print("TODO Return to Overworld")
+				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+				hud_manager.change_active_menu(0)
 	## END OF MENU INPUT CHECKS
+	
+	## SPELLCRAFT INPUT CHECKS ##
 
 # All Movement and related animation work is done here
 func _physics_process(delta: float) -> void:
 	# If not in overworld, ignore all inputs
 	# NOTE: gsm is the name of the Global GameStateManager scene
 	if(gsm.current_game_state != States.GAME_STATES.OVERWORLD):
-		pass
+		return
 
 	## BEGINNING OF MOVEMENT INPUT PROCESSING: ##
 	# Check for Sprint (TODO and Crouch) inputs
 	# This will eventually be expanded for many movement categories
+	# TODO Need to disable A/D Movement but maintain gravity/ vertical movement
+	# While in Spellcraft
 	if(Input.is_action_pressed("overworld_toggle_sprint")):
 		current_speed = RUN_SPEED
 	else:

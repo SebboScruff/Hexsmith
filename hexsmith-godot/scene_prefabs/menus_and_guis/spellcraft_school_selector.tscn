@@ -42,7 +42,7 @@ alignment = 1
 
 [node name="telumancy_button" type="TextureButton" parent="HBoxContainer"]
 unique_name_in_owner = true
-self_modulate = Color(0.533333, 0, 0.533333, 1)
+self_modulate = Color(0.533333, 0, 0.533333, 0.686275)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = ExtResource("1_n1qsa")
@@ -65,7 +65,7 @@ vertical_alignment = 1
 
 [node name="motomancy_button" type="TextureButton" parent="HBoxContainer"]
 unique_name_in_owner = true
-self_modulate = Color(0, 0.533333, 0.533333, 1)
+self_modulate = Color(0, 0.533333, 0.533333, 0.686275)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = ExtResource("1_n1qsa")
@@ -88,7 +88,7 @@ vertical_alignment = 1
 
 [node name="instrumancy_button" type="TextureButton" parent="HBoxContainer"]
 unique_name_in_owner = true
-self_modulate = Color(0.533333, 0.533333, 0, 1)
+self_modulate = Color(0.533333, 0.533333, 0, 0.686275)
 layout_mode = 2
 size_flags_horizontal = 3
 texture_normal = ExtResource("1_n1qsa")

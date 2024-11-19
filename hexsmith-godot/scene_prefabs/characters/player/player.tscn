@@ -186,9 +186,10 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager")]
 z_index = 5
 script = ExtResource("1_nvfm5")
+hud_manager = NodePath("PlayerHUD")
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -24)
