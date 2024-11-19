@@ -186,10 +186,11 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter")]
 z_index = 5
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
+spellcrafter = NodePath("SpellcraftManager")
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -24)
@@ -202,6 +203,8 @@ position = Vector2(0, -12.5)
 shape = SubResource("RectangleShape2D_0o7oo")
 
 [node name="SpellcraftManager" type="Node" parent="."]
+unique_name_in_owner = true
 script = ExtResource("3_ckdda")
 
 [node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
+unique_name_in_owner = true

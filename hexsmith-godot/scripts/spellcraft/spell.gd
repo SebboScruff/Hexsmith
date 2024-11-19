@@ -4,11 +4,14 @@ var prefix: SpellPrefix
 var suffix: SpellSuffix
 var spell_name
 
-func _init():
+func _init(_prefix:SpellPrefix, _suffix:SpellSuffix):
 	# Class Constructor:
 	# Needs to pass in a _prefix and _suffix as parameters,
+	prefix = _prefix
+	suffix = _suffix
+	
 	# then assign them and determine the spell name.
-	pass #TODO remove after adding functionality here
+	determine_spell_name()
 
 
 func determine_spell_name():

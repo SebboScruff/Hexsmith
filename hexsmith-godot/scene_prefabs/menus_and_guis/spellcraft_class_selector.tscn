@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://bnfhcx8ia5jqy"]
 
-[ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/spellcraft_school_selector.gd" id="1_e4ye7"]
-[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="1_n1qsa"]
-[ext_resource type="Texture2D" uid="uid://fcsp26ow5825" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/class_selector_cursor.png" id="3_qtafi"]
+[ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/spellcraft_class_selector.gd" id="1_jf23b"]
+[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="2_2wx5m"]
+[ext_resource type="Texture2D" uid="uid://fcsp26ow5825" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/class_selector_cursor.png" id="3_21155"]
 
 [sub_resource type="GDScript" id="GDScript_5x6df"]
 script/source = "# This exists so that the cursor collision detection in
@@ -29,7 +29,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_e4ye7")
+script = ExtResource("1_jf23b")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
@@ -45,7 +45,7 @@ unique_name_in_owner = true
 self_modulate = Color(0.533333, 0, 0.533333, 0.686275)
 layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("1_n1qsa")
+texture_normal = ExtResource("2_2wx5m")
 stretch_mode = 0
 
 [node name="telumancy_label" type="Label" parent="HBoxContainer/telumancy_button"]
@@ -68,7 +68,7 @@ unique_name_in_owner = true
 self_modulate = Color(0, 0.533333, 0.533333, 0.686275)
 layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("1_n1qsa")
+texture_normal = ExtResource("2_2wx5m")
 stretch_mode = 0
 
 [node name="motomancy_label" type="Label" parent="HBoxContainer/motomancy_button"]
@@ -91,7 +91,7 @@ unique_name_in_owner = true
 self_modulate = Color(0.533333, 0.533333, 0, 0.686275)
 layout_mode = 2
 size_flags_horizontal = 3
-texture_normal = ExtResource("1_n1qsa")
+texture_normal = ExtResource("2_2wx5m")
 stretch_mode = 0
 
 [node name="instrumancy_label" type="Label" parent="HBoxContainer/instrumancy_button"]
@@ -122,7 +122,7 @@ offset_right = 16.0
 offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_qtafi")
+texture = ExtResource("3_21155")
 script = SubResource("GDScript_5x6df")
 
 [connection signal="mouse_entered" from="HBoxContainer/telumancy_button" to="." method="_on_telumancy_button_mouse_entered"]

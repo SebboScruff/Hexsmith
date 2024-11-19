@@ -15,8 +15,7 @@ const instrumancy_cursor_colour = Color(1,1,0,1) # Yellow
 
 @onready var cursor_img: TextureRect = $class_selection_cursor
 
-# TODO holy shit this is ugly, surely its better to just use buttons
-# and a hover-over callback
+# TODO Eventually include Mouse Off Callbacks (maybe)
 @onready var telumancy_button: TextureButton = %telumancy_button
 @onready var motomancy_button: TextureButton = %motomancy_button
 @onready var instrumancy_button: TextureButton = %instrumancy_button

@@ -11,12 +11,17 @@ var current_speed : float
 
 const JUMP_VELOCITY = -400.0
 
-# Child Node References
+## CHILD NODE REFERENCES
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
-@onready var player_hud: CanvasLayer = $PlayerHUD
+
 # NOTE: Overworld is index 0; Spellcraft is index 1; Pause is index 2
 # TODO Clean this up in a way that removes the 'magic numbers' aspect.
+@onready var player_hud: CanvasLayer = $PlayerHUD
 @export var hud_manager : HudManager = player_hud as HudManager
+
+@onready var scm: Node = %SpellcraftManager
+@export var spellcrafter: SpellcraftManager = scm as SpellcraftManager
+## END OF CHILD NODE REFERENCES
 
 
 ## START OF FUNCTIONS
@@ -37,11 +42,14 @@ func _input(event: InputEvent) -> void:
 				hud_manager.change_active_menu(1)
 		
 		States.GAME_STATES.SPELLCRAFTING:
+			# Clear out the active mana selection before changing menus
 			if(event.is_action_pressed("spellcraft_open_spellbook")):
+				spellcrafter.clear_active_mana()
 				gsm.change_game_state(States.GAME_STATES.PAUSED)
 				# TODO Extend this to specifically open the pause menu ON the Spellbook tab
 				hud_manager.change_active_menu(2)
 			elif(event.is_action_pressed("toggle_spellcraft_menu")):
+				spellcrafter.clear_active_mana()
 				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
 				hud_manager.change_active_menu(0)
 		
@@ -52,6 +60,37 @@ func _input(event: InputEvent) -> void:
 	## END OF MENU INPUT CHECKS
 	
 	## SPELLCRAFT INPUT CHECKS ##
+	# TODO Refactor to not be if-chain, this is horrible to look at
+	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
+		# Addition Hotkeys
+		if(event.is_action_pressed("spellcraft_add_red")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.RED)
+		elif(event.is_action_pressed("spellcraft_add_blue")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLUE)
+		elif(event.is_action_pressed("spellcraft_add_green")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.GREEN)
+		elif(event.is_action_pressed("spellcraft_add_white")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.WHITE)
+		elif(event.is_action_pressed("spellcraft_add_black")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLACK)
+		elif(event.is_action_pressed("spellcraft_add_colorless")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.COLOURLESS)
+		# Removal Hotkeys
+		elif(event.is_action_pressed("spellcraft_remove_mana")):
+			spellcrafter.remove_last_instance()
+		elif(event.is_action_pressed("spellcraft_clear_mana")):
+			spellcrafter.clear_active_mana()
+		# Assignment Hotkeys
+		elif(event.is_action_pressed("spellcraft_bind_spellslot1")):
+			spellcrafter.craft_and_bind(1)
+		elif(event.is_action_pressed("spellcraft_bind_spellslot2")):
+			print("TODO Craft and Bind to Hotkey 2")
+		elif(event.is_action_pressed("spellcraft_bind_spellslot3")):
+			print("TODO Craft and Bind to Hotkey 3")
+		elif(event.is_action_pressed("spellcraft_bind_spellslot4")):
+			print("TODO Craft and Bind to Hotkey 4")
+		
+	## END OF SPELLCRAFT INPUT CHECKS ##
 
 # All Movement and related animation work is done here
 func _physics_process(delta: float) -> void:
