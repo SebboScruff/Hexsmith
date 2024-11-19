@@ -113,6 +113,8 @@ func _ready() -> void:
 	spellcraft_act = ActiveColourTracker.new(false, false, false, false, false)
 	spellcraft_amt = ActiveManaTracker.new(0,0,0,0,0,0)
 	
+	initialise_prefix_dict()
+	
 	gui_instances_container = player_hud.get_node(gui_instances_path)
 
 func initialise_prefix_dict():

@@ -30,6 +30,10 @@ func _ready():
 func _input(event):
 	if event is InputEventMouseMotion:
 		cursor_img.set_global_position(event.position - (cursor_img.get_rect().size/2))
+	# TODO Additional input idea for finishing a spell:
+	# - Hold down Mouse1 to make 4 buttons around the cursor
+	# - Each button is associated with a spell slot
+	# Hover over a button and release Mouse1 as an alternative input for Craft and Assign
 
 func _process(_delta: float) -> void:
 	# Change Cursor Color depending on currently selected School.
