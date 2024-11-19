@@ -12,13 +12,17 @@ var prefix_id: int
 # Eventually this generic class (and all the specific subclasses below)
 # will want a handful of colours (2-5) and a small sound library associated
 # with them for use in Shaders and Cast functions.
+# TODO Each Prefix will also need an Icon Frame assigned. This is a 
+# transparent square with an animated decal around it, to frame the suffix's
+# spell icon
+var spell_icon_frame : TextureRect
 
 var num_red_mana : int
 var num_blue_mana : int
 var num_green_mana : int
 var num_black_mana : int
 var num_white_mana : int
-var num_colorless_mana:int
+var num_colorless_mana : int
 
 ##############################################
 ## INDIVIDUAL PREFIX DECLARATIONS BELOW     ##

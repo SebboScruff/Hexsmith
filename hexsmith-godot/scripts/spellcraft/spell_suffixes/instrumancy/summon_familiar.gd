@@ -1,7 +1,7 @@
-class_name Bolt extends SpellSuffix
+class_name SummonFamiliar extends SpellSuffix
 
 func _init() -> void:
-	suffix_name = "Bolt"
+	suffix_name = "Summon Familiar"
 	
 	cast_type = CAST_TYPES.CAST_WITH_COOLDOWN
 	is_active = true
@@ -11,8 +11,4 @@ func cast(num_red:int, num_blue:int,
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):
 	# Spell Functionality here:
-	# Get Direction
-	# Instantiate Bolt prefab with correct shader and
-	# colour bonuses.
-	# Start Cooldown.
-	print("TODO Casted a BOLT Spell")
+	print("TODO Casted a SUMMON FAMILIAR Spell")

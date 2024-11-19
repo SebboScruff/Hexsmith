@@ -1,6 +1,6 @@
 # Control Cursor Movement, UI-based hit detection, and resultant Class Selection
 # For use in the Spellcrafting Menu.
-
+class_name SpellClassSelector
 extends Control
 
 # list of the Spell Classes used in Suffix generation.

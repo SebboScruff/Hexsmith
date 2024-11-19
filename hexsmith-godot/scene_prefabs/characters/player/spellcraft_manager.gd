@@ -10,67 +10,6 @@ class_name SpellcraftManager
 extends Node
 
 ## HELPER DATA STRUCTURES
-
-# Effectively just a struct of 6 ints, used for determining Suffixes
-class ActiveManaTracker:
-	var num_red: int
-	var num_blue: int
-	var num_green: int
-	var num_white: int
-	var num_black: int
-	var num_colourless: int
-	
-	var total_current_mana: int
-	
-	func _init(_red:int, _blue:int, _green:int, _white:int, _black:int, _colourless:int) -> void:
-		num_red = _red
-		num_blue = _blue
-		num_green = _green
-		num_white = _white
-		num_black = _black
-		num_colourless = _colourless
-	
-	func reset() -> void:
-		num_red = 0
-		num_blue = 0
-		num_green = 0
-		num_white = 0
-		num_black = 0
-		num_colourless = 0
-		
-		total_current_mana = 0
-	
-	func debug_readout():
-		var format_string = "Current Active Mana Count: %d Red/ %d Blue/ %d Green/ %d White/ %d Black/ %d Colourless. %d Mana Total"
-		var print_message = format_string % [num_red, num_blue, num_green, num_white, num_black, num_colourless, total_current_mana]
-		print(print_message)
-
-# Similarly, this is a struct of 5 bools, used for determining Prefixes
-class ActiveColourTracker:
-	var has_red:bool
-	var has_blue:bool
-	var has_green:bool
-	var has_white:bool
-	var has_black:bool
-	
-	var total_active_colours: int
-	
-	func _init(_red:bool, _blue:bool, _green:bool, _white:bool, _black:bool) -> void:
-		has_red = _red
-		has_blue = _blue
-		has_green = _green
-		has_white = _white
-		has_black = _black
-	
-	func reset() -> void:
-		has_red = false
-		has_blue = false
-		has_green = false
-		has_white = false
-		has_black = false
-		
-		total_active_colours = 0
-
 # This guy is gonna hold all 25 colour available colour combinations
 # Uses ActiveColourTrackers as keys, and SpellPrefixes as values.
 var prefix_dictionary = {}
@@ -94,9 +33,13 @@ const MAX_MANA : int = 5 # the maximum number of total mana that can be used in 
 
 # HUD Elements
 @onready var player_hud: HudManager = %PlayerHUD
-# Need a reference to PlayerHUD/spellcraft_hud/VBoxContainer/ManaInstancesBG/ActiveManaInstancesContainer
+@export var hud_manager : HudManager = player_hud as HudManager
+
 const gui_instances_path: String = "spellcraft_hud/VBoxContainer/ManaInstancesBG/ActiveManaInstancesContainer"
 var gui_instances_container: GridContainer
+
+const class_selector_path: String = "spellcraft_hud/VBoxContainer/spellcraft_class_selector/SpellcraftClassSelector"
+var class_selector: SpellClassSelector
 
 const BLACK_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcraft_mana_icons/black_mana_icon.tscn")
 const BLUE_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcraft_mana_icons/blue_mana_icon.tscn")
@@ -116,11 +59,49 @@ func _ready() -> void:
 	initialise_prefix_dict()
 	
 	gui_instances_container = player_hud.get_node(gui_instances_path)
+	class_selector = player_hud.get_node(class_selector_path)
 
 func initialise_prefix_dict():
-	# TODO This is basically gonna be a whole bunch of dictionary assignment calls
-	# to put a new Prefix Instance to each ActiveColourTracker instance
-	pass
+	# bruh this is the exact opposite of risk-averse
+	# TODO definitely try preloading this somehow once the game gets a bit more complex.
+	prefix_dictionary = {
+			# Mono-Colour Prefixes
+			ActiveColourTracker.new(true,false,false,false,false) : SpellPrefix.Blazing.new(spellcraft_amt.num_red, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,true,false,false,false) : SpellPrefix.Aqua.new(spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,false,true,false,false) : SpellPrefix.Phyto.new(spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,false,false,true,false) : SpellPrefix.Lumina.new(spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,false,false,false,true) : SpellPrefix.Umbral.new(spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			# Two-Colour Prefixes
+			ActiveColourTracker.new(true,true,false,false,false) : SpellPrefix.Steam.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(true,false,true,false,false) : SpellPrefix.Carbon.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(true,false,false,true,false) : SpellPrefix.Gigawatt.new(spellcraft_amt.num_red, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(true,false,false,false,true) : SpellPrefix.Infernal.new(spellcraft_amt.num_red, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			
+			ActiveColourTracker.new(false,true,true,false,false) : SpellPrefix.Terra.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,true,false,true,false) : SpellPrefix.Boreal.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,true,false,false,true) : SpellPrefix.Hadal.new(spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			
+			ActiveColourTracker.new(false,false,true,true,false) : SpellPrefix.Floral.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,false,true,false,true) : SpellPrefix.Fungal.new(spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			
+			ActiveColourTracker.new(false,false,false,true,true) : SpellPrefix.Twilight.new(spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			# Three-Colour Prefixes
+			ActiveColourTracker.new(true,true,true,false,false) : SpellPrefix.Prismatic.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(true,true,false,true,false) : SpellPrefix.Tempest.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(true,true,false,false,true) : SpellPrefix.BlackOil.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			
+			ActiveColourTracker.new(true,false,true,true,false) : SpellPrefix.Silica.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(true,false,true,false,true) : SpellPrefix.Ashen.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			
+			ActiveColourTracker.new(true,false,false,true,true) : SpellPrefix.Thundercloud.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+		
+			ActiveColourTracker.new(false,true,true,true,false) : SpellPrefix.Coral.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			ActiveColourTracker.new(false,true,true,false,true) : SpellPrefix.Mire.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			
+			ActiveColourTracker.new(false,true,false,true,true) : SpellPrefix.Arctic.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+		
+			ActiveColourTracker.new(false,false,true,true,true) : SpellPrefix.Toxic.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+		}
 
 func add_active_mana_instance(colour:MANA_COLOURS):
 	# main function body in each colour case is very similar and 
@@ -233,8 +214,9 @@ func add_active_mana_instance(colour:MANA_COLOURS):
 	spellcraft_amt.debug_readout()
 
 # TODO Remove the most recently added mana instance
-# This will likely require a full refactor, placing the Active Mana Instances
-# into an array so that there is a de facto undo-stack using pop_back()
+# This will likely require a full refactor of how Active Mana is managed, 
+# placing the Active Mana Instances into an array so that there 
+# is a de facto undo-stack using pop_back()
 func remove_last_instance():
 	print("TODO Remove Last Mana Instance")
 
@@ -248,7 +230,6 @@ func clear_active_mana():
 	var gui_instances = Utilities.get_child_nodes(gui_instances_container)
 	for n in gui_instances:
 		n.queue_free()
-		
 
 func craft_and_bind(spell_slot_index: int):
 	# TODO Combine all spell inputs to create a new spell:
@@ -262,31 +243,116 @@ func craft_and_bind(spell_slot_index: int):
 	# Otherwise, create new SpellSuffix instance and SpellPrefix Instance
 	var crafted_spell_prefix:SpellPrefix = determine_prefix()
 	var crafted_spell_suffix:SpellSuffix = determine_suffix()
+	
 	# and assign to new Spell Instance
+	if(crafted_spell_prefix == null || crafted_spell_suffix == null):
+		print("Prefix or Suffix is Null. Check Debug Logs")
+		return
+	
 	var crafted_spell:Spell = Spell.new(crafted_spell_prefix, crafted_spell_suffix)
+	
 	# then assign that new Spell to the associated spell slot passed in as parameter
 	print("TODO Craft and Bind to Spell Slot " + var_to_str(spell_slot_index))
 	
+	# and finally, clear and close the Spellcraft Menu
+	clear_active_mana()
+	gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+	hud_manager.change_active_menu(0)
 
 func determine_prefix() -> SpellPrefix:
 	var prefix : SpellPrefix = null
 	
 	# TODO Lookup in prefix_dictionary to assign value
+	# The problem here is that ActiveColourTrackers are passed by reference
+	# rather than value - so while the actual Dict key and the input key
+	# have the same values, this is a null return because the two keys are different
+	# instanced copies of the same Resource type.
+	# Arrays are compared by value - probably should refactor the ACT to be
+	# an Array because of this?
+	prefix = prefix_dictionary.get(ActiveColourTracker.new(spellcraft_act.has_red,spellcraft_act.has_blue,spellcraft_act.has_green,spellcraft_act.has_white,spellcraft_act.has_black))
 	
 	if(prefix == null):
-		#print("No Prefix found in Dictionary for that Colour Combo! Double Check in spellcraft_manager.gd.")
+		print("No Prefix found in Dictionary for that Colour Combo! Double Check in spellcraft_manager.gd.")
 		return
-	print("Determine Prefix Function not implemented") # TODO Remove this
-	return prefix
 	
+	print("Prefix Found: " + prefix.prefix_name)
+	return prefix
+
 func determine_suffix() -> SpellSuffix:
 	var suffix : SpellSuffix = null
 	
 	## TODO Selection Algorithm Here:
-	# Check every combo of Class + number of active Mana to return new Suffix
+	## This will definitely need refactoring and optimising
+	match(class_selector.current_class):
+		SpellClassSelector.SPELL_CLASSES.TELUMANCY:
+			match(spellcraft_amt.total_current_mana):
+				1:
+					suffix = Bolt.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				2:
+					suffix = Spike.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				3:
+					suffix = Beam.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				4:
+					suffix = Wave.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				5:
+					suffix = Eruption.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+		SpellClassSelector.SPELL_CLASSES.MOTOMANCY:
+			match(spellcraft_amt.total_current_mana):
+				1:
+					suffix = Strider.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				2:
+					suffix = Transmission.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				3:
+					suffix = Leap.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				4:
+					suffix = Flight.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				5:
+					suffix = Blink.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+		SpellClassSelector.SPELL_CLASSES.INSTRUMANCY:
+			match(spellcraft_amt.total_current_mana):
+				1:
+					suffix = Transmutation.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				2:
+					suffix = Cloak.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				3:
+					suffix = Barrier.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				4:
+					suffix = Blade.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+				5:
+					suffix = SummonFamiliar.new()
+					print("Suffix Found: " + suffix.suffix_name)
+					return suffix
+	
 	if(suffix == null):
-		#print("No Suffix found that Class/Mana Combo! Double Check in spellcraft_manager.gd.")
+		print("No Suffix found that Class/Mana Combo! Double Check in spellcraft_manager.gd.")
 		return
-		
-	print("Determine Suffix Function not implemented") # TODO Remove this
+	
 	return suffix

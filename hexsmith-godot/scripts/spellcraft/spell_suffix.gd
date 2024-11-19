@@ -18,6 +18,8 @@ var cast_type: CAST_TYPES
 var is_active: bool
 var target_type: TARGET_TYPES
 
+var spell_icon: TextureRect
+
 # TODO These can probably eventually be replaced by Godot Timers tied to the player
 # Remember, casting a spell puts the SUFFIX on cooldown, not that specific Spell
 # i.e. casting any Bolt spell puts ALL POSSIBLE Bolt spells on cooldown.
