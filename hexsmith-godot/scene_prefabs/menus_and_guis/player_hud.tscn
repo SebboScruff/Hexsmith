@@ -18,10 +18,10 @@ script = ExtResource("1_154uy")
 
 [node name="overworld_hud" parent="." instance=ExtResource("2_g3cc8")]
 unique_name_in_owner = true
-visible = false
 
 [node name="spellcraft_hud" type="Control" parent="."]
 unique_name_in_owner = true
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0

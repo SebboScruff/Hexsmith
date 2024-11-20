@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="1_wtwt1"]
 [ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar_frame.png" id="2_5bi6e"]
-[ext_resource type="Texture2D" uid="uid://0jg2rod428bj" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/mana_bar.png" id="3_jrrj7"]
+[ext_resource type="PackedScene" uid="uid://dlnysb1rjh2qq" path="res://scene_prefabs/menus_and_guis/mana_value_tracker.tscn" id="3_naleo"]
 [ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_frame.png" id="4_df2xn"]
 [ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="5_32mu5"]
 [ext_resource type="PackedScene" uid="uid://dcuql0xn2dtnn" path="res://scene_prefabs/menus_and_guis/crosshair.tscn" id="6_dmpeq"]
@@ -38,60 +38,48 @@ texture_progress = ExtResource("1_wtwt1")
 tint_under = Color(0.378232, 7.18953e-07, 1.92523e-07, 1)
 tint_progress = Color(1, 0.231373, 0.172549, 1)
 
-[node name="mana_centercontainer" type="CenterContainer" parent="mana_hp_panelcontainer/HBoxContainer"]
+[node name="mana_bars_vbox" type="VBoxContainer" parent="mana_hp_panelcontainer/HBoxContainer"]
 layout_mode = 2
 
-[node name="mana_bars_vbox" type="VBoxContainer" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer"]
+[node name="mana_tracker_red" parent="mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("3_naleo")]
 layout_mode = 2
-
-[node name="mana_bar_red" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-value = 67.0
-texture_under = ExtResource("3_jrrj7")
-texture_progress = ExtResource("3_jrrj7")
 tint_under = Color(0.407843, 0, 0.0588235, 1)
 tint_progress = Color(1, 0, 0, 1)
+maximum_mana = 100.0
 
-[node name="mana_bar_blue" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+[node name="mana_tracker_blue" parent="mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("3_naleo")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-value = 67.0
-texture_under = ExtResource("3_jrrj7")
-texture_progress = ExtResource("3_jrrj7")
 tint_under = Color(0, 0.0588235, 0.407843, 1)
 tint_progress = Color(0, 0, 1, 1)
+colour = 1
+maximum_mana = 100.0
 
-[node name="mana_bar_green" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+[node name="mana_tracker_green" parent="mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("3_naleo")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-value = 67.0
-texture_under = ExtResource("3_jrrj7")
-texture_progress = ExtResource("3_jrrj7")
 tint_under = Color(0.0588235, 0.407843, 0, 1)
 tint_progress = Color(0, 1, 0, 1)
+colour = 2
+maximum_mana = 100.0
 
-[node name="mana_bar_white" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+[node name="mana_tracker_white" parent="mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("3_naleo")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-value = 67.0
-texture_under = ExtResource("3_jrrj7")
-texture_progress = ExtResource("3_jrrj7")
-tint_under = Color(0.666667, 0.666667, 0.666667, 1)
+tint_under = Color(0.674814, 0.674815, 0.674814, 1)
+colour = 3
+maximum_mana = 100.0
 
-[node name="mana_bar_black" type="TextureProgressBar" parent="mana_hp_panelcontainer/HBoxContainer/mana_centercontainer/mana_bars_vbox"]
+[node name="mana_tracker_black" parent="mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("3_naleo")]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-value = 67.0
-texture_under = ExtResource("3_jrrj7")
-texture_progress = ExtResource("3_jrrj7")
-tint_under = Color(0.266667, 0.266667, 0.266667, 1)
+tint_under = Color(0.266575, 0.266575, 0.266575, 1)
 tint_progress = Color(0, 0, 0, 1)
+colour = 4
+maximum_mana = 100.0
+
+[node name="mana_tracker_colourless" parent="mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("3_naleo")]
+layout_mode = 2
+tint_under = Color(0.140447, 0.140448, 0.140447, 1)
+tint_progress = Color(0.533333, 0.533333, 0.533333, 1)
+colour = 5
+maximum_mana = 100.0
 
 [node name="minimap_panelcontainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -115,9 +103,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -102.0
+offset_top = -59.0
 offset_right = 48.0
-offset_bottom = 102.0
+offset_bottom = 145.0
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="spell_slots_container"]

@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://dlnysb1rjh2qq"]
+
+[ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/mana_value_tracker.gd" id="1_05ao0"]
+[ext_resource type="Texture2D" uid="uid://0jg2rod428bj" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/mana_bar.png" id="1_bcel3"]
+
+[node name="ManaValueTracker" type="TextureProgressBar"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+value = 100.0
+texture_under = ExtResource("1_bcel3")
+texture_progress = ExtResource("1_bcel3")
+tint_under = Color(0.485703, 0.485704, 0.485703, 1)
+script = ExtResource("1_05ao0")

@@ -65,43 +65,42 @@ func initialise_prefix_dict():
 	# bruh this is the exact opposite of risk-averse
 	# TODO definitely try preloading this somehow once the game gets a bit more complex.
 	prefix_dictionary = {
-			#TODO As per BLAZING, change all Keys to raw arrays rather than new ACT instances
 			# Mono-Colour Prefixes
 			[true,false,false,false,false] : SpellPrefix.Blazing.new(spellcraft_amt.num_red, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,true,false,false,false) : SpellPrefix.Aqua.new(spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,false,true,false,false) : SpellPrefix.Phyto.new(spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,false,false,true,false) : SpellPrefix.Lumina.new(spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,false,false,false,true) : SpellPrefix.Umbral.new(spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,false,false,false] : SpellPrefix.Aqua.new(spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
+			[false,false,true,false,false] : SpellPrefix.Phyto.new(spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[false,false,false,true,false] : SpellPrefix.Lumina.new(spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,false,false,false,true] : SpellPrefix.Umbral.new(spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			# Two-Colour Prefixes
-			ActiveColourTracker.new(true,true,false,false,false) : SpellPrefix.Steam.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(true,false,true,false,false) : SpellPrefix.Carbon.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(true,false,false,true,false) : SpellPrefix.Gigawatt.new(spellcraft_amt.num_red, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(true,false,false,false,true) : SpellPrefix.Infernal.new(spellcraft_amt.num_red, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,true,false,false,false] : SpellPrefix.Steam.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
+			[true,false,true,false,false] : SpellPrefix.Carbon.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[true,false,false,true,false] : SpellPrefix.Gigawatt.new(spellcraft_amt.num_red, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,false,false,false,true] : SpellPrefix.Infernal.new(spellcraft_amt.num_red, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			ActiveColourTracker.new(false,true,true,false,false) : SpellPrefix.Terra.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,true,false,true,false) : SpellPrefix.Boreal.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,true,false,false,true) : SpellPrefix.Hadal.new(spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,true,false,false] : SpellPrefix.Terra.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[false,true,false,true,false] : SpellPrefix.Boreal.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,true,false,false,true] : SpellPrefix.Hadal.new(spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			ActiveColourTracker.new(false,false,true,true,false) : SpellPrefix.Floral.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,false,true,false,true) : SpellPrefix.Fungal.new(spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,false,true,true,false] : SpellPrefix.Floral.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,false,true,false,true] : SpellPrefix.Fungal.new(spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			ActiveColourTracker.new(false,false,false,true,true) : SpellPrefix.Twilight.new(spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,false,false,true,true] : SpellPrefix.Twilight.new(spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			# Three-Colour Prefixes
-			ActiveColourTracker.new(true,true,true,false,false) : SpellPrefix.Prismatic.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(true,true,false,true,false) : SpellPrefix.Tempest.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(true,true,false,false,true) : SpellPrefix.BlackOil.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,true,true,false,false] : SpellPrefix.Prismatic.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[true,true,false,true,false] : SpellPrefix.Tempest.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,true,false,false,true] : SpellPrefix.BlackOil.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			ActiveColourTracker.new(true,false,true,true,false) : SpellPrefix.Silica.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(true,false,true,false,true) : SpellPrefix.Ashen.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,false,true,true,false] : SpellPrefix.Silica.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,false,true,false,true] : SpellPrefix.Ashen.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			ActiveColourTracker.new(true,false,false,true,true) : SpellPrefix.Thundercloud.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,false,false,true,true] : SpellPrefix.Thundercloud.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
 		
-			ActiveColourTracker.new(false,true,true,true,false) : SpellPrefix.Coral.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			ActiveColourTracker.new(false,true,true,false,true) : SpellPrefix.Mire.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,true,true,false] : SpellPrefix.Coral.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,true,true,false,true] : SpellPrefix.Mire.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			ActiveColourTracker.new(false,true,false,true,true) : SpellPrefix.Arctic.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,false,true,true] : SpellPrefix.Arctic.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 		
-			ActiveColourTracker.new(false,false,true,true,true) : SpellPrefix.Toxic.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,false,true,true,true] : SpellPrefix.Toxic.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 		}
 
 func add_active_mana_instance(colour:MANA_COLOURS):
@@ -289,20 +288,20 @@ func determine_suffix() -> SpellSuffix:
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
-					suffix = Spike.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Spike.new()
+					print("SPIKE not yet implemented.")
 					return suffix
 				3:
-					suffix = Beam.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Beam.new()
+					print("BEAM not yet implemented.")
 					return suffix
 				4:
-					suffix = Spear.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Spear.new()
+					print("SPEAR not yet implemented.")
 					return suffix
 				5:
-					suffix = Eruption.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Eruption.new()
+					print("ERUPTION not yet implemented.")
 					return suffix
 		SpellClassSelector.SPELL_CLASSES.MOTOMANCY:
 			match(spellcraft_amt.total_current_mana):
@@ -311,20 +310,20 @@ func determine_suffix() -> SpellSuffix:
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
-					suffix = Transmission.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Transmission.new()
+					print("TRANSMISSION not yet implemented.")
 					return suffix
 				3:
-					suffix = Leap.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Leap.new()
+					print("LEAP not yet implemented.")
 					return suffix
 				4:
-					suffix = Flight.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Flight.new()
+					print("FLIGHT not yet implemented.")
 					return suffix
 				5:
-					suffix = Blink.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Blink.new()
+					print("BLINK not yet implemented.")
 					return suffix
 		SpellClassSelector.SPELL_CLASSES.INSTRUMANCY:
 			match(spellcraft_amt.total_current_mana):
@@ -333,20 +332,20 @@ func determine_suffix() -> SpellSuffix:
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
-					suffix = Cloak.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Cloak.new()
+					print("CLOAK not yet implemented.")
 					return suffix
 				3:
-					suffix = Barrier.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Barrier.new()
+					print("BARRIER not yet implemented.")
 					return suffix
 				4:
-					suffix = Blade.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = Blade.new()
+					print("BLADE not yet implemented.")
 					return suffix
 				5:
-					suffix = SummonFamiliar.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#suffix = SummonFamiliar.new()
+					print("SUMMON FAMILIAR not yet implemented.")
 					return suffix
 	
 	if(suffix == null):
