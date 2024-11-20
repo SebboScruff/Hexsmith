@@ -28,4 +28,6 @@ func reset() -> void:
 	
 	total_active_colours = 0
 
+func get_by_value() -> Array:
+	return [has_red, has_blue, has_green, has_white, has_black]
 # TODO should probably add a debug readout here similar to ActiveManaTracker

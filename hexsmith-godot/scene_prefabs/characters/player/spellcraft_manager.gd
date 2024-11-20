@@ -65,8 +65,9 @@ func initialise_prefix_dict():
 	# bruh this is the exact opposite of risk-averse
 	# TODO definitely try preloading this somehow once the game gets a bit more complex.
 	prefix_dictionary = {
+			#TODO As per BLAZING, change all Keys to raw arrays rather than new ACT instances
 			# Mono-Colour Prefixes
-			ActiveColourTracker.new(true,false,false,false,false) : SpellPrefix.Blazing.new(spellcraft_amt.num_red, spellcraft_amt.num_colourless),
+			[true,false,false,false,false] : SpellPrefix.Blazing.new(spellcraft_amt.num_red, spellcraft_amt.num_colourless),
 			ActiveColourTracker.new(false,true,false,false,false) : SpellPrefix.Aqua.new(spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
 			ActiveColourTracker.new(false,false,true,false,false) : SpellPrefix.Phyto.new(spellcraft_amt.num_green, spellcraft_amt.num_colourless),
 			ActiveColourTracker.new(false,false,false,true,false) : SpellPrefix.Lumina.new(spellcraft_amt.num_white, spellcraft_amt.num_colourless),
@@ -262,14 +263,11 @@ func craft_and_bind(spell_slot_index: int):
 func determine_prefix() -> SpellPrefix:
 	var prefix : SpellPrefix = null
 	
-	# TODO Lookup in prefix_dictionary to assign value
-	# The problem here is that ActiveColourTrackers are passed by reference
-	# rather than value - so while the actual Dict key and the input key
-	# have the same values, this is a null return because the two keys are different
-	# instanced copies of the same Resource type.
-	# Arrays are compared by value - probably should refactor the ACT to be
-	# an Array because of this?
-	prefix = prefix_dictionary.get(ActiveColourTracker.new(spellcraft_act.has_red,spellcraft_act.has_blue,spellcraft_act.has_green,spellcraft_act.has_white,spellcraft_act.has_black))
+	# The problem here is that ActiveColourTrackers (being a Resource derivative)
+	# are passed by reference rather than value - the Dict keys are raw Arrays,
+	# and we need the custom pass-by-value getter to pass the player's Colour Tracker
+	# as a valid Dictionary Key.
+	prefix = prefix_dictionary[spellcraft_act.get_by_value()]
 	
 	if(prefix == null):
 		print("No Prefix found in Dictionary for that Colour Combo! Double Check in spellcraft_manager.gd.")
@@ -299,7 +297,7 @@ func determine_suffix() -> SpellSuffix:
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				4:
-					suffix = Wave.new()
+					suffix = Spear.new()
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				5:
