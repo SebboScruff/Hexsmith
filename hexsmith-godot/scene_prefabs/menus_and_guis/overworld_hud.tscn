@@ -103,76 +103,79 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -59.0
+offset_top = -54.0
 offset_right = 48.0
-offset_bottom = 145.0
+offset_bottom = 150.0
 grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="spell_slots_container"]
-z_index = -2
-layout_mode = 2
 
 [node name="spell_slots_grid" type="GridContainer" parent="spell_slots_container"]
 layout_mode = 2
 
 [node name="spell_slot_1_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container"]
 layout_mode = 2
 texture = ExtResource("4_df2xn")
+stretch_mode = 5
 
 [node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container"]
 z_index = -1
 layout_mode = 2
 texture = ExtResource("5_32mu5")
+stretch_mode = 5
 
-[node name="spell_slot_2_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+[node name="spell_slot_1_container2" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="spell_slot_2_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_2_container"]
+[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container2"]
 layout_mode = 2
 texture = ExtResource("4_df2xn")
 
-[node name="spell_slot_2_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_2_container"]
+[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container2"]
 z_index = -1
 layout_mode = 2
 texture = ExtResource("5_32mu5")
 
-[node name="spell_slot_3_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+[node name="spell_slot_1_container3" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="spell_slot_3_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_3_container"]
+[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container3"]
 layout_mode = 2
 texture = ExtResource("4_df2xn")
 
-[node name="spell_slot_3_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_3_container"]
+[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container3"]
 z_index = -1
 layout_mode = 2
 texture = ExtResource("5_32mu5")
 
-[node name="spell_slot_4_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+[node name="spell_slot_1_container4" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
 layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
-[node name="spell_slot_4_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_4_container"]
+[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container4"]
 layout_mode = 2
 texture = ExtResource("4_df2xn")
 
-[node name="spell_slot_4_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_4_container"]
+[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container4"]
 z_index = -1
 layout_mode = 2
 texture = ExtResource("5_32mu5")
 
 [node name="item_slots_container" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
+anchors_preset = 2
 anchor_top = 1.0
-anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -152.0
 offset_top = -48.0
-grow_horizontal = 0
+offset_right = 152.0
 grow_vertical = 0
 
 [node name="Panel" type="Panel" parent="item_slots_container"]

@@ -9,7 +9,7 @@
 class_name SpellcraftManager
 extends Node
 
-## HELPER DATA STRUCTURES
+#region HELPER DATA STRUCTURES
 # This guy is gonna hold all 25 colour available colour combinations
 # Uses ActiveColourTrackers as keys, and SpellPrefixes as values.
 var prefix_dictionary = {}
@@ -22,16 +22,19 @@ enum MANA_COLOURS{
 	BLACK,		# 4
 	COLOURLESS	# 5
 }
-## END OF HELPER DATA STRUCTURES
+#endregion
 # ------------------------------------
-## VARIABLE DECLARATIONS ##
+#region VARIABLE DECLARATIONS
+@onready var player: Player = $".."
+
 var spellcraft_amt : ActiveManaTracker
 var spellcraft_act : ActiveColourTracker
 
 const MAX_COLOURS : int = 3 # the maximum number of different colours that can be used in Spellcrafting
 const MAX_MANA : int = 5 # the maximum number of total mana that can be used in spellcrafting
+#endregion
 
-# HUD Elements
+#region HUD Elements
 @onready var player_hud: HudManager = %PlayerHUD
 @export var hud_manager : HudManager = player_hud as HudManager
 
@@ -47,8 +50,7 @@ const COLOURLESS_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcr
 const GREEN_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcraft_mana_icons/green_mana_icon.tscn")
 const RED_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcraft_mana_icons/red_mana_icon.tscn")
 const WHITE_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcraft_mana_icons/white_mana_icon.tscn")
-
-## END OF VARIABLE DECLARATIONS ##
+#endregion
 
 func _ready() -> void:
 	# Initialise the Colour Tracker to all false
@@ -231,33 +233,35 @@ func clear_active_mana():
 	for n in gui_instances:
 		n.queue_free()
 
-func craft_and_bind(spell_slot_index: int):
+func craft_and_bind(spell_index: int):
 	# TODO Combine all spell inputs to create a new spell:
 	# Preliminary checks:
-	# # If number of manas == 0 OR number of Colours == 0 OR Selected Class is NONE.
-	# # Do Nothing
+	# # Return straight out if insufficient components are provided.
+	# # TODO Add some in-game error pop-ups in these cases, maybe split into
+	# # case-by-case
 	if(spellcraft_act.total_active_colours == 0 
-	|| spellcraft_amt.total_current_mana == 0):
+	|| spellcraft_amt.total_current_mana == 0
+	|| class_selector.current_class == SpellClassSelector.SPELL_CLASSES.NONE):
 		return
 	
 	# Otherwise, create new SpellSuffix instance and SpellPrefix Instance
 	var crafted_spell_prefix:SpellPrefix = determine_prefix()
 	var crafted_spell_suffix:SpellSuffix = determine_suffix()
-	
-	# and assign to new Spell Instance
 	if(crafted_spell_prefix == null || crafted_spell_suffix == null):
 		print("Prefix or Suffix is Null. Check Debug Logs")
+		menu_cleanup()
 		return
 	
+	# and assign to new Spell Instance
 	var crafted_spell:Spell = Spell.new(crafted_spell_prefix, crafted_spell_suffix)
 	
 	# then assign that new Spell to the associated spell slot passed in as parameter
-	print("TODO Craft and Bind to Spell Slot " + var_to_str(spell_slot_index))
+	player.active_spells[spell_index] = crafted_spell
+	var debug_string = "Spell Slot %d is now %s"
+	print(debug_string %[spell_index, crafted_spell.name])
 	
 	# and finally, clear and close the Spellcraft Menu
-	clear_active_mana()
-	gsm.change_game_state(States.GAME_STATES.OVERWORLD)
-	hud_manager.change_active_menu(0)
+	menu_cleanup()
 
 func determine_prefix() -> SpellPrefix:
 	var prefix : SpellPrefix = null
@@ -353,3 +357,10 @@ func determine_suffix() -> SpellSuffix:
 		return
 	
 	return suffix
+
+# Quick-access function to clear the player's selection and close the 
+# Spellcraft Menu
+func menu_cleanup():
+	clear_active_mana()
+	gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+	hud_manager.change_active_menu(0)
