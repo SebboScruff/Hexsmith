@@ -18,7 +18,8 @@ var cast_type: CAST_TYPES
 var is_active: bool
 var target_type: TARGET_TYPES
 
-var spell_icon: TextureRect
+const icon_root_path = "res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/"
+var spell_icon: CompressedTexture2D
 
 # TODO These can probably eventually be replaced by Godot Timers tied to the player
 # Remember, casting a spell puts the SUFFIX on cooldown, not that specific Spell

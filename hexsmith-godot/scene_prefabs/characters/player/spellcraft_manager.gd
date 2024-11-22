@@ -68,41 +68,41 @@ func initialise_prefix_dict():
 	# TODO definitely try preloading this somehow once the game gets a bit more complex.
 	prefix_dictionary = {
 			# Mono-Colour Prefixes
-			[true,false,false,false,false] : SpellPrefix.Blazing.new(spellcraft_amt.num_red, spellcraft_amt.num_colourless),
-			[false,true,false,false,false] : SpellPrefix.Aqua.new(spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
-			[false,false,true,false,false] : SpellPrefix.Phyto.new(spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			[false,false,false,true,false] : SpellPrefix.Lumina.new(spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[false,false,false,false,true] : SpellPrefix.Umbral.new(spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,false,false,false,false] : Blazing.new(spellcraft_amt.num_red, spellcraft_amt.num_colourless),
+			[false,true,false,false,false] : Aqua.new(spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
+			[false,false,true,false,false] : Phyto.new(spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[false,false,false,true,false] : Lumina.new(spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,false,false,false,true] : Umbral.new(spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			# Two-Colour Prefixes
-			[true,true,false,false,false] : SpellPrefix.Steam.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
-			[true,false,true,false,false] : SpellPrefix.Carbon.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			[true,false,false,true,false] : SpellPrefix.Gigawatt.new(spellcraft_amt.num_red, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[true,false,false,false,true] : SpellPrefix.Infernal.new(spellcraft_amt.num_red, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,true,false,false,false] : Steam.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_colourless),
+			[true,false,true,false,false] : Carbon.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[true,false,false,true,false] : Gigawatt.new(spellcraft_amt.num_red, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,false,false,false,true] : Infernal.new(spellcraft_amt.num_red, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			[false,true,true,false,false] : SpellPrefix.Terra.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			[false,true,false,true,false] : SpellPrefix.Boreal.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[false,true,false,false,true] : SpellPrefix.Hadal.new(spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,true,false,false] : Terra.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[false,true,false,true,false] : Boreal.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,true,false,false,true] : Hadal.new(spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			[false,false,true,true,false] : SpellPrefix.Floral.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[false,false,true,false,true] : SpellPrefix.Fungal.new(spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,false,true,true,false] : Floral.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,false,true,false,true] : Fungal.new(spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			[false,false,false,true,true] : SpellPrefix.Twilight.new(spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,false,false,true,true] : Twilight.new(spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			# Three-Colour Prefixes
-			[true,true,true,false,false] : SpellPrefix.Prismatic.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
-			[true,true,false,true,false] : SpellPrefix.Tempest.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[true,true,false,false,true] : SpellPrefix.BlackOil.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,true,true,false,false] : Prismatic.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_colourless),
+			[true,true,false,true,false] : Tempest.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,true,false,false,true] : BlackOil.new(spellcraft_amt.num_red, spellcraft_amt.num_blue, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			[true,false,true,true,false] : SpellPrefix.Silica.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[true,false,true,false,true] : SpellPrefix.Ashen.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[true,false,true,true,false] : Silica.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,false,true,false,true] : Ashen.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			[true,false,false,true,true] : SpellPrefix.Thundercloud.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[true,false,false,true,true] : Thundercloud.new(spellcraft_amt.num_red, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
 		
-			[false,true,true,true,false] : SpellPrefix.Coral.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
-			[false,true,true,false,true] : SpellPrefix.Mire.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,true,true,false] : Coral.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_colourless),
+			[false,true,true,false,true] : Mire.new(spellcraft_amt.num_blue, spellcraft_amt.num_green, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 			
-			[false,true,false,true,true] : SpellPrefix.Arctic.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,true,false,true,true] : Arctic.new(spellcraft_amt.num_blue, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 		
-			[false,false,true,true,true] : SpellPrefix.Toxic.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
+			[false,false,true,true,true] : Toxic.new(spellcraft_amt.num_green, spellcraft_amt.num_white, spellcraft_amt.num_black, spellcraft_amt.num_colourless),
 		}
 
 func add_active_mana_instance(colour:MANA_COLOURS):
@@ -259,6 +259,9 @@ func craft_and_bind(spell_index: int):
 	player.active_spells[spell_index] = crafted_spell
 	var debug_string = "Spell Slot %d is now %s"
 	print(debug_string %[spell_index, crafted_spell.name])
+	
+	# TODO Change GUI Spell Icon using crafted_spell_prefix.spell_icon_frame
+	# and crafted_spell_suffix.spell_icon
 	
 	# and finally, clear and close the Spellcraft Menu
 	menu_cleanup()

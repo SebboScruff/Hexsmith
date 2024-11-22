@@ -6,6 +6,8 @@ func _init() -> void:
 	cast_type = CAST_TYPES.TOGGLE
 	is_active = false
 	target_type = TARGET_TYPES.SELF
+	
+	spell_icon = preload(icon_root_path + "transmutation_icon.png")
 
 func toggle():
 	print("Toggled a TRANSMUTATION Spell")

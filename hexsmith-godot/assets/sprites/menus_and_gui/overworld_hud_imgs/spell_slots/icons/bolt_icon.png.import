@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bhnj52ci1micl"
-path="res://.godot/imported/spell_slot_frame.png-31cdb54da6bd97fefa004a7fcb030b49.ctex"
+uid="uid://bhbgk7fttvshc"
+path="res://.godot/imported/bolt_icon.png-57da0fab546128b6dcd86921a8672497.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_frame.png"
-dest_files=["res://.godot/imported/spell_slot_frame.png-31cdb54da6bd97fefa004a7fcb030b49.ctex"]
+source_file="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/bolt_icon.png"
+dest_files=["res://.godot/imported/bolt_icon.png-57da0fab546128b6dcd86921a8672497.ctex"]
 
 [params]
 

@@ -3,8 +3,8 @@
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="1_wtwt1"]
 [ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar_frame.png" id="2_5bi6e"]
 [ext_resource type="PackedScene" uid="uid://dlnysb1rjh2qq" path="res://scene_prefabs/menus_and_guis/mana_value_tracker.tscn" id="3_naleo"]
-[ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_frame.png" id="4_df2xn"]
-[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slot_icon.png" id="5_32mu5"]
+[ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/spell_slot_frame.png" id="4_df2xn"]
+[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png" id="5_32mu5"]
 [ext_resource type="PackedScene" uid="uid://dcuql0xn2dtnn" path="res://scene_prefabs/menus_and_guis/crosshair.tscn" id="6_dmpeq"]
 
 [node name="overworld_hud" type="Control"]

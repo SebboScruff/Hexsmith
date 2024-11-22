@@ -37,8 +37,8 @@ var active_spells: Array[Spell]
 # customised in Project Settings->General->Display->Mouse Cursor
 func _ready() -> void:
 	active_spells = [null, null, null, null]
+	
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-
 
 # All input processing work is done in here
 # as well as all related animation work. It's done in _physics_process() rather
@@ -112,9 +112,13 @@ func _physics_process(delta: float) -> void:
 	# or Spellcraft
 	move_and_slide()
 	#endregion
+	
 	# After moving, check for Spellcasting and Combat inputs:
 	#region Spellcasting and Combat
-	# TODO As with the Input Processing stuff, this can probably all be refactored.
+	# TODO As with the Input Processing stuff, this can probably all be refactored,
+	# and like assign a function to each input callback
+	# Also TODO This eventually wants to be broken down into precast() and cast()
+	# stages to allow for some JUICE
 	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
 		if(Input.is_action_just_pressed("overworld_melee_attack")):
 			basic_melee()
@@ -155,7 +159,7 @@ func _physics_process(delta: float) -> void:
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot1")):
 			spellcrafter.craft_and_bind(0)
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
-			print("TODO Craft and Bind to Hotkey 2")
+			spellcrafter.craft_and_bind(1)
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
 			print("TODO Craft and Bind to Hotkey 3")
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
@@ -164,6 +168,10 @@ func _physics_process(delta: float) -> void:
 #endregion
 
 #region SPRITE ANIMATION
+	# TODO Firstly, check if the player is in Spellcrafting Menu
+	# If they are, play the "Thinking" animation and then return
+	# to break out of _physics_process without doing further animation work
+	
 	# Flip depending on Movement Direction
 	if direction > 0:
 		body_sprite.flip_h = false
@@ -179,8 +187,6 @@ func _physics_process(delta: float) -> void:
 	else:
 		body_sprite.play("jump_whole")
 #endregion SPRITE ANIMATION
-	## ---
-	
 
 func cast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
