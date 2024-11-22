@@ -269,8 +269,7 @@ func craft_and_bind(spell_index: int):
 	
 	# then assign that new Spell to the associated spell slot passed in as parameter
 	player.active_spells[spell_index] = crafted_spell
-	var debug_string = "Spell Slot %d is now %s"
-	print(debug_string %[spell_index, crafted_spell.name])
+	print("Spell Slot %d is now %s" %[spell_index, crafted_spell.spell_name])
 	
 	# Change GUI Spell Icon via the Hud Manager
 	hud_manager.change_spell_icon(spell_index, crafted_spell_prefix.spell_icon_frame, crafted_spell_suffix.spell_icon)
@@ -281,10 +280,9 @@ func craft_and_bind(spell_index: int):
 func determine_prefix() -> SpellPrefix:
 	var prefix : SpellPrefix = null
 	
-	# The problem here is that ActiveColourTrackers (being a Resource derivative)
-	# are passed by reference rather than value - the Dict keys are raw Arrays,
-	# and we need the custom pass-by-value getter to pass the player's Colour Tracker
-	# as a valid Dictionary Key.
+	# ActiveColourTracker has a custom Pass-By-Value getter so that
+	# the player's instance can be compared directly with the keys
+	# in the prefix_dictionary (which are Bool Arrays)
 	prefix = prefix_dictionary[spellcraft_act.get_by_value()]
 	
 	if(prefix == null):
@@ -294,11 +292,11 @@ func determine_prefix() -> SpellPrefix:
 	print("Prefix Found: " + prefix.prefix_name)
 	return prefix
 
+## This will definitely need refactoring and optimising,
+## I'd really rather not have a million if-chains
 func determine_suffix() -> SpellSuffix:
 	var suffix : SpellSuffix = null
 	
-	## TODO Selection Algorithm Here:
-	## This will definitely need refactoring and optimising
 	match(class_selector.current_class):
 		SpellClassSelector.SPELL_CLASSES.TELUMANCY:
 			match(spellcraft_amt.total_current_mana):
