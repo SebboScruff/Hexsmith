@@ -7,7 +7,7 @@ func _init(input_black:int, input_colourless:int):
 	
 	# Once spell frames are finished, load them in here. Switch out spell_slot_frame for the
 	# .png file name.
-	spell_icon_frame = preload(icon_frame_root_path + "spell_slot_frame.png")
+	spell_icon_frame = preload(icon_frame_root_path + "umbral_frame.png")
 	# NOTE: Colors declared as RGBA[0,1] so these are all defaulted opaque white
 	colors = [
 		Color(0,0,0,1), # Spell's Primary Color

@@ -18,6 +18,13 @@ func determine_spell_name():
 	spell_name = prefix.prefix_name + " " + suffix.suffix_name
 	## TODO There is an edge-case where if the suffix is Summon Familiar.
 
+func precast_spell():
+	if(suffix.cast_type != SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
+		print("No Precast Behaviours for Toggles and Passives")
+		return
+	
+	suffix.precast()
+
 func cast_spell():
 	# Actual behaviour here determined by the spell cast type. This behavioural split has to 
 	# happen here because the player just activates this generic function from their input hotkey.

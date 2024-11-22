@@ -242,6 +242,7 @@ func craft_and_bind(spell_index: int):
 	if(spellcraft_act.total_active_colours == 0 
 	|| spellcraft_amt.total_current_mana == 0
 	|| class_selector.current_class == SpellClassSelector.SPELL_CLASSES.NONE):
+		print("Insufficient Spell Components Added!")
 		return
 	
 	# Otherwise, create new SpellSuffix instance and SpellPrefix Instance
@@ -254,6 +255,17 @@ func craft_and_bind(spell_index: int):
 	
 	# and assign to new Spell Instance
 	var crafted_spell:Spell = Spell.new(crafted_spell_prefix, crafted_spell_suffix)
+	
+	# After checking if the spell is valid, make sure the player doesn't
+	# already have it in a different spell slot.
+	# TODO This could potentially have other functionality, like
+	# moving the existing spell to their chosen slot, or switching
+	# the two spells around. Also probably want to refactor away from a name check.
+	for n in 4:
+		if(player.active_spells[n] != null
+		&& player.active_spells[n].spell_name == crafted_spell.spell_name):
+			print("Already have that spell in slot " + var_to_str(n+1))
+			return
 	
 	# then assign that new Spell to the associated spell slot passed in as parameter
 	player.active_spells[spell_index] = crafted_spell

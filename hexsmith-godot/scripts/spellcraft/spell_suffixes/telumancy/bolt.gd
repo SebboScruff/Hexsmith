@@ -9,6 +9,9 @@ func _init() -> void:
 	
 	spell_icon = preload(icon_root_path + "bolt_icon.png")
 
+func precast():
+	print("Pre-casting BOLT")
+
 func cast(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):

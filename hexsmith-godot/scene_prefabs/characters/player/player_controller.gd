@@ -9,11 +9,12 @@ const RUN_SPEED = 300.0
 const CRAWL_SPEED = 75.0
 var current_speed : float
 
-const JUMP_VELOCITY = -400.0
+const JUMP_VELOCITY = -300.0
 #endregion
 
-#region Spellcraft Parameters
+#region Spellcraft & Spellcasting Parameters
 var active_spells: Array[Spell]
+var is_precasting:bool
 #endregion
 
 #region Child Node References
@@ -36,6 +37,7 @@ var active_spells: Array[Spell]
 # NOTE The actual in-game visual cursor (for menu naviation and stuff) can be
 # customised in Project Settings->General->Display->Mouse Cursor
 func _ready() -> void:
+	is_precasting = false
 	active_spells = [null, null, null, null]
 	
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
@@ -120,16 +122,30 @@ func _physics_process(delta: float) -> void:
 	# Also TODO This eventually wants to be broken down into precast() and cast()
 	# stages to allow for some JUICE
 	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
-		if(Input.is_action_just_pressed("overworld_melee_attack")):
-			basic_melee()
-		elif(Input.is_action_just_pressed("overworld_cast_spellslot1")):
-			cast_active_spell(0)
-		elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
-			cast_active_spell(1)
-		elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
-			cast_active_spell(2)
-		elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
-			cast_active_spell(3)
+		# If the player is precasting, they can either release a spell,
+		# or launch a melee attack. Both of these will cancel the precast state
+		# Also means you dont instantly cast after crafting
+		if(is_precasting):
+			if(Input.is_action_just_released("overworld_cast_spellslot1")):
+				cast_active_spell(0)
+			elif(Input.is_action_just_released("overworld_cast_spellslot2")):
+				cast_active_spell(1)
+			elif(Input.is_action_just_released("overworld_cast_spellslot3")):
+				cast_active_spell(2)
+			elif(Input.is_action_just_released("overworld_cast_spellslot4")):
+				cast_active_spell(3)
+			elif(Input.is_action_just_pressed("overworld_melee_attack")):
+				basic_melee()
+		# Otherwise, the player is allowed to start precasting
+		else:
+			if(Input.is_action_just_pressed("overworld_cast_spellslot1")):
+				precast_active_spell(0)
+			elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
+				precast_active_spell(1)
+			elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
+				precast_active_spell(2)
+			elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
+				precast_active_spell(3)
 	#endregion
 #endregion
 
@@ -188,6 +204,14 @@ func _physics_process(delta: float) -> void:
 		body_sprite.play("jump_whole")
 #endregion SPRITE ANIMATION
 
+func precast_active_spell(spell_index:int):
+	if(active_spells[spell_index] == null):
+		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
+		
+	# Any TODO in cast_active_spell is also relevant here.
+	is_precasting = true
+	active_spells[spell_index].precast_spell()
+
 func cast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
@@ -199,7 +223,9 @@ func cast_active_spell(spell_index:int):
 	
 	# Call that spell's Cast function - specific spell behaviours
 	# are determined on a per-class basis
+	is_precasting = false
 	active_spells[spell_index].cast_spell()
 
 func basic_melee():
+	is_precasting = false
 	print("TODO Basic Melee Attack")

@@ -31,11 +31,21 @@ var cooldown_max: float
 func _init() -> void:
 	pass
 
+# Called on KeyDown, for doing any pre-cast behaviours
+# for example, a slow-down feature to help with aiming,
+# a preview of mana costs in the HUD, or a
+# particle/animation on the player's sprite.
+# For Toggles or Passives, this is not used.
+func precast() -> void:
+	print("No default pre-cast behaviours for this spell.")
+	pass
+
 ## This must be overridden in all non-Passive Suffixes
 ## Determines all cast behaviours: whether something needs to be instantiated, 
 ## activating or deactivating certain aspects of the player's prefab,
 ## moving the player in some way, or anything else.
 ## Prefix-specific aspects will also be defined here.
+# Called on KeyUp, to initiate all post-cast behaviours of the spell.
 func cast(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):
