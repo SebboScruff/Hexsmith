@@ -1,0 +1,26 @@
+[gd_scene load_steps=4 format=3 uid="uid://cesliqrxfdtgy"]
+
+[ext_resource type="Texture2D" uid="uid://73c5rgico80h" path="res://third_party/testing_ground_assets/platformertiles.png" id="1_eywiq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c3och"]
+size = Vector2(96, 32)
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_vabxr"]
+polygon = PackedVector2Array(-48, -32, 48, -32, 48, 0, -48, 0)
+
+[node name="Test platform" type="AnimatableBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -16)
+shape = SubResource("RectangleShape2D_c3och")
+one_way_collision = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -16)
+rotation = 1.5708
+texture = ExtResource("1_eywiq")
+region_enabled = true
+region_rect = Rect2(128, 0, 32, 96)
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="."]
+occluder = SubResource("OccluderPolygon2D_vabxr")
