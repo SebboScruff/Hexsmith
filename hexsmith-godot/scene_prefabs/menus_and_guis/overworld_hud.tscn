@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://du76kdtuspo1d"]
+[gd_scene load_steps=8 format=3 uid="uid://du76kdtuspo1d"]
 
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="1_wtwt1"]
 [ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar_frame.png" id="2_5bi6e"]
 [ext_resource type="PackedScene" uid="uid://dlnysb1rjh2qq" path="res://scene_prefabs/menus_and_guis/mana_value_tracker.tscn" id="3_naleo"]
 [ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/spell_slot_frame.png" id="4_df2xn"]
+[ext_resource type="PackedScene" uid="uid://cogpts60jbjbf" path="res://scene_prefabs/menus_and_guis/spell_icon.tscn" id="4_nhtt8"]
 [ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png" id="5_32mu5"]
 [ext_resource type="PackedScene" uid="uid://dcuql0xn2dtnn" path="res://scene_prefabs/menus_and_guis/crosshair.tscn" id="6_dmpeq"]
 
@@ -14,6 +15,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="mana_hp_panelcontainer" type="PanelContainer" parent="."]
 layout_mode = 1
@@ -83,11 +86,12 @@ maximum_mana = 100.0
 
 [node name="minimap_panelcontainer" type="PanelContainer" parent="."]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = -1
+anchor_left = 0.741
 anchor_right = 1.0
-offset_left = -298.0
-offset_bottom = 151.0
+anchor_bottom = 0.233
+offset_left = 0.36792
+offset_bottom = 0.0159912
 grow_horizontal = 0
 
 [node name="placeholder_label" type="Label" parent="minimap_panelcontainer"]
@@ -100,74 +104,29 @@ vertical_alignment = 1
 
 [node name="spell_slots_container" type="CenterContainer" parent="."]
 layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_top = -54.0
-offset_right = 48.0
-offset_bottom = 150.0
-grow_vertical = 2
+anchors_preset = -1
+anchor_top = 0.441
+anchor_bottom = 0.441
+offset_top = 0.231995
+offset_right = 400.0
+offset_bottom = 1612.23
+grow_vertical = 0
+scale = Vector2(0.16, 0.16)
 
 [node name="spell_slots_grid" type="GridContainer" parent="spell_slots_container"]
 layout_mode = 2
 
-[node name="spell_slot_1_container" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+[node name="SpellIcon1" parent="spell_slots_container/spell_slots_grid" instance=ExtResource("4_nhtt8")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 
-[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container"]
+[node name="SpellIcon2" parent="spell_slots_container/spell_slots_grid" instance=ExtResource("4_nhtt8")]
 layout_mode = 2
-texture = ExtResource("4_df2xn")
-stretch_mode = 5
 
-[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container"]
-z_index = -1
+[node name="SpellIcon3" parent="spell_slots_container/spell_slots_grid" instance=ExtResource("4_nhtt8")]
 layout_mode = 2
-texture = ExtResource("5_32mu5")
-stretch_mode = 5
 
-[node name="spell_slot_1_container2" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
+[node name="SpellIcon4" parent="spell_slots_container/spell_slots_grid" instance=ExtResource("4_nhtt8")]
 layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container2"]
-layout_mode = 2
-texture = ExtResource("4_df2xn")
-
-[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container2"]
-z_index = -1
-layout_mode = 2
-texture = ExtResource("5_32mu5")
-
-[node name="spell_slot_1_container3" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container3"]
-layout_mode = 2
-texture = ExtResource("4_df2xn")
-
-[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container3"]
-z_index = -1
-layout_mode = 2
-texture = ExtResource("5_32mu5")
-
-[node name="spell_slot_1_container4" type="CenterContainer" parent="spell_slots_container/spell_slots_grid"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="spell_slot_1_frame" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container4"]
-layout_mode = 2
-texture = ExtResource("4_df2xn")
-
-[node name="spell_slot_1_icon" type="TextureRect" parent="spell_slots_container/spell_slots_grid/spell_slot_1_container4"]
-z_index = -1
-layout_mode = 2
-texture = ExtResource("5_32mu5")
 
 [node name="item_slots_container" type="CenterContainer" parent="."]
 layout_mode = 1

@@ -260,8 +260,8 @@ func craft_and_bind(spell_index: int):
 	var debug_string = "Spell Slot %d is now %s"
 	print(debug_string %[spell_index, crafted_spell.name])
 	
-	# TODO Change GUI Spell Icon using crafted_spell_prefix.spell_icon_frame
-	# and crafted_spell_suffix.spell_icon
+	# Change GUI Spell Icon via the Hud Manager
+	hud_manager.change_spell_icon(spell_index, crafted_spell_prefix.spell_icon_frame, crafted_spell_suffix.spell_icon)
 	
 	# and finally, clear and close the Spellcraft Menu
 	menu_cleanup()

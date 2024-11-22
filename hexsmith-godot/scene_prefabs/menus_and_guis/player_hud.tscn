@@ -13,8 +13,9 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_407db"]
 bg_color = Color(0.243137, 0.243137, 0.243137, 0.498039)
 
-[node name="PlayerHUD" type="CanvasLayer"]
+[node name="PlayerHUD" type="CanvasLayer" node_paths=PackedStringArray("spell_icons")]
 script = ExtResource("1_154uy")
+spell_icons = [null]
 
 [node name="overworld_hud" parent="." instance=ExtResource("2_g3cc8")]
 unique_name_in_owner = true

@@ -161,9 +161,9 @@ func _physics_process(delta: float) -> void:
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
 			spellcrafter.craft_and_bind(1)
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
-			print("TODO Craft and Bind to Hotkey 3")
+			spellcrafter.craft_and_bind(2)
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
-			print("TODO Craft and Bind to Hotkey 4")
+			spellcrafter.craft_and_bind(3)
 		#endregion
 #endregion
 
