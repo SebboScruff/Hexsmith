@@ -12,12 +12,20 @@ enum MOVEMENT_STYLES{ # Used for altering the player's fundamental movement beha
 }
 var current_movement_style:MOVEMENT_STYLES
 
-const SPEED = 150.0
+const BASE_SPEED = 150.0
 const RUN_SPEED = 300.0
 const CRAWL_SPEED = 75.0
+
+const SWIM_SPEED = 80.0 # basic movement speed in all directions
+# SWIM_SPEED must be multiplied and made negative to overcome
+# gravity and move in the correct direction
+const SWIM_VERTICAL_FACTOR = -1
+var can_surface:bool = false # turned on whenever player is at the top of a patch of water
+
 var current_speed : float
 
-const JUMP_VELOCITY = -300.0
+const JUMP_VELOCITY = -200.0
+var gravity_scale:float = 1.0
 #endregion
 
 #region Spellcraft & Spellcasting Parameters
@@ -91,35 +99,109 @@ func _physics_process(delta: float) -> void:
 	if(gsm.current_game_state == States.GAME_STATES.PAUSED):
 		return
 	
+#region Gravity
 	# Gravity processing is the first thing to be checked, so that the player will still 
 	# fall even if they are in the Spellcraft Menu
-	if not is_on_floor():
-		velocity += get_gravity() * delta
+	# Gravity has different effective strengths depending on the player's movement state.
+	match(current_movement_style):
+		MOVEMENT_STYLES.NORMAL:
+			gravity_scale = 1.0
+		MOVEMENT_STYLES.SWIMMING:
+			gravity_scale = 0.2
+		MOVEMENT_STYLES.CLIMBING:
+			gravity_scale = 0
+		MOVEMENT_STYLES.FLYING:
+			gravity_scale = 0
 	
-	# NOTE: Direction is declared outside of any conditionals because otherwise the animation code will break
+	if not is_on_floor():
+		velocity += get_gravity() * delta * gravity_scale
+#endregion
+	
+	# NOTE: Direction is declared outside of any input checks because otherwise
+	# the animation code will break. It's used in movement and animation.
 	var direction := Input.get_axis("overworld_move_left", "overworld_move_right")
+
+# TODO Refactor Spellcraft inputs to not be a horrible if-chain
+#region Spellcraft Menu Controls
+	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
+		#region Mana Addition
+		if(Input.is_action_just_pressed("spellcraft_add_red")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.RED)
+		elif(Input.is_action_just_pressed("spellcraft_add_blue")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLUE)
+		elif(Input.is_action_just_pressed("spellcraft_add_green")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.GREEN)
+		elif(Input.is_action_just_pressed("spellcraft_add_white")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.WHITE)
+		elif(Input.is_action_just_pressed("spellcraft_add_black")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLACK)
+		elif(Input.is_action_just_pressed("spellcraft_add_colorless")):
+			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.COLOURLESS)
+		#endregion
+		#region Mana Removal
+		elif(Input.is_action_just_pressed("spellcraft_remove_mana")):
+			spellcrafter.remove_last_instance()
+		elif(Input.is_action_just_pressed("spellcraft_clear_mana")):
+			spellcrafter.clear_active_mana()
+		#endregion
+		#region Spell Slot Assignment
+		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot1")):
+			spellcrafter.craft_and_bind(0)
+		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
+			spellcrafter.craft_and_bind(1)
+		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
+			spellcrafter.craft_and_bind(2)
+		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
+			spellcrafter.craft_and_bind(3)
+		#endregion
+#endregion
 
 #region Overworld Controls
 	#region Movement
 	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
 		## BEGINNING OF MOVEMENT INPUT PROCESSING: ##
-		# Check for Sprint (TODO and Crouch) inputs
-		# This will eventually be expanded for many movement categories
-		if(Input.is_action_pressed("overworld_toggle_sprint")):
-			current_speed = RUN_SPEED
-		else:
-			current_speed = SPEED
-		# Handle jump.
-		if Input.is_action_just_pressed("overworld_jump") and is_on_floor():
-			velocity.y = JUMP_VELOCITY
-		# Movement
+		# Horizontal Movement is done at the end of this match block.
+		# The player's vertical movmement, speed, etc. are all set differently depending on 
+		# their current movement state
+		match(current_movement_style):
+			MOVEMENT_STYLES.NORMAL:
+				# Check for Sprint (TODO and Crouch) inputs
+				# This will eventually be expanded for many movement categories
+				if(Input.is_action_pressed("overworld_toggle_sprint")):
+					current_speed = RUN_SPEED
+				else:
+					current_speed = BASE_SPEED
+				# Handle jump.
+				if Input.is_action_pressed("overworld_jump"):
+					if(is_on_floor() || can_surface):
+						velocity.y = JUMP_VELOCITY
+				# Movement
+				
+			MOVEMENT_STYLES.SWIMMING:
+				current_speed = SWIM_SPEED
+				# Free Vertical Movement with slight gravity while underwater
+				var dir_v := Input.get_axis("overworld_up", "overworld_down")
+				if(dir_v):
+					velocity -= get_gravity() * delta * gravity_scale
+					velocity.y += dir_v * current_speed * delta
+				
+				# Surfacing Controls
+				if Input.is_action_pressed("overworld_jump") and can_surface:
+					velocity.y = JUMP_VELOCITY
+			MOVEMENT_STYLES.CLIMBING:
+				print("TODO Implement Climbing")
+				pass
+			MOVEMENT_STYLES.FLYING:
+				print("TODO Implement Flying")
+				pass
+		# Horizontal Deceleration: if not moving, reduce speed back to 0
 		if direction:
 			velocity.x = direction * current_speed
 		else:
 			velocity.x = move_toward(velocity.x, 0, current_speed)
 			
 	# Apply the MoveAndSlide regardless of whether the game is in Overworld
-	# or Spellcraft
+	# or Spellcraft, so that the player will continue falling due to gravity
 	move_and_slide()
 	#endregion
 	
@@ -157,40 +239,6 @@ func _physics_process(delta: float) -> void:
 	#endregion
 #endregion
 
-#region Spellcraft Menu Controls
-	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
-		#region Mana Addition
-		if(Input.is_action_just_pressed("spellcraft_add_red")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.RED)
-		elif(Input.is_action_just_pressed("spellcraft_add_blue")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLUE)
-		elif(Input.is_action_just_pressed("spellcraft_add_green")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.GREEN)
-		elif(Input.is_action_just_pressed("spellcraft_add_white")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.WHITE)
-		elif(Input.is_action_just_pressed("spellcraft_add_black")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLACK)
-		elif(Input.is_action_just_pressed("spellcraft_add_colorless")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.COLOURLESS)
-		#endregion
-		#region Mana Removal
-		elif(Input.is_action_just_pressed("spellcraft_remove_mana")):
-			spellcrafter.remove_last_instance()
-		elif(Input.is_action_just_pressed("spellcraft_clear_mana")):
-			spellcrafter.clear_active_mana()
-		#endregion
-		#region Spell Slot Assignment
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot1")):
-			spellcrafter.craft_and_bind(0)
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
-			spellcrafter.craft_and_bind(1)
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
-			spellcrafter.craft_and_bind(2)
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
-			spellcrafter.craft_and_bind(3)
-		#endregion
-#endregion
-
 #region SPRITE ANIMATION
 	# TODO Firstly, check if the player is in Spellcrafting Menu
 	# If they are, play the "Thinking" animation and then return
@@ -203,6 +251,9 @@ func _physics_process(delta: float) -> void:
 		body_sprite.flip_h = true
 		
 	#Then determine animations
+	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
+		print("TODO Play Thinking/Spellcrafting Animation")
+		return
 	if is_on_floor():
 		if direction == 0:
 			body_sprite.play("idle")
@@ -210,33 +261,39 @@ func _physics_process(delta: float) -> void:
 			body_sprite.play("run")
 	else:
 		body_sprite.play("jump_whole")
+#end of _physics_process function body.
+
 #endregion SPRITE ANIMATION
 
 func set_movement_style(new_style:MOVEMENT_STYLES):
 	current_movement_style = new_style
-	print("New Movement Style: " + var_to_str(new_style))
+	# Kill all current velocity-altering effects
+	# so gravity doesn't continue to affect the player's velocity during state changes
+	# TODO this might be pretty jarring if you e.g. fall onto a ladder, maybe
+	# try to lerp or tween to reduce the effect over about 0.2s
+	velocity = Vector2.ZERO
 
 func precast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
-		
-	# Any TODO in cast_active_spell is also relevant here.
-	is_precasting = true
-	active_spells[spell_index].precast_spell()
+	else:
+		# Any TODO in cast_active_spell is also relevant here.
+		is_precasting = true
+		active_spells[spell_index].precast_spell()
 
 func cast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
-	
-	## TODO Once we start implementing player progression, also need to check
-	## If the player has unlocked this spell slot. Probably will be intrinsically managed
-	## in the previous conditional & the spellcraft menu: if the slot isnt unlocked, it just
-	## wont complete the craft step and therefore the spell will be null
-	
-	# Call that spell's Cast function - specific spell behaviours
-	# are determined on a per-class basis
-	is_precasting = false
-	active_spells[spell_index].cast_spell()
+	else:
+		## TODO Once we start implementing player progression, also need to check
+		## If the player has unlocked this spell slot. Probably will be intrinsically managed
+		## in the previous conditional & the spellcraft menu: if the slot isnt unlocked, it just
+		## wont complete the craft step and therefore the spell will be null
+
+		# Call that spell's Cast function - specific spell behaviours
+		# are determined on a per-class basis
+		is_precasting = false
+		active_spells[spell_index].cast_spell()
 
 func basic_melee():
 	is_precasting = false
