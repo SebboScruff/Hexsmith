@@ -16,12 +16,18 @@ const BASE_SPEED = 150.0
 const RUN_SPEED = 300.0
 const CRAWL_SPEED = 75.0
 
+#region Underwater Parameters
 const SWIM_SPEED = 80.0 # basic movement speed in all directions
 # SWIM_SPEED must be multiplied and made negative to overcome
 # gravity and move in the correct direction
 const SWIM_VERTICAL_FACTOR = -1
 var can_surface:bool = false # turned on whenever player is at the top of a patch of water
+const MAX_OXYGEN = 5 ## Number of seconds the player can remain underwater by default
+var current_oxygen:float
+@onready var oxygen_meter:TextureProgressBar = $OxygenMeter
+#endregion
 
+var external_speed_mult:float = 1.0 # eventually will be used for Phyto Strider, speed potions, etc
 var current_speed : float
 
 const JUMP_VELOCITY = -200.0
@@ -56,7 +62,37 @@ func _ready() -> void:
 	is_precasting = false
 	active_spells = [null, null, null, null]
 	
+	oxygen_meter.max_value = MAX_OXYGEN
+	current_oxygen = MAX_OXYGEN
+	
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+
+# All Resource Management - Mana & Health Regeneration, Oxygen while underwater,
+# and other constant over-time effects like that will happen in here
+func _process(delta: float) -> void:
+#region Oxygen Management
+	# TODO Eventually add a HasWaterbreathing bool. Blue-Mana Cloaks will give waterbreathing,
+	# as well as maybe some consumable items.
+	if(current_movement_style == MOVEMENT_STYLES.SWIMMING and !can_surface):
+		# Player is underwater
+		current_oxygen -= delta
+		if(current_oxygen < 0):current_oxygen=0
+	elif(current_oxygen < MAX_OXYGEN):
+		# Player is not underwater but still has somewhat empty lungs
+		current_oxygen += delta
+	
+	#Update HUD Oxygen Bar
+	oxygen_meter.value = current_oxygen
+	if(oxygen_meter.value >= oxygen_meter.max_value):
+		oxygen_meter.set_visible(false)
+	else:
+		oxygen_meter.set_visible(true)
+		
+	if(current_oxygen <= 0):
+		# probably manage this through a Timer node?
+		# i.e. onTimerTimeout, deal damage through the player's CombatEntity
+		print("TODO Out of Oxygen, taking damage")
+#endregion
 
 # All input processing work is done in here
 # as well as all related animation work. It's done in _physics_process() rather
@@ -107,7 +143,7 @@ func _physics_process(delta: float) -> void:
 		MOVEMENT_STYLES.NORMAL:
 			gravity_scale = 1.0
 		MOVEMENT_STYLES.SWIMMING:
-			gravity_scale = 0.2
+			gravity_scale = 0.5
 		MOVEMENT_STYLES.CLIMBING:
 			gravity_scale = 0
 		MOVEMENT_STYLES.FLYING:
@@ -181,9 +217,11 @@ func _physics_process(delta: float) -> void:
 				current_speed = SWIM_SPEED
 				# Free Vertical Movement with slight gravity while underwater
 				var dir_v := Input.get_axis("overworld_up", "overworld_down")
-				if(dir_v):
+				if(dir_v != 0):
 					velocity -= get_gravity() * delta * gravity_scale
-					velocity.y += dir_v * current_speed * delta
+					velocity.y = dir_v * current_speed
+				else:
+					velocity.y = get_gravity().y * delta * gravity_scale
 				
 				# Surfacing Controls
 				if Input.is_action_pressed("overworld_jump") and can_surface:

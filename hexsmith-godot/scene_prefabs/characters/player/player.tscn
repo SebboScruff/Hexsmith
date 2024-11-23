@@ -1,9 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=28 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
+[ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_d1o63"]
 atlas = ExtResource("2_mr4py")
@@ -215,3 +216,21 @@ unique_name_in_owner = true
 z_index = 1
 position = Vector2(-7, -40)
 zoom = Vector2(3, 3)
+
+[node name="OxygenMeter" type="TextureProgressBar" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -25.0
+offset_right = 38.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+value = 100.0
+fill_mode = 3
+texture_under = ExtResource("5_doyrg")
+texture_progress = ExtResource("5_doyrg")
+tint_under = Color(0.144063, 0.144063, 0.144063, 1)
+tint_progress = Color(0, 0.794772, 0.794772, 1)
