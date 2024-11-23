@@ -301,7 +301,7 @@ func determine_suffix() -> SpellSuffix:
 		SpellClassSelector.SPELL_CLASSES.TELUMANCY:
 			match(spellcraft_amt.total_current_mana):
 				1:
-					suffix = Bolt.new()
+					suffix = BoltSuffix.new()
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
@@ -323,7 +323,7 @@ func determine_suffix() -> SpellSuffix:
 		SpellClassSelector.SPELL_CLASSES.MOTOMANCY:
 			match(spellcraft_amt.total_current_mana):
 				1:
-					suffix = Strider.new()
+					suffix = StriderSuffix.new()
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
@@ -345,7 +345,7 @@ func determine_suffix() -> SpellSuffix:
 		SpellClassSelector.SPELL_CLASSES.INSTRUMANCY:
 			match(spellcraft_amt.total_current_mana):
 				1:
-					suffix = Transmutation.new()
+					suffix = TransmutationSuffix.new()
 					print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:

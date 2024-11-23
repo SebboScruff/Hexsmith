@@ -1,4 +1,4 @@
-class_name SummonFamiliar extends SpellSuffix
+class_name SummonFamiliarSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Summon Familiar"

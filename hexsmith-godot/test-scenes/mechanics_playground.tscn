@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=4 uid="uid://b026oh5eny5o2"]
+[gd_scene load_steps=13 format=4 uid="uid://b026oh5eny5o2"]
 
 [ext_resource type="TileSet" uid="uid://cx22yeu87jm6g" path="res://test-scenes/moon_cave_tiles.tres" id="1_c3vxp"]
 [ext_resource type="PackedScene" uid="uid://bhapy03ndyqo8" path="res://scene_prefabs/characters/player/player.tscn" id="1_jdw74"]
 [ext_resource type="TileSet" uid="uid://cqrk7a85o14vw" path="res://test-scenes/woodland_tiles.tres" id="2_ogsnc"]
 [ext_resource type="PackedScene" uid="uid://cesliqrxfdtgy" path="res://third_party/testing_ground_assets/test-platform.tscn" id="3_byg2d"]
+[ext_resource type="PackedScene" uid="uid://86anbq0ljjt5" path="res://scene_prefabs/movement_areas/water_area.tscn" id="3_e20fm"]
 [ext_resource type="PackedScene" uid="uid://c612bpdlmvc2l" path="res://test-scenes/target_dummy.tscn" id="5_8kije"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_215lo"]
@@ -100,6 +101,10 @@ z_index = 6
 tile_map_data = PackedByteArray("AADu/wsAAAAIAAUAAADv/wsAAAAIAAUAAADw/wsAAAAIAAUAAADx/wsAAAAIAAUAAADy/wsAAAAIAAUAAADz/wsAAAAIAAUAAAD0/wsAAAAIAAUAAAD1/wsAAAAIAAUAAAD2/wsAAAAIAAUAAAD3/wsAAAAIAAUAAAD4/wsAAAAIAAUAAAD5/wsAAAAIAAUAAAD6/wsAAAAIAAUAAAD7/wsAAAAIAAUAAADu/wwAAAAIAAYAAADu/w0AAAAIAAYAAADu/w4AAAAIAAYAAADu/w8AAAAIAAYAAADu/xAAAAAIAAYAAADu/xEAAAAIAAYAAADu/xIAAAAIAAYAAADv/wwAAAAIAAYAAADv/w0AAAAIAAYAAADv/w4AAAAIAAYAAADv/w8AAAAIAAYAAADv/xAAAAAIAAYAAADv/xEAAAAIAAYAAADv/xIAAAAIAAYAAADw/wwAAAAIAAYAAADw/w0AAAAIAAYAAADw/w4AAAAIAAYAAADw/w8AAAAIAAYAAADw/xAAAAAIAAYAAADw/xEAAAAIAAYAAADw/xIAAAAIAAYAAADx/wwAAAAIAAYAAADx/w0AAAAIAAYAAADx/w4AAAAIAAYAAADx/w8AAAAIAAYAAADx/xAAAAAIAAYAAADx/xEAAAAIAAYAAADx/xIAAAAIAAYAAADy/wwAAAAIAAYAAADy/w0AAAAIAAYAAADy/w4AAAAIAAYAAADy/w8AAAAIAAYAAADy/xAAAAAIAAYAAADy/xEAAAAIAAYAAADy/xIAAAAIAAYAAADz/wwAAAAIAAYAAADz/w0AAAAIAAYAAADz/w4AAAAIAAYAAADz/w8AAAAIAAYAAADz/xAAAAAIAAYAAADz/xEAAAAIAAYAAADz/xIAAAAIAAYAAAD0/wwAAAAIAAYAAAD0/w0AAAAIAAYAAAD0/w4AAAAIAAYAAAD0/w8AAAAIAAYAAAD0/xAAAAAIAAYAAAD0/xEAAAAIAAYAAAD0/xIAAAAIAAYAAAD1/wwAAAAIAAYAAAD1/w0AAAAIAAYAAAD1/w4AAAAIAAYAAAD1/w8AAAAIAAYAAAD1/xAAAAAIAAYAAAD1/xEAAAAIAAYAAAD1/xIAAAAIAAYAAAD2/wwAAAAIAAYAAAD2/w0AAAAIAAYAAAD2/w4AAAAIAAYAAAD2/w8AAAAIAAYAAAD2/xAAAAAIAAYAAAD2/xEAAAAIAAYAAAD2/xIAAAAIAAYAAAD3/wwAAAAIAAYAAAD3/w0AAAAIAAYAAAD3/w4AAAAIAAYAAAD3/w8AAAAIAAYAAAD3/xAAAAAIAAYAAAD3/xEAAAAIAAYAAAD3/xIAAAAIAAYAAAD4/wwAAAAIAAYAAAD4/w0AAAAIAAYAAAD4/w4AAAAIAAYAAAD4/w8AAAAIAAYAAAD4/xAAAAAIAAYAAAD4/xEAAAAIAAYAAAD4/xIAAAAIAAYAAAD5/wwAAAAIAAYAAAD5/w0AAAAIAAYAAAD5/w4AAAAIAAYAAAD5/w8AAAAIAAYAAAD5/xAAAAAIAAYAAAD5/xEAAAAIAAYAAAD5/xIAAAAIAAYAAAD6/wwAAAAIAAYAAAD6/w0AAAAIAAYAAAD6/w4AAAAIAAYAAAD6/w8AAAAIAAYAAAD6/xAAAAAIAAYAAAD6/xEAAAAIAAYAAAD6/xIAAAAIAAYAAAD7/wwAAAAIAAYAAAD7/w0AAAAIAAYAAAD7/w4AAAAIAAYAAAD7/w8AAAAIAAYAAAD7/xAAAAAIAAYAAAD7/xEAAAAIAAYAAAD7/xIAAAAIAAYAAAD8/wsAAAAIAAUAAAD8/wwAAAAIAAYAAAD8/w0AAAAIAAYAAAD8/w4AAAAIAAYAAAD8/w8AAAAIAAYAAAD8/xAAAAAIAAYAAAD8/xEAAAAIAAYAAAD8/xIAAAAIAAYAAAA=")
 tile_set = ExtResource("2_ogsnc")
 
+[node name="WaterZone" parent="tilemap/water_tiles" instance=ExtResource("3_e20fm")]
+position = Vector2(-174, 183)
+scale = Vector2(82.0744, 6.7109)
+
 [node name="floor_tiles" type="TileMapLayer" parent="tilemap"]
 z_index = 10
 use_parent_material = true
@@ -117,14 +122,10 @@ text = "haven't implemented swimming
  yet so this is too deep"
 
 [node name="Player" parent="." instance=ExtResource("1_jdw74")]
-position = Vector2(7, -14)
-
-[node name="Camera2D" type="Camera2D" parent="Player"]
-z_index = 1
-position = Vector2(-7, -40)
-zoom = Vector2(3, 3)
+position = Vector2(-401, 156)
 
 [node name="world_border" type="StaticBody2D" parent="."]
+collision_layer = 2
 
 [node name="border_left" type="CollisionShape2D" parent="world_border"]
 position = Vector2(-749, 1)

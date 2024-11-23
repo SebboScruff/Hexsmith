@@ -1,4 +1,4 @@
-class_name Transmission extends SpellSuffix
+class_name TransmissionSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Transmission"

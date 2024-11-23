@@ -4,6 +4,14 @@ class_name Player
 extends CharacterBody2D
 
 #region Movement Parameters
+enum MOVEMENT_STYLES{ # Used for altering the player's fundamental movement behaviours.
+	NORMAL,		# default Movement State
+	SWIMMING,	# Free vertical movement, reduced gravity. Underwater. Toggled with Zones. Priority over Climbing.
+	CLIMBING,	# Free vertical movement, no gravity. Ladders, rugged walls, etc. Toggled with Zones.
+	FLYING		# Free vertical movement, no gravity. Flight Spell. Movement costs Mana.
+}
+var current_movement_style:MOVEMENT_STYLES
+
 const SPEED = 150.0
 const RUN_SPEED = 300.0
 const CRAWL_SPEED = 75.0
@@ -203,6 +211,10 @@ func _physics_process(delta: float) -> void:
 	else:
 		body_sprite.play("jump_whole")
 #endregion SPRITE ANIMATION
+
+func set_movement_style(new_style:MOVEMENT_STYLES):
+	current_movement_style = new_style
+	print("New Movement Style: " + var_to_str(new_style))
 
 func precast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):

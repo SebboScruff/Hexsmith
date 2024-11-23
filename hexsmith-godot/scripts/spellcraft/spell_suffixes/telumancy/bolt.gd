@@ -1,4 +1,4 @@
-class_name Bolt extends SpellSuffix
+class_name BoltSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Bolt"

@@ -1,0 +1,33 @@
+[gd_scene load_steps=4 format=3 uid="uid://86anbq0ljjt5"]
+
+[ext_resource type="Script" path="res://scene_prefabs/movement_areas/water_area.gd" id="1_yjoft"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7mqw3"]
+size = Vector2(20, 1)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fx8iy"]
+
+[node name="WaterZone" type="Node2D"]
+script = ExtResource("1_yjoft")
+
+[node name="water_surface" type="StaticBody2D" parent="."]
+position = Vector2(0, 1)
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="water_surface"]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_7mqw3")
+one_way_collision = true
+debug_color = Color(1.55944e-05, 0.551344, 0.988961, 0.862745)
+
+[node name="underwater_area" type="Area2D" parent="."]
+collision_layer = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="underwater_area"]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_fx8iy")
+debug_color = Color(0, 0.380392, 0.447059, 0.564706)
+
+[connection signal="body_entered" from="underwater_area" to="." method="_on_underwater_area_body_entered"]
+[connection signal="body_exited" from="underwater_area" to="." method="_on_underwater_area_body_exited"]

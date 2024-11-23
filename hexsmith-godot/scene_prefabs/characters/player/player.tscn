@@ -188,6 +188,7 @@ size = Vector2(10, 25)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter")]
 z_index = 5
+collision_mask = 71
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
@@ -209,3 +210,8 @@ hud_manager = NodePath("../PlayerHUD")
 
 [node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
 unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+z_index = 1
+position = Vector2(-7, -40)
+zoom = Vector2(3, 3)

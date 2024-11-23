@@ -1,4 +1,4 @@
-class_name Spike extends SpellSuffix
+class_name SpikeSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Spike"

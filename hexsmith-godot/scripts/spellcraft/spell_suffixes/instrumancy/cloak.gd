@@ -1,4 +1,4 @@
-class_name Cloak extends SpellSuffix
+class_name CloakSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Cloak"

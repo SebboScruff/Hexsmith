@@ -1,4 +1,4 @@
-class_name Flight extends SpellSuffix
+class_name FlightSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Flight"

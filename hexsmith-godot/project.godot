@@ -160,9 +160,13 @@ global_pause={
 [layer_names]
 
 2d_physics/layer_1="Player"
-2d_physics/layer_2="Environment"
-2d_physics/layer_3="Enemies"
+2d_physics/layer_2="Enemies"
+2d_physics/layer_3="WorldTerrain"
 2d_physics/layer_4="UI ONLY"
+2d_physics/layer_5="WaterBody"
+2d_physics/layer_6="WaterSurface"
+2d_physics/layer_7="EnvironmentObjects"
+2d_physics/layer_8="OtherNPCs"
 
 [physics]
 
