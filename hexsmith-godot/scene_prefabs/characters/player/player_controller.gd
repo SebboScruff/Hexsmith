@@ -222,13 +222,13 @@ func _physics_process(delta: float) -> void:
 					velocity.y = dir_v * current_speed
 				else:
 					velocity.y = get_gravity().y * delta * gravity_scale
-				
 				# Surfacing Controls
 				if Input.is_action_pressed("overworld_jump") and can_surface:
 					velocity.y = JUMP_VELOCITY
 			MOVEMENT_STYLES.CLIMBING:
-				print("TODO Implement Climbing")
-				pass
+				# Free Vertical Movement with No Gravity. Gravity is already set to 0
+				var dir_v := Input.get_axis("overworld_up", "overworld_down")
+				velocity.y = dir_v * current_speed
 			MOVEMENT_STYLES.FLYING:
 				print("TODO Implement Flying")
 				pass
@@ -278,10 +278,6 @@ func _physics_process(delta: float) -> void:
 #endregion
 
 #region SPRITE ANIMATION
-	# TODO Firstly, check if the player is in Spellcrafting Menu
-	# If they are, play the "Thinking" animation and then return
-	# to break out of _physics_process without doing further animation work
-	
 	# Flip depending on Movement Direction
 	if direction > 0:
 		body_sprite.flip_h = false
@@ -290,15 +286,35 @@ func _physics_process(delta: float) -> void:
 		
 	#Then determine animations
 	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
+		# If the player is in Spellcraft Mode, play a "Thinking" animation
+		# and break out from _physics_process to ignore future animations
+		# overwriting this.
 		print("TODO Play Thinking/Spellcrafting Animation")
 		return
-	if is_on_floor():
-		if direction == 0:
-			body_sprite.play("idle")
-		else:
-			body_sprite.play("run")
-	else:
-		body_sprite.play("jump_whole")
+		
+	# If not in Spellcrafting, the animations will depend entirely on the player's
+	# current movement state.
+	match(current_movement_style):
+		MOVEMENT_STYLES.NORMAL:
+			if is_on_floor():
+				if direction == 0:
+					body_sprite.play("idle")
+				else:
+					body_sprite.play("run")
+			else:
+				body_sprite.play("jump_whole")
+		MOVEMENT_STYLES.SWIMMING:
+			# Any swimming animations go here
+			# Should basically always be playing so no need to toggle here.
+			pass
+		MOVEMENT_STYLES.CLIMBING:
+			# Any climbing animations go here
+			# Will need a way to play/pause based on whether the player is moving
+			# Either Horizontally or Vertically
+			pass
+		MOVEMENT_STYLES.FLYING:
+			# Any flying animations go here.
+			pass
 #end of _physics_process function body.
 
 #endregion SPRITE ANIMATION
