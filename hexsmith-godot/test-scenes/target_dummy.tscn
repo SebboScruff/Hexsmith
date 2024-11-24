@@ -2,13 +2,14 @@
 
 [ext_resource type="Texture2D" uid="uid://ovpak86vy40h" path="res://third_party/testing_ground_assets/target_dummy.png" id="1_o01yd"]
 [ext_resource type="Script" path="res://test-scenes/target_dummy.gd" id="1_u5efn"]
-[ext_resource type="PackedScene" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_pdad4"]
+[ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_pdad4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_wyv2j"]
 radius = 5.0
 height = 32.0
 
 [node name="TargetDummy" type="StaticBody2D"]
+z_index = 5
 collision_layer = 128
 collision_mask = 135
 script = ExtResource("1_u5efn")
@@ -22,42 +23,22 @@ position = Vector2(0, -16)
 rotation = 1.5708
 shape = SubResource("CapsuleShape2D_wyv2j")
 
+[node name="CombatEntity" parent="." instance=ExtResource("2_pdad4")]
+position = Vector2(-32, -102)
+show_damage_debug = true
+incoming_damage_multipliers = {
+0: 3.86,
+1: 1.0,
+2: 1.0,
+3: 1.0,
+4: 1.0,
+5: 1.0
+}
+max_health = 99999.0
+
 [node name="visual" type="Sprite2D" parent="."]
 position = Vector2(0, -16)
 texture = ExtResource("1_o01yd")
 
-[node name="CombatEntity" parent="." instance=ExtResource("2_pdad4")]
-max_health = 1e+08
-
-[node name="damage_readout" type="PanelContainer" parent="."]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -27.0
-offset_top = -71.0
-offset_right = 78.0
-offset_bottom = 6.0
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.5, 0.5)
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="VBoxContainer" type="VBoxContainer" parent="damage_readout"]
-layout_mode = 2
-
-[node name="Title" type="Label" parent="damage_readout/VBoxContainer"]
-layout_mode = 2
-text = "Last Damage:"
-
-[node name="last_damage_amount" type="Label" parent="damage_readout/VBoxContainer"]
-layout_mode = 2
-text = "[Amount]"
-
-[node name="last_damage_type" type="Label" parent="damage_readout/VBoxContainer"]
-layout_mode = 2
-text = "[Type]"
-
 [connection signal="damage_taken" from="CombatEntity" to="." method="_on_combat_entity_damage_taken"]
+[connection signal="has_died" from="CombatEntity" to="." method="_on_combat_entity_has_died"]

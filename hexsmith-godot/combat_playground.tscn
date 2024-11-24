@@ -37,7 +37,7 @@ rotation = -1.5708
 shape = SubResource("WorldBoundaryShape2D_o5l6l")
 
 [node name="Player" parent="." instance=ExtResource("2_wljqv")]
+basic_melee_damage = 15.0
 
 [node name="TargetDummy" parent="." instance=ExtResource("3_rowll")]
-z_index = 1
 position = Vector2(90, 0)

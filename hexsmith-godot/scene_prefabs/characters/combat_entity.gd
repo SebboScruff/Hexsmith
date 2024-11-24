@@ -9,6 +9,17 @@
 class_name CombatEntity
 extends Node
 
+@export var show_damage_debug:bool
+@onready var debug_damage_window: PanelContainer = $damage_readout
+const DEBUG_WINDOW_HEIGHT = 139
+var debug_damage_total:float
+# ---
+@onready var debug_label_raw: Label = $damage_readout/VBoxContainer/last_damage_raw_amount
+@onready var debug_label_actual: Label = $damage_readout/VBoxContainer/last_damage_real_amount
+@onready var debug_label_type: Label = $damage_readout/VBoxContainer/last_damage_type
+@onready var debug_label_total: Label = $damage_readout/VBoxContainer/total_damage
+@onready var debug_reset_timer: Timer = $damage_readout/damage_readout_reset
+
 enum DAMAGE_TYPES{
 	PHYSICAL,	# 0
 	RED,		# 1 
@@ -34,8 +45,12 @@ enum DAMAGE_TYPES{
 @export var max_health : float
 var curr_health : float
 # Set this up as a signal to proc Hurt animations, reduce player's HUD healthbar, etc
-signal damage_taken(amount:float, type:DAMAGE_TYPES)
+signal damage_taken(raw_amount:float, amount:float, type:DAMAGE_TYPES)
 signal has_died
+
+func _ready() -> void:
+	curr_health = max_health
+	debug_damage_window.set_visible(show_damage_debug)
 
 # Simple addition with upper clamp.
 func gain_health(_amount:float):
@@ -46,14 +61,24 @@ func gain_health(_amount:float):
 # Modify incoming amount according to own damage modifiers
 # then reduce HP accordingly
 func take_damage(_amount:float, _type:DAMAGE_TYPES):
-	damage_taken.emit(_amount, _type)
 	var actual_amount = _amount
-	if(incoming_damage_multipliers.has_key(_type)):
-		actual_amount *= incoming_damage_multipliers[_type]
+	actual_amount *= incoming_damage_multipliers[_type]
 	
 	curr_health -= actual_amount
+	# Emit a signal for any uses elsewhere - animations, debug readouts, etc.
+	damage_taken.emit(_amount, actual_amount, _type)
 	
-	if(curr_health >= 0):
+	#region DEBUG ZONE
+	debug_damage_total += actual_amount
+	
+	debug_label_raw.text = "Raw: %d"%[_amount]
+	debug_label_actual.text = "Actual: %d"%[actual_amount]
+	debug_label_type.text = "Type: %s"%[DAMAGE_TYPES.keys()[_type]]
+	debug_label_total.text = "Total: %8.3f"%[debug_damage_total]
+	
+	debug_reset_timer.start()
+	#endregion
+	if(curr_health <= 0):
 		die()
 	
 func die() -> void:
@@ -62,3 +87,11 @@ func die() -> void:
 	# the player, an enemy, a boss, etc that died. Case-by-cases can be dealt with
 	# in the corresponding entity's main behaviours.
 	has_died.emit()
+
+func _on_damage_readout_reset_timeout() -> void:
+	debug_damage_total = 0
+	
+	debug_label_raw.text = "[Raw Damage]"
+	debug_label_actual.text = "[Damage Taken]"
+	debug_label_type.text = "[Damage Type]"
+	debug_label_total.text = "Total: %8.3f"%[debug_damage_total]

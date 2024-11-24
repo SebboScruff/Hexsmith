@@ -1,10 +1,62 @@
-[gd_scene load_steps=38 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=39 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
+
+[sub_resource type="Animation" id="Animation_10cu0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite/melee_attack_hitbox:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BodySprite/melee_attack_hitbox:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BodySprite/melee_attack_hitbox:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:is_using_melee")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_e4bs4"]
 resource_name = "melee_attack_1"
@@ -69,57 +121,6 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 1,
 "values": [true, false]
-}
-
-[sub_resource type="Animation" id="Animation_10cu0"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("BodySprite/melee_attack_hitbox:monitoring")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("BodySprite/melee_attack_hitbox:monitorable")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("BodySprite/melee_attack_hitbox:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".:is_using_melee")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [false]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_gyl4d"]
@@ -360,7 +361,7 @@ radius = 9.0
 size = Vector2(10, 25)
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter")]
-z_index = 5
+z_index = 6
 collision_mask = 711
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
@@ -382,6 +383,7 @@ visible = false
 collision_mask = 192
 monitoring = false
 monitorable = false
+script = ExtResource("3_x6rab")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BodySprite/melee_attack_hitbox"]
 position = Vector2(16, 11)
@@ -426,4 +428,5 @@ texture_progress = ExtResource("5_doyrg")
 tint_under = Color(0.144063, 0.144063, 0.144063, 1)
 tint_progress = Color(0, 0.794772, 0.794772, 1)
 
+[connection signal="body_entered" from="BodySprite/melee_attack_hitbox" to="BodySprite/melee_attack_hitbox" method="_on_body_entered"]
 [connection signal="timeout" from="BodySprite/melee_attack_hitbox/melee_attack_cooldown" to="." method="_on_melee_attack_cooldown_timeout"]

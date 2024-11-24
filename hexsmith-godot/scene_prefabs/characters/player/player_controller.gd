@@ -41,7 +41,8 @@ var is_precasting:bool
 
 #region Combat Parameters
 var is_melee_ready:bool # for melee attack cooldown
-@export var is_using_melee:bool = false # for melee attack animations
+@export var is_using_melee:bool = false # for melee attack animations. Exported to AnimationPlayer.
+@export var basic_melee_damage:float
 # Stuff like this will be MeleeCombatCount - the number of consecutive attacks the player
 # can make. Also Melee Damage Bonus, etc.
 #endregion
@@ -385,7 +386,7 @@ func cast_active_spell(spell_index:int):
 
 func basic_melee():
 	is_precasting = false
-	print("TODO Basic Melee")
+	#print("TODO Basic Melee")
 	animation_player.play("melee_attack_1")
 	is_melee_ready = false
 	melee_attack_cooldown.start()
