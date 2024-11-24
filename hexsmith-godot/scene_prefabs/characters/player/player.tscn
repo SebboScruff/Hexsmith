@@ -397,6 +397,9 @@ debug_color = Color(0.964076, 2.88785e-07, 0.49492, 0.42)
 [node name="melee_attack_cooldown" type="Timer" parent="BodySprite/melee_attack_hitbox"]
 one_shot = true
 
+[node name="cast_origin" type="Marker2D" parent="BodySprite"]
+position = Vector2(6, 9)
+
 [node name="SpellcraftManager" type="Node" parent="." node_paths=PackedStringArray("hud_manager")]
 unique_name_in_owner = true
 script = ExtResource("3_ckdda")

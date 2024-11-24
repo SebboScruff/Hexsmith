@@ -1,28 +1,30 @@
 class_name Spell extends Node
 
+var player: Player
 var prefix: SpellPrefix
 var suffix: SpellSuffix
 var spell_name
 
-func _init(_prefix:SpellPrefix, _suffix:SpellSuffix):
+func _init(_player:Player, _prefix:SpellPrefix, _suffix:SpellSuffix):
 	# Class Constructor:
-	# Needs to pass in a _prefix and _suffix as parameters,
+	# Needs a prefix and suffix to define itself as a spell, and also
+	# requires a reference to the Player (that crafted it) so the cast suffix's 
+	# cast behaviours can reference positions, cast costs, etc.
 	prefix = _prefix
 	suffix = _suffix
-	
+	player = _player
+	suffix.player = _player
+	print("Initialised a %s %s to Player: %s"%[prefix.prefix_name, suffix.suffix_name, player.name])
 	# then assign them and determine the spell name.
 	determine_spell_name()
-
 
 func determine_spell_name():
 	spell_name = prefix.prefix_name + " " + suffix.suffix_name
 	## TODO There is an edge-case where if the suffix is Summon Familiar.
 
 func precast_spell():
-	if(suffix.cast_type != SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
-		print("No Precast Behaviours for Toggles and Passives")
-		return
-	
+	# This will either print a message and do nothing (Toggles and Passives)
+	# Or call the generic SpellSuffix precast() function
 	suffix.precast()
 
 func cast_spell():
@@ -40,7 +42,6 @@ func cast_spell():
 		# Toggles and passives have their numbers passed into suffix.do_effect. Subject to
 		# change depending on how tedious it gets.
 			SpellSuffix.CAST_TYPES.TOGGLE:
-				print("Toggling %s"%[spell_name])
 				suffix.toggle()
 			
 			SpellSuffix.CAST_TYPES.PASSIVE:

@@ -72,6 +72,8 @@ var is_melee_ready:bool # for melee attack cooldown
 
 @onready var scm: Node = %SpellcraftManager
 @export var spellcrafter: SpellcraftManager = scm as SpellcraftManager
+@onready var cast_origin: Marker2D = $BodySprite/cast_origin
+
 
 @onready var melee_attack_cooldown: Timer = $BodySprite/melee_attack_hitbox/melee_attack_cooldown
 #endregion
@@ -91,7 +93,7 @@ func _ready() -> void:
 	oxygen_meter.max_value = MAX_OXYGEN
 	current_oxygen = MAX_OXYGEN
 	
-	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 # All Resource Management - Mana & Health Regeneration, Oxygen while underwater,
 # and other constant over-time effects like that will happen in here
@@ -296,10 +298,12 @@ func _physics_process(delta: float) -> void:
 	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
 		# If the player is precasting, they can either release a spell,
 		# or launch a melee attack. Both of these will cancel the precast state
-		# Also means you dont instantly cast after crafting
 		if(is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
 				basic_melee()
 		
+		# TODO Eventually change this to animation_player.play(spellcast)
+		# and call cast_active_spell through that. Gonna be a headache trying
+		# to fanagle the right parameters.
 		if(is_precasting):
 			if(Input.is_action_just_released("overworld_cast_spellslot1")):
 				cast_active_spell(0)
@@ -371,6 +375,16 @@ func _physics_process(delta: float) -> void:
 #end of _physics_process function body.
 
 #endregion SPRITE ANIMATION
+
+# Used for basically all Spellcast-based projectile spawning
+func get_dir_to_crosshair() -> float:
+	var aim_angle:float
+	
+	var vector_diff:Vector2 = cast_origin.global_position - get_global_mouse_position()
+	aim_angle = vector_diff.angle()
+	
+	print("Angle between Cast Origin and Cursor is: %f"%[aim_angle])
+	return aim_angle
 
 func set_movement_style(new_style:MOVEMENT_STYLES):
 	current_movement_style = new_style

@@ -9,8 +9,9 @@ func _init() -> void:
 	
 	spell_icon = preload(icon_root_path + "transmutation_icon.png")
 
-func toggle():
-	print("Toggled a TRANSMUTATION Spell")
+# No inherited behaviours to force-call SpellSuffix.toggle()
+#func toggle():
+	#print("Toggled a TRANSMUTATION Spell")
 	
 func do_effect(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 

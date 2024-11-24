@@ -43,10 +43,10 @@ func change_active_menu(new_menu_index:int) -> void:
 	# TODO Definitely need to get rid of these magic numbers at some point
 	match new_menu_index:
 		0:
-			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+			#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 			activate_hud_group(overworld_hud)
 		1:
-			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+			#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 			activate_hud_group(spellcraft_hud)
 		2:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

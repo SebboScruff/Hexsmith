@@ -266,7 +266,7 @@ func craft_and_bind(spell_index: int):
 		return
 	
 	# Physically create the new Spell Instance
-	var crafted_spell:Spell = Spell.new(crafted_spell_prefix, crafted_spell_suffix)
+	var crafted_spell:Spell = Spell.new(player, crafted_spell_prefix, crafted_spell_suffix)
 	
 	# After checking if the spell is valid, make sure the player doesn't
 	# already have it in a different spell slot. Must be a number check because
