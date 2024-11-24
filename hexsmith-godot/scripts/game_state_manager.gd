@@ -15,6 +15,8 @@ func change_game_state(new_state:States.GAME_STATES):
 	match(current_game_state):
 		States.GAME_STATES.OVERWORLD:
 			Engine.time_scale = 1.0
+		States.GAME_STATES.CUTSCENE:
+			Engine.time_scale = 1.0
 		States.GAME_STATES.SPELLCRAFTING:
 			Engine.time_scale = 0.1
 		States.GAME_STATES.PAUSED:

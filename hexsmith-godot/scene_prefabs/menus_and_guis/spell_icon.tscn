@@ -3,7 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png" id="1_j3x5s"]
 [ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/spell_slot_frame.png" id="2_3nrxk"]
 [ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/spell_icon.gd" id="2_ubrqu"]
-[ext_resource type="Texture2D" uid="uid://cuuw2dghws6qh" path="res://third_party/keyboard_atlas.tres" id="4_goepq"]
+[ext_resource type="Texture2D" uid="uid://cuuw2dghws6qh" path="res://third_party/spell_slot_1_atlas.tres" id="4_goepq"]
 
 [node name="Control" type="Control"]
 custom_minimum_size = Vector2(400, 400)

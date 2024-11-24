@@ -6,6 +6,7 @@ extends CharacterBody2D
 #region Movement Parameters
 enum MOVEMENT_STYLES{ # Used for altering the player's fundamental movement behaviours.
 	NORMAL,		# default Movement State
+	CUTSCENE,	# Movement disabled (reading a sign, talking to an NPC, etc.
 	SWIMMING,	# Free vertical movement, reduced gravity. Underwater. Toggled with Zones. Priority over Climbing.
 	CLIMBING,	# Free vertical movement, no gravity. Ladders, rugged walls, etc. Toggled with Zones.
 	FLYING		# Free vertical movement, no gravity. Flight Spell. Movement costs Mana.
@@ -129,6 +130,12 @@ func _physics_process(delta: float) -> void:
 			if(Input.is_action_just_pressed("global_pause")):
 				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
 				hud_manager.change_active_menu(0)
+		
+		States.GAME_STATES.CUTSCENE:
+			if(Input.is_action_just_pressed("global_pause") ||
+			Input.is_action_just_pressed("overworld_interact")):
+				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+				hud_manager.change_active_menu(0)
 #endregion
 
 	# If paused, ignore all player-based physics processes.
@@ -152,6 +159,12 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta * gravity_scale
 #endregion
+	
+	# If in a cutscene, register gravity-based movement but don't accept other controls
+	# so if the player starts reading a sign mid-air they still fall to the ground
+	if(gsm.current_game_state == States.GAME_STATES.CUTSCENE):
+		move_and_slide()
+		return
 	
 	# NOTE: Direction is declared outside of any input checks because otherwise
 	# the animation code will break. It's used in movement and animation.
