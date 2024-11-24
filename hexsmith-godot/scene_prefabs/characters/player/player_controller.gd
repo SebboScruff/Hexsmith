@@ -17,7 +17,7 @@ const BASE_SPEED = 150.0
 const RUN_SPEED = 300.0
 const CRAWL_SPEED = 75.0
 
-#region Underwater Parameters
+	#region Underwater Parameters
 const SWIM_SPEED = 80.0 # basic movement speed in all directions
 # SWIM_SPEED must be multiplied and made negative to overcome
 # gravity and move in the correct direction
@@ -25,18 +25,27 @@ const SWIM_VERTICAL_FACTOR = -1
 var can_surface:bool = false # turned on whenever player is at the top of a patch of water
 const MAX_OXYGEN = 5 ## Number of seconds the player can remain underwater by default
 var current_oxygen:float
-@onready var oxygen_meter:TextureProgressBar = $OxygenMeter
-#endregion
+@onready var oxygen_meter:TextureProgressBar = %OxygenMeter
+	#endregion
 
-var external_speed_mult:float = 1.0 # eventually will be used for Phyto Strider, speed potions, etc
+# If anything else needs to modify speed (consumable items, spell effects)
+# it is done through this.
+var external_speed_mult:float = 1.0
 var current_speed : float
 
 const JUMP_VELOCITY = -200.0
+# Gravity strength is adjusted in different game states e.g. 0 when paused.
 var gravity_scale:float = 1.0
 #endregion
 
 #region Spellcraft & Spellcasting Parameters
-var active_spells: Array[Spell]
+var active_spells:Array[Spell]
+
+# Shitty bandaid solution to stop newly-crafted spells from automatically casting.
+# TODO Probably address this and make it less shitty
+@onready var postcraft_cast_cd: Timer = $SpellcraftManager/spellcraft_cast_cd
+var can_cast:bool = true 
+
 var is_precasting:bool
 
 #region Combat Parameters
@@ -87,6 +96,8 @@ func _ready() -> void:
 # All Resource Management - Mana & Health Regeneration, Oxygen while underwater,
 # and other constant over-time effects like that will happen in here
 func _process(delta: float) -> void:
+	#print("can_cast: " + var_to_str(can_cast))
+	#print("is_precasting: %s"%[is_precasting])
 #region Oxygen Management
 	# TODO Eventually add a HasWaterbreathing bool. Blue-Mana Cloaks will give waterbreathing,
 	# as well as maybe some consumable items.
@@ -129,6 +140,7 @@ func _physics_process(delta: float) -> void:
 			elif(Input.is_action_just_pressed("toggle_spellcraft_menu")):
 				gsm.change_game_state(States.GAME_STATES.SPELLCRAFTING)
 				hud_manager.change_active_menu(1)
+				can_cast = false
 		
 		States.GAME_STATES.SPELLCRAFTING:
 			# Clear out the active mana selection before changing menus
@@ -141,6 +153,7 @@ func _physics_process(delta: float) -> void:
 				spellcrafter.clear_active_mana()
 				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
 				hud_manager.change_active_menu(0)
+				postcraft_cast_cd.start()
 		
 		States.GAME_STATES.PAUSED:
 			if(Input.is_action_just_pressed("global_pause")):
@@ -212,12 +225,16 @@ func _physics_process(delta: float) -> void:
 		#region Spell Slot Assignment
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot1")):
 			spellcrafter.craft_and_bind(0)
+			postcraft_cast_cd.start()
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
 			spellcrafter.craft_and_bind(1)
+			postcraft_cast_cd.start()
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
 			spellcrafter.craft_and_bind(2)
+			postcraft_cast_cd.start()
 		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
 			spellcrafter.craft_and_bind(3)
+			postcraft_cast_cd.start()
 		#endregion
 #endregion
 
@@ -293,7 +310,7 @@ func _physics_process(delta: float) -> void:
 			elif(Input.is_action_just_released("overworld_cast_spellslot4")):
 				cast_active_spell(3)
 		# Otherwise, the player is allowed to start precasting
-		else:
+		elif(can_cast):
 			if(Input.is_action_just_pressed("overworld_cast_spellslot1")):
 				precast_active_spell(0)
 			elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
@@ -302,6 +319,7 @@ func _physics_process(delta: float) -> void:
 				precast_active_spell(2)
 			elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
 				precast_active_spell(3)
+			
 	#endregion
 #endregion
 
@@ -320,7 +338,7 @@ func _physics_process(delta: float) -> void:
 		# If the player is in Spellcraft Mode, play a "Thinking" animation
 		# and break out from _physics_process to ignore future animations
 		# overwriting this.
-		print("TODO Play Thinking/Spellcrafting Animation")
+		#print("TODO Play Thinking/Spellcrafting Animation")
 		return
 
 	# Melee attacks override all other animations
@@ -361,6 +379,9 @@ func set_movement_style(new_style:MOVEMENT_STYLES):
 	# TODO this might be pretty jarring if you e.g. fall onto a ladder, maybe
 	# try to lerp or tween to reduce the effect over about 0.2s
 	velocity = Vector2.ZERO
+
+func _on_spellcraft_cast_cd_timeout() -> void:
+	can_cast = true
 
 func precast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):

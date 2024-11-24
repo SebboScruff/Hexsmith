@@ -26,11 +26,12 @@ func _on_underwater_area_body_exited(body: Node2D) -> void:
 		body.set_movement_style(Player.MOVEMENT_STYLES.NORMAL)
 
 # ---
-
-func _on_surfaceable_region_body_entered(body: Node2D) -> void:
-	if(body.name == "Player"):
-		body.can_surface = true
-
-func _on_surfaceable_region_body_exited(body: Node2D) -> void:
-	if(body.name == "Player"):
-		body.can_surface = false
+## NOTE: This has been moved to a separate scene, surfaceable_water.tscn
+## to prevent the player from being able to "Water Jump"
+#func _on_surfaceable_region_body_entered(body: Node2D) -> void:
+	#if(body.name == "Player"):
+		#body.can_surface = true
+#
+#func _on_surfaceable_region_body_exited(body: Node2D) -> void:
+	#if(body.name == "Player"):
+		#body.can_surface = false

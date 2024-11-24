@@ -63,6 +63,9 @@ func _ready() -> void:
 	gui_instances_container = player_hud.get_node(gui_instances_path)
 	class_selector = player_hud.get_node(class_selector_path)
 
+## Assign every possible colour combination to its corresponding prefix.
+## The Dict Initialisation is pretty ugly here but I think it's a necessary
+## evil - can't think of any better ways of doing this.
 func initialise_prefix_dict():
 	# bruh this is the exact opposite of risk-averse
 	# TODO definitely try preloading this somehow once the game gets a bit more complex.
@@ -106,12 +109,13 @@ func initialise_prefix_dict():
 		}
 
 func add_active_mana_instance(colour:MANA_COLOURS):
-	# main function body in each colour case is very similar and 
+	# Main function body in each colour case is very similar and 
 	# that means this can almost certainly be improved or refactored
 	# as such, comments are provided for Red case and no others
-	# TODO think about refactoring this to make it more readable. Efficiency tests required.
+	# TODO think about refactoring this to make it more readable/efficient. Unsure about different approaches
 	match colour:
 		MANA_COLOURS.RED:
+			# Catch fail cases first:
 			if(spellcraft_act.total_active_colours == MAX_COLOURS && spellcraft_act.has_red == false):
 				print("Colour limit reached. Cannot add Red Mana.")
 				return
@@ -213,6 +217,7 @@ func add_active_mana_instance(colour:MANA_COLOURS):
 			gui_instances_container.add_child(COLOURLESS_MANA_ICON.instantiate())
 	
 	# DEBUG ONLY: print out the current mana combination after every addition
+	# TODO Remove this eventually.
 	spellcraft_amt.debug_readout()
 
 # TODO Remove the most recently added mana instance
@@ -222,59 +227,69 @@ func add_active_mana_instance(colour:MANA_COLOURS):
 func remove_last_instance():
 	print("TODO Remove Last Mana Instance")
 
+# Clear the player's current selection of mana completely
 func clear_active_mana():
-	# TODO Eventually refactor this, it's got a lot of arbitrary moving parts
+	# Mana and Colour Tracker classes have their own in-built reset functions
 	spellcraft_act.reset()
 	spellcraft_amt.reset()
 	
-	# function body in /scripts/utils.gd
-	# basically clear the active instances from the HUD
+	# Clear the active instances from the HUD
+	# NOTE: function body for this is in /scripts/utils.gd
 	var gui_instances = Utilities.get_child_nodes(gui_instances_container)
 	for n in gui_instances:
 		n.queue_free()
 
 func craft_and_bind(spell_index: int):
-	# TODO Combine all spell inputs to create a new spell:
-	# Preliminary checks:
-	# # Return straight out if insufficient components are provided.
-	# # TODO Add some in-game error pop-ups in these cases, maybe split into
-	# # case-by-case
-	if(spellcraft_act.total_active_colours == 0 
-	|| spellcraft_amt.total_current_mana == 0
-	|| class_selector.current_class == SpellClassSelector.SPELL_CLASSES.NONE):
-		print("Insufficient Spell Components Added!")
+	# Preliminary checks: Return straight out if insufficient components are provided.
+	# TODO Add some in-game error pop-ups/ explanations in these cases when we get 
+	# round to making a Playtest Build.
+	if(spellcraft_act.total_active_colours == 0):
+		print("Cannot craft Spell: not enough Mana Colours provided!") 
+		return
+	elif(spellcraft_amt.total_current_mana == 0):
+		print("Cannot craft Spell: not enough total Mana added!")
+		return
+	elif(class_selector.current_class == SpellClassSelector.SPELL_CLASSES.NONE):
+		print("Cannot craft Spell: no Spell Class selected!")
 		return
 	
-	# Otherwise, create new SpellSuffix instance and SpellPrefix Instance
+	# Create new SpellSuffix instance and SpellPrefix Instance
+	# based on Mana Inputs
 	var crafted_spell_prefix:SpellPrefix = determine_prefix()
 	var crafted_spell_suffix:SpellSuffix = determine_suffix()
+	
+	# Just a WIP catch-all, this can be removed when all 
+	# prefixes and suffixes have been implemented
 	if(crafted_spell_prefix == null || crafted_spell_suffix == null):
 		print("Prefix or Suffix is Null. Check Debug Logs")
 		menu_cleanup()
 		return
 	
-	# and assign to new Spell Instance
+	# Physically create the new Spell Instance
 	var crafted_spell:Spell = Spell.new(crafted_spell_prefix, crafted_spell_suffix)
 	
 	# After checking if the spell is valid, make sure the player doesn't
-	# already have it in a different spell slot.
-	# TODO This could potentially have other functionality, like
+	# already have it in a different spell slot. Must be a number check because
+	# every crafted Spell is a new class instance.
+	# [TODO This could potentially have other functionality, like
 	# moving the existing spell to their chosen slot, or switching
-	# the two spells around. Also probably want to refactor away from a name check.
+	# the two spells around. Also probably want to refactor away from a name check.]
 	for n in 4:
 		if(player.active_spells[n] != null
 		&& player.active_spells[n].spell_name == crafted_spell.spell_name):
 			print("Already have that spell in slot " + var_to_str(n+1))
 			return
 	
-	# then assign that new Spell to the associated spell slot passed in as parameter
+	# All potential fail-cases have been accounted for by this point.
+	# New Spell can be assigned to the associated spell slot passed in as a parameter
+	# to this function.
 	player.active_spells[spell_index] = crafted_spell
 	print("Spell Slot %d is now %s" %[spell_index, crafted_spell.spell_name])
 	
 	# Change GUI Spell Icon via the Hud Manager
 	hud_manager.change_spell_icon(spell_index, crafted_spell_prefix.spell_icon_frame, crafted_spell_suffix.spell_icon)
 	
-	# and finally, clear and close the Spellcraft Menu
+	# And finally, clear and close the Spellcraft Menu
 	menu_cleanup()
 
 func determine_prefix() -> SpellPrefix:
