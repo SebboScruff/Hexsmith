@@ -6,7 +6,7 @@ extends CharacterBody2D
 #region Movement Parameters
 enum MOVEMENT_STYLES{ # Used for altering the player's fundamental movement behaviours.
 	NORMAL,		# default Movement State
-	CUTSCENE,	# Movement disabled (reading a sign, talking to an NPC, etc.
+	CUTSCENE,	# Movement disabled (reading a sign, talking to an NPC, etc.)
 	SWIMMING,	# Free vertical movement, reduced gravity. Underwater. Toggled with Zones. Priority over Climbing.
 	CLIMBING,	# Free vertical movement, no gravity. Ladders, rugged walls, etc. Toggled with Zones.
 	FLYING		# Free vertical movement, no gravity. Flight Spell. Movement costs Mana.
@@ -38,9 +38,21 @@ var gravity_scale:float = 1.0
 #region Spellcraft & Spellcasting Parameters
 var active_spells: Array[Spell]
 var is_precasting:bool
+
+#region Combat Parameters
+var is_melee_ready:bool # for melee attack cooldown
+@export var is_using_melee:bool = false # for melee attack animations
+# Stuff like this will be MeleeCombatCount - the number of consecutive attacks the player
+# can make. Also Melee Damage Bonus, etc.
+#endregion
+
 #endregion
 
 #region Child Node References
+# The Animation Player is used for any time-sensitive interactions, or anything
+# that wants an inbuilt delay. For example, melee attacks and dying.
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
 
 # NOTE: Overworld is index 0; Spellcraft is index 1; Pause is index 2
@@ -50,6 +62,8 @@ var is_precasting:bool
 
 @onready var scm: Node = %SpellcraftManager
 @export var spellcrafter: SpellcraftManager = scm as SpellcraftManager
+
+@onready var melee_attack_cooldown: Timer = $BodySprite/melee_attack_hitbox/melee_attack_cooldown
 #endregion
 
 ########################
@@ -62,6 +76,7 @@ var is_precasting:bool
 func _ready() -> void:
 	is_precasting = false
 	active_spells = [null, null, null, null]
+	is_melee_ready = true
 	
 	oxygen_meter.max_value = MAX_OXYGEN
 	current_oxygen = MAX_OXYGEN
@@ -260,12 +275,13 @@ func _physics_process(delta: float) -> void:
 	#region Spellcasting and Combat
 	# TODO As with the Input Processing stuff, this can probably all be refactored,
 	# and like assign a function to each input callback
-	# Also TODO This eventually wants to be broken down into precast() and cast()
-	# stages to allow for some JUICE
 	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
 		# If the player is precasting, they can either release a spell,
 		# or launch a melee attack. Both of these will cancel the precast state
 		# Also means you dont instantly cast after crafting
+		if(is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
+				basic_melee()
+		
 		if(is_precasting):
 			if(Input.is_action_just_released("overworld_cast_spellslot1")):
 				cast_active_spell(0)
@@ -275,8 +291,6 @@ func _physics_process(delta: float) -> void:
 				cast_active_spell(2)
 			elif(Input.is_action_just_released("overworld_cast_spellslot4")):
 				cast_active_spell(3)
-			elif(Input.is_action_just_pressed("overworld_melee_attack")):
-				basic_melee()
 		# Otherwise, the player is allowed to start precasting
 		else:
 			if(Input.is_action_just_pressed("overworld_cast_spellslot1")):
@@ -292,10 +306,13 @@ func _physics_process(delta: float) -> void:
 
 #region SPRITE ANIMATION
 	# Flip depending on Movement Direction
+	# This is a scale manipulation rather than a sprite.flip_h call
+	# because the melee hitbox is childed to the sprite. The whole set needs
+	# to be inverted in order for the hitboxes to be correct.
 	if direction > 0:
-		body_sprite.flip_h = false
+		body_sprite.scale.x = 1
 	elif direction < 0:
-		body_sprite.flip_h = true
+		body_sprite.scale.x = -1
 		
 	#Then determine animations
 	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
@@ -304,7 +321,11 @@ func _physics_process(delta: float) -> void:
 		# overwriting this.
 		print("TODO Play Thinking/Spellcrafting Animation")
 		return
-		
+
+	# Melee attacks override all other animations
+	if(is_using_melee):
+		return
+	
 	# If not in Spellcrafting, the animations will depend entirely on the player's
 	# current movement state.
 	match(current_movement_style):
@@ -364,4 +385,10 @@ func cast_active_spell(spell_index:int):
 
 func basic_melee():
 	is_precasting = false
-	print("TODO Basic Melee Attack")
+	print("TODO Basic Melee")
+	animation_player.play("melee_attack_1")
+	is_melee_ready = false
+	melee_attack_cooldown.start()
+
+func _on_melee_attack_cooldown_timeout() -> void:
+	is_melee_ready = true

@@ -33,6 +33,9 @@ enum DAMAGE_TYPES{
 
 @export var max_health : float
 var curr_health : float
+# Set this up as a signal to proc Hurt animations, reduce player's HUD healthbar, etc
+signal damage_taken(amount:float, type:DAMAGE_TYPES)
+signal has_died
 
 # Simple addition with upper clamp.
 func gain_health(_amount:float):
@@ -43,6 +46,7 @@ func gain_health(_amount:float):
 # Modify incoming amount according to own damage modifiers
 # then reduce HP accordingly
 func take_damage(_amount:float, _type:DAMAGE_TYPES):
+	damage_taken.emit(_amount, _type)
 	var actual_amount = _amount
 	if(incoming_damage_multipliers.has_key(_type)):
 		actual_amount *= incoming_damage_multipliers[_type]
@@ -53,7 +57,8 @@ func take_damage(_amount:float, _type:DAMAGE_TYPES):
 		die()
 	
 func die() -> void:
-	# need to do a check if this entity is the player.
-	# Play a death animation that ultimately ends in the entity calling
-	# queue_free()
-	pass
+	# emit a signal, and do nothing else on the generic Combat Entity end.
+	# This function will have wildly different effects based on whether it was
+	# the player, an enemy, a boss, etc that died. Case-by-cases can be dealt with
+	# in the corresponding entity's main behaviours.
+	has_died.emit()
