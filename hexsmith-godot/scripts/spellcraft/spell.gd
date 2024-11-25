@@ -13,7 +13,10 @@ func _init(_player:Player, _prefix:SpellPrefix, _suffix:SpellSuffix):
 	prefix = _prefix
 	suffix = _suffix
 	player = _player
+	
 	suffix.player = _player
+	suffix.get_prefix_colors(prefix.colors)
+	
 	print("Initialised a %s %s to Player: %s"%[prefix.prefix_name, suffix.suffix_name, player.name])
 	# then assign them and determine the spell name.
 	determine_spell_name()

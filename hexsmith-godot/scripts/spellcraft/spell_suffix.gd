@@ -30,6 +30,9 @@ var player : Player
 var cooldown_current: float
 var cooldown_max: float
 
+# Pass in stuff from Prefix
+var colors_from_prefix:Array[Color]
+
 func _init() -> void:
 	pass
 
@@ -72,3 +75,6 @@ func do_effect(num_red:int, num_blue:int,
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):
 	print("A %s Spell is currently active."%[suffix_name])
+
+func get_prefix_colors(_colors:Array[Color]) -> void:
+	colors_from_prefix = _colors

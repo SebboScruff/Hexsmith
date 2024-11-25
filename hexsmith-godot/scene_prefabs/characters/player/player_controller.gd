@@ -383,7 +383,6 @@ func get_dir_to_crosshair() -> float:
 	var vector_diff:Vector2 = cast_origin.global_position - get_global_mouse_position()
 	aim_angle = vector_diff.angle()
 	
-	print("Angle between Cast Origin and Cursor is: %f"%[aim_angle])
 	return aim_angle
 
 func set_movement_style(new_style:MOVEMENT_STYLES):

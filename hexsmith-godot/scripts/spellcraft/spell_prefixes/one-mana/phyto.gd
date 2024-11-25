@@ -10,7 +10,7 @@ func _init(input_green:int, input_colourless:int):
 	spell_icon_frame = preload(icon_frame_root_path + "phyto_frame.png")
 	# NOTE: Colors declared as RGBA[0,1] so these are all defaulted opaque white
 	colors = [
-		Color(1,1,1,1), # Spell's Primary Color
+		Color(0,1,0,1), # Spell's Primary Color
 		Color(1,1,1,1), # Spell's Secondary Color
 		Color(1,1,1,1), # Spell's Tertiary Color
 		Color(1,1,1,1), # Spell's Primary Effect Color (trails, particles, additional bits)

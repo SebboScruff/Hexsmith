@@ -22,6 +22,8 @@ num_colourless:int):
 	var new_projectile = PROJECTILE_PREFAB.instantiate()
 	new_projectile.position = player.cast_origin.global_position
 	new_projectile.rotation = player.get_dir_to_crosshair()
+	new_projectile.initialise_shader(self.colors_from_prefix)
+	new_projectile.initialise_prefix_effects(num_red, num_blue, num_green, num_white, num_black, num_colourless)
 	
 	player.add_sibling(new_projectile)
 	# Start Cooldown.
