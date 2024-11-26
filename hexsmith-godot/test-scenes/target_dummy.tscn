@@ -28,11 +28,11 @@ position = Vector2(-32, -102)
 show_damage_debug = true
 incoming_damage_multipliers = {
 0: 3.86,
-1: 1.0,
-2: 1.0,
-3: 1.0,
-4: 1.0,
-5: 1.0
+1: 0.5,
+2: 2.0,
+3: 1.1,
+4: 4.0,
+5: 0.0
 }
 max_health = 99999.0
 

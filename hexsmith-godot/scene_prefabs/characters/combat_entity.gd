@@ -28,7 +28,7 @@ enum DAMAGE_TYPES{
 	WHITE,		# 4
 	BLACK		# 5
 }
-# provided as a dictionary for easy lookup.
+
 ## Damage Modification Multipliers as floats:
 ## 0 = Physical; 1 = Red; 2 = Blue; 3 = Green; 4 = White; 5 = Black.
 ## If value is 0, this Entity is immune to that type of damage. 

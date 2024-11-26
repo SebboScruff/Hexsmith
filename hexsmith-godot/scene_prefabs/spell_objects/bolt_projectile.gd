@@ -1,34 +1,7 @@
 # TODO This probably wants to turn into a generic, inheritable SpellProjectile
 # class - so the majority of the initialisation can be kept consistent.
-extends Area2D
+extends SpellProjectile
 
-var visual: Sprite2D
-
-var mat : ShaderMaterial
-var base_tex:Texture2D
-var colors:Array[Color]
-
-## How fast does this projectile travel in pixels/s
-## Needs to be somewhere in the region of 200-500 to have any reasonable speed.
-@export var travel_speed:float
-# Set up as a dictionary with float values and damage type keys for easy access
-# in both initialisation and damage calc.
-var damage_dict = {
-	CombatEntity.DAMAGE_TYPES.RED : 0.0,
-	CombatEntity.DAMAGE_TYPES.BLUE : 0.0,
-	CombatEntity.DAMAGE_TYPES.GREEN : 0.0,
-	CombatEntity.DAMAGE_TYPES.WHITE : 0.0,
-	CombatEntity.DAMAGE_TYPES.BLACK : 0.0,
-}
-## The amount of damage dealt by a single instance of mana in this spell.
-## e.g. if the spell contains 2 Red Mana, it will deal 2 * [this value] as RED damage.
-@export var damage_per_mana = 10.0
-
-func _init() -> void:
-	mat = material
-	mat.resource_local_to_scene = true
-
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
 
@@ -37,8 +10,9 @@ func initialise_shader(colors:Array[Color]) -> void:
 	# Takes in the Color Array from the Prefix:
 	# 0, 1, 2 are Primary, Secondary, Tertiary respectively.
 	# 3, 4 are Effect Colors.
-	print("Primary Color is: " + var_to_str(colors[0]))
 	mat.set_shader_parameter("PrimaryColor", colors[0])
+	mat.set_shader_parameter("SecondaryColor", colors[1])
+	mat.set_shader_parameter("TertiaryColor", colors[2])
 
 # Add specific effects from Prefix Color Combos.
 func initialise_prefix_effects(_red:int, _blue:int, _green:int, 
@@ -49,14 +23,29 @@ _white:int, _black:int, _colorless:int, ) -> void:
 	damage_dict[CombatEntity.DAMAGE_TYPES.GREEN] = damage_per_mana*_green
 	damage_dict[CombatEntity.DAMAGE_TYPES.WHITE] = damage_per_mana*_white
 	damage_dict[CombatEntity.DAMAGE_TYPES.BLACK] = damage_per_mana*_black
-	# Then add specific, colour-based effects.s
-	pass
+	
+	# Then add specific, colour-based effects.
+	# TODO Refactor this so it isnt terrible
+	# Not that there's anything intrinsically wrong with if-chains
+	if(_red > 0):
+		# Make the bolt an igniter - TODO Requires Fire Management system
+		pass
+	elif(_blue > 0):
+		# Make the bolt an extinguisher - TODO Requires Fire Management system
+		pass
+	elif(_green > 0):
+		# Make the bolt flammable - TODO Requires Fire Management system
+		pass
+	elif(_white > 0):
+		# Create a small light and instantiate as child to the projectile
+		pass
+	elif(_black > 0):
+		# Adjust the bolt's collision mask so it doesnt hit terrain (Layer 2)
+		pass
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(delta: float) -> void:
-	# Move Forward based on this objects forward vector.
-	var move_dir = Vector2.LEFT.rotated(self.rotation)
-	self.position += move_dir * delta * travel_speed
+	# Do movement via SpellProjectile base class's physics process.
+	super._physics_process(delta)
 
 func _on_body_entered(body: Node2D) -> void:
 	# Find combat entity of body (if any)

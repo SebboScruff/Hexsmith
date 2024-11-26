@@ -12,11 +12,13 @@ shader_parameter/PrimaryColor = Color(0, 0, 0, 1)
 radius = 8.06226
 
 [node name="BoltProjectile" type="Area2D"]
+z_index = 3
 material = SubResource("ShaderMaterial_d2gjb")
 scale = Vector2(0.4, 0.4)
 collision_mask = 194
 script = ExtResource("2_yalyp")
 travel_speed = 250.0
+damage_per_mana = 10.0
 
 [node name="visual" type="Sprite2D" parent="."]
 z_index = 2
