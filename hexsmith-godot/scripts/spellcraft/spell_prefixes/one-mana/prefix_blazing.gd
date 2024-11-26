@@ -24,3 +24,4 @@ func _init(input_red:int, input_colourless:int):
 	num_white_mana = 0
 	num_black_mana = 0
 	num_colorless_mana = input_colourless
+	print("Initialised BLAZING prefix with %d red and %d colorless"%[num_red_mana, num_colorless_mana])

@@ -6,7 +6,6 @@ var suffix: SpellSuffix
 var spell_name
 
 func _init(_player:Player, _prefix:SpellPrefix, _suffix:SpellSuffix):
-	# Class Constructor:
 	# Needs a prefix and suffix to define itself as a spell, and also
 	# requires a reference to the Player (that crafted it) so the cast suffix's 
 	# cast behaviours can reference positions, cast costs, etc.
@@ -38,6 +37,9 @@ func cast_spell():
 		# specific numbers
 			SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN:
 				print("Casting %s"%[spell_name])
+				print("%s has %d Red, %d Blue, %d Green, %d White, %d Black, %d Colourless"%
+				[spell_name, prefix.num_red_mana,prefix.num_blue_mana,prefix.num_green_mana,prefix.num_white_mana,prefix.num_black_mana, prefix.num_colorless_mana])
+				
 				suffix.cast(prefix.num_red_mana, prefix.num_blue_mana, 
 				prefix.num_green_mana, prefix.num_white_mana, 
 				prefix.num_black_mana, prefix.num_colorless_mana)

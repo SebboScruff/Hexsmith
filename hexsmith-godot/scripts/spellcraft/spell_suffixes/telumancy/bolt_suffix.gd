@@ -23,8 +23,8 @@ num_colourless:int):
 	new_projectile.position = player.cast_origin.global_position
 	new_projectile.rotation = player.get_dir_to_crosshair()
 	new_projectile.initialise_shader(self.colors_from_prefix)
+	print("Initialising Bolt with %d Red/ %d Blue/ %d Green/ %d White/ %d Black/ %d CL"%[num_red, num_blue, num_green, num_white, num_black, num_colourless])
 	new_projectile.initialise_prefix_effects(num_red, num_blue, num_green, num_white, num_black, num_colourless)
 	
 	player.add_sibling(new_projectile)
-	# Start Cooldown.
-	print("TODO %s casted a Bolt Spell"%[player.name])
+	# TODO Start Cooldown.

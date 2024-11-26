@@ -1,0 +1,64 @@
+[gd_resource type="VisualShader" load_steps=7 format=3 uid="uid://tevvfu1m7nqh"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_gxw6g"]
+output_port_for_preview = 0
+expanded_output_ports = [0]
+parameter_name = "PrimaryColor"
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_jkenn"]
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_4wgxg"]
+expanded_output_ports = [0]
+parameter_name = "SecondaryColor"
+
+[sub_resource type="VisualShaderNodeColorParameter" id="VisualShaderNodeColorParameter_kjkcp"]
+expanded_output_ports = [0]
+parameter_name = "TertiaryColor"
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_mm8aj"]
+
+[sub_resource type="VisualShaderNodeVectorCompose" id="VisualShaderNodeVectorCompose_tms6o"]
+
+[resource]
+code = "shader_type canvas_item;
+render_mode blend_mix;
+
+uniform vec4 PrimaryColor : source_color;
+
+
+
+void fragment() {
+// ColorParameter:2
+	vec4 n_out2p0 = PrimaryColor;
+	float n_out2p1 = n_out2p0.r;
+	float n_out2p2 = n_out2p0.g;
+	float n_out2p3 = n_out2p0.b;
+
+
+// VectorCompose:3
+	vec3 n_out3p0 = vec3(n_out2p1, n_out2p2, n_out2p3);
+
+
+// Output:0
+	COLOR.rgb = n_out3p0;
+
+
+}
+"
+graph_offset = Vector2(-1325, -239)
+mode = 1
+flags/light_only = false
+nodes/fragment/0/position = Vector2(400, 100)
+nodes/fragment/2/node = SubResource("VisualShaderNodeColorParameter_gxw6g")
+nodes/fragment/2/position = Vector2(-420, 20)
+nodes/fragment/3/node = SubResource("VisualShaderNodeVectorCompose_jkenn")
+nodes/fragment/3/position = Vector2(-140, 100)
+nodes/fragment/4/node = SubResource("VisualShaderNodeColorParameter_4wgxg")
+nodes/fragment/4/position = Vector2(-1020, 20)
+nodes/fragment/5/node = SubResource("VisualShaderNodeColorParameter_kjkcp")
+nodes/fragment/5/position = Vector2(-1020, 360)
+nodes/fragment/6/node = SubResource("VisualShaderNodeVectorCompose_mm8aj")
+nodes/fragment/6/position = Vector2(-740, 400)
+nodes/fragment/7/node = SubResource("VisualShaderNodeVectorCompose_tms6o")
+nodes/fragment/7/position = Vector2(-740, 120)
+nodes/fragment/connections = PackedInt32Array(2, 1, 3, 0, 2, 2, 3, 1, 2, 3, 3, 2, 3, 0, 0, 0, 4, 1, 7, 0, 4, 2, 7, 1, 4, 3, 7, 2, 5, 1, 6, 0, 5, 2, 6, 1, 5, 3, 6, 2)
