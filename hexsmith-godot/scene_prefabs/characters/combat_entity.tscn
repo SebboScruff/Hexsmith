@@ -7,6 +7,7 @@ position = Vector2(0, 1)
 script = ExtResource("1_aekqm")
 
 [node name="damage_readout" type="PanelContainer" parent="."]
+unique_name_in_owner = true
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -57,5 +58,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="damage_readout_reset" type="Timer" parent="damage_readout"]
-wait_time = 2.0
+wait_time = 4.0
 one_shot = true
+
+[connection signal="timeout" from="damage_readout/damage_readout_reset" to="." method="_on_damage_readout_reset_timeout"]

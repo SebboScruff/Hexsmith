@@ -25,7 +25,7 @@ var current_active_menu
 func _ready() -> void:
 	change_active_menu(0)
 	
-		# Load up the Spell Icon arrays
+	# Load up the Spell Icon arrays
 	# TODO This is awful to look at and extremely fragile, definitely refactor this
 	spell_icons = [overworld_hud.get_node("spell_slots_container/spell_slots_grid/SpellIcon1") as SpellIcon,
 	overworld_hud.get_node("spell_slots_container/spell_slots_grid/SpellIcon2") as SpellIcon,
@@ -43,10 +43,10 @@ func change_active_menu(new_menu_index:int) -> void:
 	# TODO Definitely need to get rid of these magic numbers at some point
 	match new_menu_index:
 		0:
-			#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 			activate_hud_group(overworld_hud)
 		1:
-			#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 			activate_hud_group(spellcraft_hud)
 		2:
 			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

@@ -9,7 +9,8 @@ extends Node2D
 @onready var combat_entity: CombatEntity = $CombatEntity
 
 func _ready() -> void:
-	print("Target Dummy has %d HP"%[combat_entity.curr_health])
+	#print("Target Dummy has %d HP"%[combat_entity.curr_health])
+	pass
 
 func _on_combat_entity_has_died() -> void:
 	print("How the hell did you kill the target dummy")

@@ -10,7 +10,7 @@ class_name CombatEntity
 extends Node
 
 @export var show_damage_debug:bool
-@onready var debug_damage_window: PanelContainer = $damage_readout
+@onready var debug_damage_readout: PanelContainer = %damage_readout
 const DEBUG_WINDOW_HEIGHT = 139
 var debug_damage_total:float
 # ---
@@ -44,19 +44,34 @@ enum DAMAGE_TYPES{
 
 @export var max_health : float
 var curr_health : float
+@export var health_regen_rate : float
+# Only some CombatEntities (for example, the Player and major bosses
+# will have visual health bars. As a result, this needs a nullcheck before
+# anywhere it is used.
+var health_bar_visual : TextureProgressBar
 # Set this up as a signal to proc Hurt animations, reduce player's HUD healthbar, etc
 signal damage_taken(raw_amount:float, amount:float, type:DAMAGE_TYPES)
 signal has_died
 
 func _ready() -> void:
 	curr_health = max_health
-	debug_damage_window.set_visible(show_damage_debug)
+	#if(health_bar_visual != null):
+		#health_bar_visual.max_value = max_health
+		#health_bar_visual.value = curr_health
+		
+	debug_damage_readout.set_visible(show_damage_debug)
 
 # Simple addition with upper clamp.
 func gain_health(_amount:float):
-	curr_health += _amount
-	if(curr_health > max_health):
+	# Health gain with basic clamp
+	if(curr_health + _amount > max_health):
 		curr_health = max_health
+	else:
+		curr_health += _amount
+	
+	# Visual Update
+	if(health_bar_visual != null):
+		health_bar_visual.value = curr_health
 
 # Modify incoming amount according to own damage modifiers
 # then reduce HP accordingly
@@ -65,6 +80,9 @@ func take_damage(_amount:float, _type:DAMAGE_TYPES):
 	actual_amount *= incoming_damage_multipliers[_type]
 	
 	curr_health -= actual_amount
+
+	if(health_bar_visual != null):
+		health_bar_visual.value = curr_health
 	# Emit a signal for any uses elsewhere - animations, debug readouts, etc.
 	damage_taken.emit(_amount, actual_amount, _type)
 	

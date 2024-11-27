@@ -18,6 +18,12 @@ var cast_type: CAST_TYPES
 var is_active: bool
 var target_type: TARGET_TYPES
 
+## This will be per-cast (and generally higher) for CAST_WILL_COOLDOWN spells
+## and per-second (while active) - and generally lower - for PASSIVE or TOGGLED spells.
+## Spell mana cost is calculated per-colour, and follows:
+## colour_cost = [this] * num_color_instances
+var base_mana_cost: float
+
 const icon_root_path = "res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/"
 var spell_icon: CompressedTexture2D
 
@@ -74,7 +80,7 @@ func toggle():
 func do_effect(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):
-	print("A %s Spell is currently active."%[suffix_name])
+	print("A %s Spell is currently active. No effect implemented yet."%[suffix_name])
 
 func get_prefix_colors(_colors:Array[Color]) -> void:
 	colors_from_prefix = _colors

@@ -8,8 +8,16 @@ extends TextureProgressBar
 @onready var visual_bar: ManaValueTracker = $"." 
 @export var colour:SpellcraftManager.MANA_COLOURS 
 @export var maximum_mana:float
-@export var current_mana:float # clamped between 0 and maximum_mana. Used as TextureProgressBar value parameter
-@export var mana_regen_rate:float
+@export var current_mana:float ## Clamped between 0 and maximum_mana. Used as TextureProgressBar value parameter
+@export var mana_regen_rate:float ## in Mana per Second
+
+func _ready():
+	update_current_mana(maximum_mana)
+
+# Mana Regen done on the mana tracker level.
+func _process(delta: float) -> void:
+	if(current_mana < maximum_mana):
+		update_current_mana(mana_regen_rate * delta)
 
 ## Directly changes the value of maximum_mana, then updates current_mana to ensure the same percentage
 func set_maximum_mana(new_max:float) -> void:

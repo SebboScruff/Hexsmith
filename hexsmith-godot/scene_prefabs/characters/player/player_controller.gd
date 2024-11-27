@@ -14,7 +14,7 @@ enum MOVEMENT_STYLES{ # Used for altering the player's fundamental movement beha
 var current_movement_style:MOVEMENT_STYLES
 
 const BASE_SPEED = 150.0
-const RUN_SPEED = 300.0
+const RUN_SPEED = 200.0
 const CRAWL_SPEED = 75.0
 
 	#region Underwater Parameters
@@ -40,6 +40,13 @@ var gravity_scale:float = 1.0
 
 #region Spellcraft & Spellcasting Parameters
 var active_spells:Array[Spell]
+# These represent the Mana Resource that is spent when casting spells,
+# and regenerates over time.
+var mana_value_trackers:Array[ManaValueTracker]
+var hp_bar : TextureProgressBar
+# The path to go from overworld_hud to the Mana Value Tracker Objects.
+const mana_tracker_path = "mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox"
+const hp_bar_path = "mana_hp_panelcontainer/HBoxContainer/hp_centercontainer"
 
 # Shitty bandaid solution to stop newly-crafted spells from automatically casting.
 # TODO Probably address this and make it less shitty
@@ -74,7 +81,7 @@ var is_melee_ready:bool # for melee attack cooldown
 @export var spellcrafter: SpellcraftManager = scm as SpellcraftManager
 @onready var cast_origin: Marker2D = $BodySprite/cast_origin
 
-
+# @onready var player_combat_entity: CombatEntity = %CombatEntity
 @onready var melee_attack_cooldown: Timer = $BodySprite/melee_attack_hitbox/melee_attack_cooldown
 #endregion
 
@@ -82,9 +89,6 @@ var is_melee_ready:bool # for melee attack cooldown
 ## START OF FUNCTIONS ##
 ########################
 
-# dont wanna see the nasty default cursor.
-# NOTE The actual in-game visual cursor (for menu naviation and stuff) can be
-# customised in Project Settings->General->Display->Mouse Cursor
 func _ready() -> void:
 	is_precasting = false
 	active_spells = [null, null, null, null]
@@ -93,13 +97,23 @@ func _ready() -> void:
 	oxygen_meter.max_value = MAX_OXYGEN
 	current_oxygen = MAX_OXYGEN
 	
-	#Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	# TODO this is so shit lmao
+	# if there is literally any other way of doing this, do that instead
+	mana_value_trackers = [hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_red") as ManaValueTracker,
+	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_blue") as ManaValueTracker,
+	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_green") as ManaValueTracker,
+	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_white") as ManaValueTracker,
+	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_black") as ManaValueTracker,
+	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_colourless") as ManaValueTracker]
+	# player_combat_entity.health_bar_visual = hud_manager.overworld_hud.get_node(hp_bar_path+"/hp_bar") as TextureProgressBar
+	
+	# NOTE The actual in-game visual cursor (for menu naviation and stuff) can be
+	# customised in Project Settings->General->Display->Mouse Cursor
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 
 # All Resource Management - Mana & Health Regeneration, Oxygen while underwater,
 # and other constant over-time effects like that will happen in here
 func _process(delta: float) -> void:
-	#print("can_cast: " + var_to_str(can_cast))
-	#print("is_precasting: %s"%[is_precasting])
 #region Oxygen Management
 	# TODO Eventually add a HasWaterbreathing bool. Blue-Mana Cloaks will give waterbreathing,
 	# as well as maybe some consumable items.
@@ -123,6 +137,12 @@ func _process(delta: float) -> void:
 		# i.e. onTimerTimeout, deal damage through the player's CombatEntity
 		print("TODO Out of Oxygen, taking damage")
 #endregion
+	
+	## NOTE: Mana Regen is managed on a per-tracker basis in 
+	## mana_value_tracker.gd. Adjust mana regen values, or grant large 
+	## individual increases through this where necessary.
+	#if(player_combat_entity.curr_health < player_combat_entity.max_health):
+		#player_combat_entity.gain_health(player_combat_entity.health_regen_rate)
 
 # All input processing work is done in here
 # as well as all related animation work. It's done in _physics_process() rather
@@ -304,6 +324,10 @@ func _physics_process(delta: float) -> void:
 		# TODO Eventually change this to animation_player.play(spellcast)
 		# and call cast_active_spell through that. Gonna be a headache trying
 		# to fanagle the right parameters.
+		## TODO Once I start implementing player progression, also need to check
+		## If the player has unlocked this spell slot. Probably will be intrinsically managed
+		## in the previous conditional & the spellcraft menu: if the slot isnt unlocked, it just
+		## wont complete the craft step and therefore the spell will be null
 		if(is_precasting):
 			if(Input.is_action_just_released("overworld_cast_spellslot1")):
 				cast_active_spell(0)
@@ -400,22 +424,29 @@ func precast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
 	else:
-		# Any TODO in cast_active_spell is also relevant here.
+		# TODO Play a "start-up" particle system and animation.
+		# The animation will be tied to the player; the particles tied to the prefix.
 		is_precasting = true
 		active_spells[spell_index].precast_spell()
 
 func cast_active_spell(spell_index:int):
+	# TODO Turn off precast particles here.
+	is_precasting = false
+	# Fail check 1: Player doesn't have a spell in that spell slot
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
 	else:
-		## TODO Once we start implementing player progression, also need to check
-		## If the player has unlocked this spell slot. Probably will be intrinsically managed
-		## in the previous conditional & the spellcraft menu: if the slot isnt unlocked, it just
-		## wont complete the craft step and therefore the spell will be null
-
+	# Fail Check 2: Player doesn't have enough mana to cast that spell.
+		for m in mana_value_trackers:
+			var i:int = m.get_index()
+			if(m.current_mana < active_spells[spell_index].mana_cost[i]):
+				print("Player does not have enough %s Mana to cast %s"%
+				[SpellcraftManager.MANA_COLOURS.keys()[m.colour],active_spells[spell_index].spell_name])
+				return
+			# Mana Expenditure done while still in this for loop
+			m.current_mana -= active_spells[spell_index].mana_cost[i]
 		# Call that spell's Cast function - specific spell behaviours
 		# are determined on a per-class basis
-		is_precasting = false
 		active_spells[spell_index].cast_spell()
 
 func basic_melee():

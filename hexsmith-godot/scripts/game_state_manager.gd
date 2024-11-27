@@ -10,7 +10,7 @@ func _init() -> void:
 
 func change_game_state(new_state:States.GAME_STATES):
 	current_game_state = new_state
-	print("Changed to new Game State: " + States.GAME_STATES.keys()[new_state])
+	# print("Changed to new Game State: " + States.GAME_STATES.keys()[new_state])
 	# change things based on new game state e.g. timescale
 	match(current_game_state):
 		States.GAME_STATES.OVERWORLD:

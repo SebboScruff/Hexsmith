@@ -172,10 +172,9 @@ func add_active_mana_instance(colour:MANA_COLOURS):
 
 			gui_instances_container.add_child(COLOURLESS_MANA_ICON.instantiate())
 	
-	# DEBUG ONLY: print out the current mana combination after every addition
-	# TODO Remove this eventually.
 	update_prefix_dict()
-	spellcraft_amt.debug_readout()
+	# DEBUG ONLY: print out the current mana combination after every addition
+	#spellcraft_amt.debug_readout()
 
 # TODO Remove the most recently added mana instance
 # This will likely require a full refactor of how Active Mana is managed, 
@@ -243,7 +242,7 @@ func craft_and_bind(spell_index: int):
 	# New Spell can be assigned to the associated spell slot passed in as a parameter
 	# to this function.
 	player.active_spells[spell_index] = crafted_spell
-	print("Spell Slot %d is now %s" %[spell_index, crafted_spell.spell_name])
+	#print("Spell Slot %d is now %s" %[spell_index, crafted_spell.spell_name])
 	
 	# Change GUI Spell Icon via the Hud Manager
 	hud_manager.change_spell_icon(spell_index, crafted_spell_prefix.spell_icon_frame, crafted_spell_suffix.spell_icon)
@@ -319,20 +318,22 @@ func determine_prefix() -> SpellPrefix:
 		print("No Prefix found in Dictionary for that Colour Combo! Double Check in spellcraft_manager.gd.")
 		return
 	
-	print("Prefix Found: " + prefix.prefix_name)
+	#print("Prefix Found: " + prefix.prefix_name)
 	return prefix
 
 ## This will definitely need refactoring and optimising,
-## I'd really rather not have a million if-chains
+## I'd really rather not have a million if/switch-chains
 func determine_suffix() -> SpellSuffix:
 	var suffix : SpellSuffix = null
 	
+	# Minor optimisation by returning out as soon as we find this.
+	# Worst case, we have to check 14 options before returning out
 	match(class_selector.current_class):
 		SpellClassSelector.SPELL_CLASSES.TELUMANCY:
 			match(spellcraft_amt.total_current_mana):
 				1:
 					suffix = BoltSuffix.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
 					#suffix = Spike.new()
@@ -354,7 +355,7 @@ func determine_suffix() -> SpellSuffix:
 			match(spellcraft_amt.total_current_mana):
 				1:
 					suffix = StriderSuffix.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
 					#suffix = Transmission.new()
@@ -376,7 +377,7 @@ func determine_suffix() -> SpellSuffix:
 			match(spellcraft_amt.total_current_mana):
 				1:
 					suffix = TransmutationSuffix.new()
-					print("Suffix Found: " + suffix.suffix_name)
+					#print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:
 					#suffix = Cloak.new()

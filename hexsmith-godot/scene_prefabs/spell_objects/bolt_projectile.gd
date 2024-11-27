@@ -59,6 +59,6 @@ func _on_body_entered(body: Node2D) -> void:
 		for t in damage_dict.keys():
 			if(damage_dict[t] != 0):
 				hit_combat_entity.take_damage(damage_dict[t], t)
-				print("Hit %s for %f damage of type %s"%[body.name, damage_dict[t], CombatEntity.DAMAGE_TYPES.keys()[t]])
+				#print("Hit %s for %f damage of type %s"%[body.name, damage_dict[t], CombatEntity.DAMAGE_TYPES.keys()[t]])
 	# Destroy this bolt
 	queue_free()

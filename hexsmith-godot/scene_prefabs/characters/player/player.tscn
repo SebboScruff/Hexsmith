@@ -371,6 +371,16 @@ spellcrafter = NodePath("SpellcraftManager")
 position = Vector2(0, -12.5)
 shape = SubResource("RectangleShape2D_0o7oo")
 
+[node name="SpellcraftManager" type="Node" parent="." node_paths=PackedStringArray("hud_manager")]
+unique_name_in_owner = true
+script = ExtResource("3_ckdda")
+hud_manager = NodePath("../PlayerHUD")
+
+[node name="spellcraft_cast_cd" type="Timer" parent="SpellcraftManager"]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 "": SubResource("AnimationLibrary_gyl4d")
@@ -400,16 +410,6 @@ one_shot = true
 [node name="cast_origin" type="Marker2D" parent="BodySprite"]
 position = Vector2(6, 9)
 
-[node name="SpellcraftManager" type="Node" parent="." node_paths=PackedStringArray("hud_manager")]
-unique_name_in_owner = true
-script = ExtResource("3_ckdda")
-hud_manager = NodePath("../PlayerHUD")
-
-[node name="spellcraft_cast_cd" type="Timer" parent="SpellcraftManager"]
-process_callback = 0
-wait_time = 0.1
-one_shot = true
-
 [node name="OxygenMeter" type="TextureProgressBar" parent="."]
 unique_name_in_owner = true
 anchors_preset = 15
@@ -437,6 +437,6 @@ z_index = 1
 position = Vector2(-7, -40)
 zoom = Vector2(3, 3)
 
+[connection signal="timeout" from="SpellcraftManager/spellcraft_cast_cd" to="." method="_on_spellcraft_cast_cd_timeout"]
 [connection signal="body_entered" from="BodySprite/melee_attack_hitbox" to="BodySprite/melee_attack_hitbox" method="_on_body_entered"]
 [connection signal="timeout" from="BodySprite/melee_attack_hitbox/melee_attack_cooldown" to="." method="_on_melee_attack_cooldown_timeout"]
-[connection signal="timeout" from="SpellcraftManager/spellcraft_cast_cd" to="." method="_on_spellcraft_cast_cd_timeout"]
