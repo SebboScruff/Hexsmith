@@ -1,6 +1,7 @@
-[gd_scene load_steps=39 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=40 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
+[ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
@@ -367,6 +368,13 @@ script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
 
+[node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
+unique_name_in_owner = true
+position = Vector2(-33, 0)
+show_damage_debug = true
+max_health = 100.0
+health_regen_rate = 2.0
+
 [node name="hitbox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -12.5)
 shape = SubResource("RectangleShape2D_0o7oo")
@@ -437,6 +445,9 @@ z_index = 1
 position = Vector2(-7, -40)
 zoom = Vector2(3, 3)
 
+[connection signal="damage_taken" from="CombatEntity" to="." method="_on_combat_entity_damage_taken"]
+[connection signal="has_died" from="CombatEntity" to="." method="_on_combat_entity_has_died"]
+[connection signal="healed" from="CombatEntity" to="." method="_on_combat_entity_healed"]
 [connection signal="timeout" from="SpellcraftManager/spellcraft_cast_cd" to="." method="_on_spellcraft_cast_cd_timeout"]
 [connection signal="body_entered" from="BodySprite/melee_attack_hitbox" to="BodySprite/melee_attack_hitbox" method="_on_body_entered"]
 [connection signal="timeout" from="BodySprite/melee_attack_hitbox/melee_attack_cooldown" to="." method="_on_melee_attack_cooldown_timeout"]

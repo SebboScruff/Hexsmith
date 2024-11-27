@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://didj2uga56d07"]
+
+[ext_resource type="Script" path="res://scene_prefabs/obstacles_and_decor/hurt_zone.gd" id="1_eaw4a"]
+
+[node name="HurtZone" type="Area2D"]
+collision_layer = 128
+collision_mask = 67
+script = ExtResource("1_eaw4a")
+damage_type = 6
+
+[node name="damage_interval_timer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
+autostart = true
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="timeout" from="damage_interval_timer" to="." method="_on_damage_interval_timer_timeout"]

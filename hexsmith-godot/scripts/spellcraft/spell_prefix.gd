@@ -6,6 +6,7 @@
 ## specific stats as well as in-game mana cost to cast.
 
 class_name SpellPrefix
+
 # Identification Parameters
 var prefix_name:String
 var prefix_id: int
@@ -15,11 +16,12 @@ var prefix_id: int
 # eventually, rather than 25 (animated) image sets
 const icon_frame_root_path = "res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/"
 var spell_icon_frame : CompressedTexture2D
+# var precast_particles : GPUParticles2D # TODO Fill in every prefix with a precast particle
 
 var colors : Array[Color]
 # TODO var sound_effect_source
 
-# Mana Values
+# Specific Mana Quantities
 var num_red_mana : int
 var num_blue_mana : int
 var num_green_mana : int

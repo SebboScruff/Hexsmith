@@ -49,7 +49,6 @@ layout_mode = 2
 
 [node name="hp_bar" type="TextureProgressBar" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/hp_centercontainer"]
 layout_mode = 2
-value = 67.0
 fill_mode = 3
 texture_under = ExtResource("2_018o7")
 texture_over = ExtResource("3_xorbd")

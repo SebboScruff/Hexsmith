@@ -36,7 +36,8 @@ var player : Player
 var cooldown_current: float
 var cooldown_max: float
 
-# Pass in stuff from Prefix
+# Pass in stuff from Prefix, for use in things like particle/ projectile instantiation
+# and Shader Initialisation.
 var colors_from_prefix:Array[Color]
 
 func _init() -> void:

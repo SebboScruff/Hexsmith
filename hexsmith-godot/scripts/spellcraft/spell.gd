@@ -6,33 +6,38 @@ var suffix: SpellSuffix
 
 var spell_name:String
 # Stored as an array: 0,1,2,3,4,5 are Red,Blue,Green,White,Black,Colorless
-# mana costs respectively. 
+# mana costs respectively.
+# NOTE: Must be kept consistent with the player's Mana Value Tracker 
 var mana_cost:Array[float]
 
+# Constructor to assemble the spell's basic definition and get an access point
+# to the player's controller.
 func _init(_player:Player, _prefix:SpellPrefix, _suffix:SpellSuffix):
-	# Needs a prefix and suffix to define itself as a spell, and also
-	# requires a reference to the Player (that crafted it) so the cast suffix's 
-	# cast behaviours can reference positions, cast costs, etc.
-	prefix = _prefix
-	suffix = _suffix
-	player = _player
+	prefix = _prefix # Prefix: Specific Stats, Colours, Additional SFX, Pre-cast Particles
+	suffix = _suffix # Suffix: Overall Spell behaviours, and general SFX.
 	
-	suffix.player = _player
-	suffix.get_prefix_colors(prefix.colors)
+	player = _player # Player reference so that the Suffix can determine cast origin & direction, or apply the correct effects.
+	suffix.player = _player # As above.
 	
-	#print("Initialised a %s %s to Player: %s"%[prefix.prefix_name, suffix.suffix_name, player.name])
-	# then assign them and determine the spell name.
+	suffix.get_prefix_colors(prefix.colors) # Access the prefix's visual colors so shaders can be set up correctly
+	
+	# After spell definition, determine both its name and mana cost(s)
 	determine_spell_name()
 	mana_cost = calculate_mana_cost()
 
+# Extremely simple string concatenation
 func determine_spell_name():
 	spell_name = prefix.prefix_name + " " + suffix.suffix_name
 	## TODO There is an edge-case where if the suffix is Summon Familiar.
+	## where the name is changed to "Summon [Prefix] Familiar"
 
 func calculate_mana_cost() -> Array[float]:
+	# Setup zeroes array to begin with
 	var costs:Array[float] = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 	
-	# add mana costs based on A) Prefix Colours and B) Suffix basic cost.
+	# Add mana costs based on A) Prefix Mana Input and B) Suffix basic cost.
+	# This means that complex spells can have different mana costs even if their names are the same,
+	# i.e. RRB Steam Spells are different to RBB (or RBC).
 	# TODO There's definitely a more efficient way to do this
 	costs[0] = suffix.base_mana_cost * prefix.num_red_mana
 	costs[1] = suffix.base_mana_cost * prefix.num_blue_mana
@@ -55,8 +60,6 @@ func cast_spell():
 		# "One-and-done" spells require colour input here to determine their 
 		# specific numbers
 			SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN:
-				#print("Casting %s"%[spell_name])
-				
 				suffix.cast(prefix.num_red_mana, prefix.num_blue_mana, 
 				prefix.num_green_mana, prefix.num_white_mana, 
 				prefix.num_black_mana, prefix.num_colorless_mana)
@@ -69,5 +72,7 @@ func cast_spell():
 			SpellSuffix.CAST_TYPES.PASSIVE:
 				print("Tried to cast %s but it is a Passive Spell."%[spell_name])
 
+# Simple getter, so the player can access mana costs and 
+# thereby check whether they can cast this spell.
 func get_mana_cost() -> float:
 	return suffix.mana_cost
