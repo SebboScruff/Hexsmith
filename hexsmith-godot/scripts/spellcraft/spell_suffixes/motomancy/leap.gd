@@ -1,4 +1,4 @@
-class_name Leap extends SpellSuffix
+class_name LeapSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Leap"

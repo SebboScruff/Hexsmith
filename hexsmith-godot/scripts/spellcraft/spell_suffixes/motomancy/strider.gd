@@ -1,4 +1,4 @@
-class_name Strider extends SpellSuffix
+class_name StriderSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Strider"

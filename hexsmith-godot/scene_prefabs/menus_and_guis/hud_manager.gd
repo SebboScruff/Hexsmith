@@ -25,7 +25,7 @@ var current_active_menu
 func _ready() -> void:
 	change_active_menu(0)
 	
-		# Load up the Spell Icon arrays
+	# Load up the Spell Icon arrays
 	# TODO This is awful to look at and extremely fragile, definitely refactor this
 	spell_icons = [overworld_hud.get_node("spell_slots_container/spell_slots_grid/SpellIcon1") as SpellIcon,
 	overworld_hud.get_node("spell_slots_container/spell_slots_grid/SpellIcon2") as SpellIcon,

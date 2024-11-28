@@ -1,0 +1,67 @@
+[gd_scene load_steps=7 format=3 uid="uid://dwe3cvo2ke1rg"]
+
+[ext_resource type="Texture2D" uid="uid://ddkd3clehwbj1" path="res://third_party/testing_ground_assets/platformertiles2.png" id="1_bkuwf"]
+[ext_resource type="Script" path="res://scene_prefabs/obstacles_and_decor/interactible_sign.gd" id="1_tns6r"]
+[ext_resource type="Texture2D" uid="uid://5yn5uxxqsg05" path="res://third_party/testing_ground_assets/hotkeys.png" id="2_qa34l"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7dym"]
+atlas = ExtResource("1_bkuwf")
+region = Rect2(226, 2, 13, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3oxv7"]
+size = Vector2(20, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aosde"]
+atlas = ExtResource("2_qa34l")
+region = Rect2(484, 226, 26, 28)
+
+[node name="InteractibleSign" type="Node2D"]
+z_index = 1
+script = ExtResource("1_tns6r")
+display_text = "[SIGN TEXT HERE]"
+
+[node name="sprite" type="Sprite2D" parent="."]
+position = Vector2(0, -7)
+texture = SubResource("AtlasTexture_n7dym")
+
+[node name="activation_region" type="Area2D" parent="."]
+position = Vector2(0, -7)
+collision_layer = 64
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="activation_region"]
+position = Vector2(0, -1)
+shape = SubResource("RectangleShape2D_3oxv7")
+debug_color = Color(0.817008, 0.00189943, 0.972599, 0.42)
+
+[node name="input_prompt" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -14.0
+offset_top = -46.0
+offset_right = 56.0
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="input_prompt"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="button_prompt" type="TextureRect" parent="input_prompt/HBoxContainer"]
+layout_mode = 2
+texture = SubResource("AtlasTexture_aosde")
+stretch_mode = 5
+
+[node name="button_promp_description" type="Label" parent="input_prompt/HBoxContainer"]
+layout_mode = 2
+text = "Read"
+
+[connection signal="body_entered" from="activation_region" to="." method="_on_activation_region_body_entered"]
+[connection signal="body_exited" from="activation_region" to="." method="_on_activation_region_body_exited"]

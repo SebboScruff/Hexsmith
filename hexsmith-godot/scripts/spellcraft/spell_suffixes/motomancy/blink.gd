@@ -1,4 +1,4 @@
-class_name Blink extends SpellSuffix
+class_name BlinkSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Blink"

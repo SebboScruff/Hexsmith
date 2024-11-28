@@ -1,6 +1,64 @@
-[gd_scene load_steps=2 format=3 uid="uid://qglduw561n00"]
+[gd_scene load_steps=2 format=3 uid="uid://c40hu3eo4mat3"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/combat_entity.gd" id="1_aekqm"]
 
-[node name="CombatEntity" type="Node"]
+[node name="CombatEntity" type="Node2D"]
+position = Vector2(0, 1)
 script = ExtResource("1_aekqm")
+
+[node name="damage_readout" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 126.0
+offset_bottom = 139.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="damage_readout"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="damage_readout/VBoxContainer"]
+layout_mode = 2
+text = "Last Hit:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="last_damage_raw_amount" type="Label" parent="damage_readout/VBoxContainer"]
+layout_mode = 2
+text = "[Raw Damage]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="last_damage_real_amount" type="Label" parent="damage_readout/VBoxContainer"]
+layout_mode = 2
+text = "[Damage Taken]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="last_damage_type" type="Label" parent="damage_readout/VBoxContainer"]
+layout_mode = 2
+text = "[Damage Type]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="damage_readout/VBoxContainer"]
+layout_mode = 2
+
+[node name="total_damage" type="Label" parent="damage_readout/VBoxContainer"]
+layout_mode = 2
+text = "Total: 00000000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="damage_readout_reset" type="Timer" parent="damage_readout"]
+wait_time = 4.0
+one_shot = true
+
+[connection signal="timeout" from="damage_readout/damage_readout_reset" to="." method="_on_damage_readout_reset_timeout"]

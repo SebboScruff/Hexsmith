@@ -1,9 +1,15 @@
-[gd_scene load_steps=11 format=3 uid="uid://d3e57kxopdxv5"]
+[gd_scene load_steps=17 format=3 uid="uid://d3e57kxopdxv5"]
 
 [ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/hud_manager.gd" id="1_154uy"]
-[ext_resource type="PackedScene" uid="uid://du76kdtuspo1d" path="res://scene_prefabs/menus_and_guis/overworld_hud.tscn" id="2_g3cc8"]
+[ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="2_018o7"]
+[ext_resource type="Texture2D" uid="uid://bq8346tx7io7g" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar_frame.png" id="3_xorbd"]
+[ext_resource type="PackedScene" uid="uid://dlnysb1rjh2qq" path="res://scene_prefabs/menus_and_guis/mana_value_tracker.tscn" id="4_dvjj2"]
+[ext_resource type="PackedScene" uid="uid://cogpts60jbjbf" path="res://scene_prefabs/menus_and_guis/spell_icon.tscn" id="5_2ovb2"]
+[ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/spell_slot_frame.png" id="6_lqvhg"]
 [ext_resource type="PackedScene" uid="uid://bnfhcx8ia5jqy" path="res://scene_prefabs/menus_and_guis/spellcraft_class_selector.tscn" id="7_bys04"]
 [ext_resource type="Texture2D" uid="uid://dkrrhj20ngflq" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_red_mana.png" id="7_fkkxa"]
+[ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png" id="7_r8a5a"]
+[ext_resource type="PackedScene" uid="uid://dcuql0xn2dtnn" path="res://scene_prefabs/menus_and_guis/crosshair.tscn" id="8_ji24q"]
 [ext_resource type="Texture2D" uid="uid://dprj4mn87m7ux" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_blue_mana.png" id="8_kikgm"]
 [ext_resource type="Texture2D" uid="uid://jm3f4ipjlcag" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_green_mana.png" id="9_u46kl"]
 [ext_resource type="Texture2D" uid="uid://dt48cv805ctha" path="res://assets/sprites/menus_and_gui/spellcraft_menu_imgs/spellcraft_menu_white_mana.png" id="10_ywe7d"]
@@ -17,8 +23,198 @@ bg_color = Color(0.243137, 0.243137, 0.243137, 0.498039)
 script = ExtResource("1_154uy")
 spell_icons = [null]
 
-[node name="overworld_hud" parent="." instance=ExtResource("2_g3cc8")]
+[node name="overworld_hud" type="Control" parent="."]
 unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="mana_hp_panelcontainer" type="PanelContainer" parent="overworld_hud"]
+layout_mode = 1
+anchors_preset = -1
+offset_right = 100.0
+offset_bottom = 56.0
+scale = Vector2(3.83255, 3.83255)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="overworld_hud/mana_hp_panelcontainer"]
+layout_mode = 2
+
+[node name="hp_centercontainer" type="CenterContainer" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="hp_bar" type="TextureProgressBar" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/hp_centercontainer"]
+layout_mode = 2
+fill_mode = 3
+texture_under = ExtResource("2_018o7")
+texture_over = ExtResource("3_xorbd")
+texture_progress = ExtResource("2_018o7")
+tint_under = Color(0.378232, 7.18953e-07, 1.92523e-07, 1)
+tint_progress = Color(1, 0.231373, 0.172549, 1)
+
+[node name="mana_bars_vbox" type="VBoxContainer" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="mana_tracker_red" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("4_dvjj2")]
+layout_mode = 2
+tint_under = Color(0.407843, 0, 0.0588235, 1)
+tint_progress = Color(1, 0, 0, 1)
+maximum_mana = 100.0
+mana_regen_rate = 2.0
+
+[node name="mana_tracker_blue" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("4_dvjj2")]
+layout_mode = 2
+tint_under = Color(0, 0.0588235, 0.407843, 1)
+tint_progress = Color(0, 0, 1, 1)
+colour = 1
+maximum_mana = 100.0
+mana_regen_rate = 2.0
+
+[node name="mana_tracker_green" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("4_dvjj2")]
+layout_mode = 2
+tint_under = Color(0.0588235, 0.407843, 0, 1)
+tint_progress = Color(0, 1, 0, 1)
+colour = 2
+maximum_mana = 100.0
+mana_regen_rate = 2.0
+
+[node name="mana_tracker_white" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("4_dvjj2")]
+layout_mode = 2
+tint_under = Color(0.674814, 0.674815, 0.674814, 1)
+colour = 3
+maximum_mana = 100.0
+mana_regen_rate = 2.0
+
+[node name="mana_tracker_black" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("4_dvjj2")]
+layout_mode = 2
+tint_under = Color(0.266575, 0.266575, 0.266575, 1)
+tint_progress = Color(0, 0, 0, 1)
+colour = 4
+maximum_mana = 100.0
+mana_regen_rate = 2.0
+
+[node name="mana_tracker_colourless" parent="overworld_hud/mana_hp_panelcontainer/HBoxContainer/mana_bars_vbox" instance=ExtResource("4_dvjj2")]
+layout_mode = 2
+tint_under = Color(0.140447, 0.140448, 0.140447, 1)
+tint_progress = Color(0.533333, 0.533333, 0.533333, 1)
+colour = 5
+maximum_mana = 100.0
+mana_regen_rate = 2.0
+
+[node name="minimap_panelcontainer" type="PanelContainer" parent="overworld_hud"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.741
+anchor_right = 1.0
+anchor_bottom = 0.233
+offset_left = 0.36792
+offset_bottom = 0.0159912
+grow_horizontal = 0
+
+[node name="placeholder_label" type="Label" parent="overworld_hud/minimap_panelcontainer"]
+layout_mode = 2
+text = "PLACEHOLDER
+MINIMAP HERE
+EVENTUALLY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="spell_slots_container" type="CenterContainer" parent="overworld_hud"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.441
+anchor_bottom = 0.441
+offset_top = 0.231995
+offset_right = 400.0
+offset_bottom = 1612.23
+grow_vertical = 0
+scale = Vector2(0.16, 0.16)
+
+[node name="spell_slots_grid" type="GridContainer" parent="overworld_hud/spell_slots_container"]
+layout_mode = 2
+
+[node name="SpellIcon1" parent="overworld_hud/spell_slots_container/spell_slots_grid" instance=ExtResource("5_2ovb2")]
+layout_mode = 2
+
+[node name="SpellIcon2" parent="overworld_hud/spell_slots_container/spell_slots_grid" instance=ExtResource("5_2ovb2")]
+layout_mode = 2
+
+[node name="SpellIcon3" parent="overworld_hud/spell_slots_container/spell_slots_grid" instance=ExtResource("5_2ovb2")]
+layout_mode = 2
+
+[node name="SpellIcon4" parent="overworld_hud/spell_slots_container/spell_slots_grid" instance=ExtResource("5_2ovb2")]
+layout_mode = 2
+
+[node name="item_slots_container" type="CenterContainer" parent="overworld_hud"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -48.0
+offset_right = 152.0
+grow_vertical = 0
+
+[node name="Panel" type="Panel" parent="overworld_hud/item_slots_container"]
+z_index = -2
+layout_mode = 2
+
+[node name="spell_slots_grid" type="GridContainer" parent="overworld_hud/item_slots_container"]
+layout_mode = 2
+columns = 3
+
+[node name="spell_slot_1_container" type="CenterContainer" parent="overworld_hud/item_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_1_frame" type="TextureRect" parent="overworld_hud/item_slots_container/spell_slots_grid/spell_slot_1_container"]
+layout_mode = 2
+texture = ExtResource("6_lqvhg")
+
+[node name="spell_slot_1_icon" type="TextureRect" parent="overworld_hud/item_slots_container/spell_slots_grid/spell_slot_1_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("7_r8a5a")
+
+[node name="spell_slot_2_container" type="CenterContainer" parent="overworld_hud/item_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_2_frame" type="TextureRect" parent="overworld_hud/item_slots_container/spell_slots_grid/spell_slot_2_container"]
+layout_mode = 2
+texture = ExtResource("6_lqvhg")
+
+[node name="spell_slot_2_icon" type="TextureRect" parent="overworld_hud/item_slots_container/spell_slots_grid/spell_slot_2_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("7_r8a5a")
+
+[node name="spell_slot_3_container" type="CenterContainer" parent="overworld_hud/item_slots_container/spell_slots_grid"]
+layout_mode = 2
+
+[node name="spell_slot_3_frame" type="TextureRect" parent="overworld_hud/item_slots_container/spell_slots_grid/spell_slot_3_container"]
+layout_mode = 2
+texture = ExtResource("6_lqvhg")
+
+[node name="spell_slot_3_icon" type="TextureRect" parent="overworld_hud/item_slots_container/spell_slots_grid/spell_slot_3_container"]
+z_index = -1
+layout_mode = 2
+texture = ExtResource("7_r8a5a")
+
+[node name="Crosshair" parent="overworld_hud" instance=ExtResource("8_ji24q")]
+layout_mode = 0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 40.0
+offset_bottom = 40.0
+grow_horizontal = 1
+grow_vertical = 1
 
 [node name="spellcraft_hud" type="Control" parent="."]
 unique_name_in_owner = true

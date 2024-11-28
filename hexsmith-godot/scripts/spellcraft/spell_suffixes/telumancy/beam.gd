@@ -1,4 +1,4 @@
-class_name Beam extends SpellSuffix
+class_name BeamSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Beam"

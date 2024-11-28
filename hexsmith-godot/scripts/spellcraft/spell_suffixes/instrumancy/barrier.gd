@@ -1,4 +1,4 @@
-class_name Barrier extends SpellSuffix
+class_name BarrierSuffix extends SpellSuffix
 
 func _init() -> void:
 	suffix_name = "Barrier"
