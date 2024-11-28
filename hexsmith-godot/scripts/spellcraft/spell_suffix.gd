@@ -12,7 +12,8 @@ enum TARGET_TYPES{
 	SELF			# Affects only the Player
 }
 
-var suffix_name: String
+var suffix_name:String
+var suffix_id:int ## NOTE: Very important for spells with Cooldowns.
 
 var cast_type: CAST_TYPES
 var is_active: bool
@@ -33,7 +34,7 @@ var player : Player
 # Remember, casting a spell puts the SUFFIX on cooldown, not that specific Spell
 # i.e. casting any Bolt spell puts ALL POSSIBLE Bolt spells on cooldown.
 # Set to 0 if Toggled or Passive.
-var cooldown_current: float
+# var cooldown_current: float
 var cooldown_max: float
 
 # Pass in stuff from Prefix, for use in things like particle/ projectile instantiation

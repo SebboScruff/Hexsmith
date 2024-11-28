@@ -4,6 +4,7 @@ const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/bolt_projec
 
 func _init() -> void:
 	suffix_name = "Bolt"
+	suffix_id = 0
 	
 	cast_type = CAST_TYPES.CAST_WITH_COOLDOWN
 	is_active = true
@@ -11,6 +12,8 @@ func _init() -> void:
 	base_mana_cost = 10
 	
 	spell_icon = preload(icon_root_path + "bolt_icon.png")
+	
+	cooldown_max = 2.0
 
 func calc_mana_cost():
 	print("NOTE: Using Mana Calc from inherited class.")

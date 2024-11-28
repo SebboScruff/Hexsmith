@@ -3,17 +3,24 @@ class_name SpellIcon extends Control
 @onready var icon: TextureRect = %icon
 @onready var frame: TextureRect = %frame
 @onready var hotkey: TextureRect = %hotkey
+@onready var cooldown: TextureProgressBar = %cooldown
 
 
 func get_icon() -> TextureRect:
 	return icon
 func get_frame() -> TextureRect:
 	return frame
+func get_cooldown_indicator() -> TextureProgressBar:
+	return cooldown
 
 func set_icon(new_icon:CompressedTexture2D) -> void:
 	icon.texture = new_icon
 func set_frame(new_frame:CompressedTexture2D) -> void:
 	frame.texture = new_frame
+
+func update_cd_visual(_max:float, _current:float) -> void:
+	cooldown.max_value = _max
+	cooldown.value = _current
 
 # Pass in corresponding x, y, w, h values for a new region in the hotkey
 # images texture atlas.

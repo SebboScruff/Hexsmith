@@ -50,6 +50,11 @@ var gravity_scale:float = 1.0
 # TODO this needs to be transferred to save-state data.
 var active_spells:Array[Spell]
 
+# The parent object into which all spell cooldown timers will be placed.
+@onready var spell_cooldowns_parent: Node = $SpellCooldowns
+# The prefab timers with ID tied to them, for monitoring spell cooldowns.
+const SPELL_COOLDOWN_TIMER_PREFAB = preload("res://scene_prefabs/spell_cooldown_timer.tscn")
+
 # These represent the player's coloured Mana Resources,
 # regenerating over time and being spent when using spells.
 var mana_value_trackers:Array[ManaValueTracker]
@@ -165,7 +170,47 @@ func _process(delta: float) -> void:
 	# HP Regen managed here.
 	if(player_combat_entity.curr_health < player_combat_entity.max_health):
 		player_combat_entity.gain_health(player_combat_entity.health_regen_rate * delta, true)
-
+		
+	# This is set up in a way where all spells with the same Suffix will share a cooldown.
+	# So if you cast a BOLT Spell, all possible BOLT spells go on cooldown.
+	# Likewise, casting a BOLT spell then putting a different spell in that slot
+	# will potentially take it off cooldown.
+	# 9 Suffixes have cooldowns so worst case this has to run 36 times, but that
+	# requires a player casting literally every single spell with a cooldown before
+	# the first one ends.
+	#region Spell Cooldown Management Algorithm:
+	for n in active_spells.size():
+		var spell := active_spells[n] as Spell
+		# If that spellslot is empty, go to next one immediately.
+		if(spell == null):
+			continue
+		# Set the spell to be off-cooldown initially, then overwrite to being 
+		# on cooldown where necessary.
+		spell.is_on_cooldown = false
+		# Get the corresponding HUD icon
+		var spell_icon := hud_manager.spell_icons[n] as SpellIcon
+		# Minor optimisation to auto-skip any spells that don't have cooldowns, 
+		# i.e. toggles and passives. Also resets the cooldown visual for those spells.
+		if(spell.suffix.cast_type != SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
+			spell_icon.update_cd_visual(1, 0)
+			continue
+		# Iterate through all current Cooldown Timers.
+		# These are instantiated as soon as a spell is cast, and destroyed
+		# when they time out, so there will never be more than 1 per suffix
+		# (i.e. more than 9 in total).
+		for t in spell_cooldowns_parent.get_children():
+			var cdt := t as SpellCooldownTimer # cast as specialised timer with ID
+			# Check for matching internal IDs
+			if(cdt.timer_id == spell.get_suffix_id()):
+				## Corresponding Cooldown Timer found, that spell is now on cooldown.
+				spell.is_on_cooldown = true
+				spell_icon.update_cd_visual(cdt.wait_time, cdt.time_left)
+				break # and proceed to next spell in the list
+		## Having gone through every timer without finding an ID match,
+		## this spell is not on cooldown. The previously declared
+		## spell.is_on_cooldown = false will be maintained. 
+	#endregion
+	
 # All input processing work is done in here
 # as well as all related animation work. It's done in _physics_process() rather
 # than _input() for now because I want it updated at a consistent rate
@@ -480,8 +525,14 @@ func cast_active_spell(spell_index:int):
 	# Fail check 1: Player doesn't have a spell in that spell slot
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
+	# Fail check 2: That spell is on Cooldown.
+	elif(active_spells[spell_index].is_on_cooldown):
+		# TODO Visual Indicator other than the cooldown bars.
+		# Maybe like a fizzle-out particle effect or something 
+		print("%s Spells are on Cooldown!"%[active_spells[spell_index].suffix.suffix_name])
+		return
 	else:
-	# Fail Check 2: Player doesn't have enough mana to cast that spell.
+	# Fail Check 3: Player doesn't have enough mana to cast that spell.
 		for m in mana_value_trackers:
 			var i:int = m.get_index()
 			if(m.current_mana < active_spells[spell_index].mana_cost[i]):
@@ -490,9 +541,22 @@ func cast_active_spell(spell_index:int):
 				return
 			# Mana Expenditure done while still in this for loop
 			m.current_mana -= active_spells[spell_index].mana_cost[i]
+		
+		## All failchecks passed; now the spell can be cast.
 		# Call that spell's Cast function - specific spell behaviours
 		# are determined on a per-class basis
 		active_spells[spell_index].cast_spell()
+		
+		# If the casted spell has a cooldown, apply it after casting
+		# by adding a new cooldown timer to the list.
+		# NOTE: Timers are initialised with the same ID as the Suffix so the 
+		# Cooldown Progression algorithm in _ready() can work correctly.
+		if(active_spells[spell_index].suffix.cast_type == SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
+			var new_cd_timer:SpellCooldownTimer
+			var casted_suffix:SpellSuffix = active_spells[spell_index].suffix
+			new_cd_timer = SpellCooldownTimer.create_new_cooldown_timer(casted_suffix.suffix_id, casted_suffix.cooldown_max)
+			
+			spell_cooldowns_parent.add_child(new_cd_timer)
 
 # TODO have an int parameter for tracking melee combos.
 func basic_melee():
@@ -524,3 +588,12 @@ func _on_combat_entity_has_died() -> void:
 	# Don't really know what I want to do yet for actual player death.
 	player_combat_entity.gain_health(player_combat_entity.max_health)
 #endregion
+
+static func create_new_cooldown_timer(_id:int, _duration:float) -> SpellCooldownTimer:
+	var new_timer:SpellCooldownTimer = SPELL_COOLDOWN_TIMER_PREFAB.instantiate()
+	
+	new_timer.timer_id = _id
+	new_timer.wait_time = _duration
+	new_timer.autostart = true
+	
+	return new_timer

@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw8470yxi1drs"]
+
+[ext_resource type="Script" path="res://spell_cooldown_timer.gd" id="1_d0ke4"]
+
+[node name="SpellCooldownTimer" type="Timer"]
+one_shot = true
+autostart = true
+script = ExtResource("1_d0ke4")
+
+[connection signal="timeout" from="." to="." method="_on_timeout"]
