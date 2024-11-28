@@ -123,7 +123,6 @@ text = "haven't implemented swimming
 
 [node name="Player" parent="." instance=ExtResource("1_jdw74")]
 position = Vector2(-401, 156)
-basic_melee_damage = 0.0
 
 [node name="world_border" type="StaticBody2D" parent="."]
 collision_layer = 2

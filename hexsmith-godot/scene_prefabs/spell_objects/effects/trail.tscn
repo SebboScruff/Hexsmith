@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://bdyeyuetq00l1"]
+
+[ext_resource type="Script" path="res://scene_prefabs/spell_objects/effects/trail.gd" id="1_2gtl1"]
+
+[sub_resource type="Curve" id="Curve_g8rrs"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 1.4, 0.0, 0, 0]
+point_count = 2
+
+[node name="Trail" type="Line2D"]
+top_level = true
+position = Vector2(-33, -25)
+points = PackedVector2Array(65, 23, 260, 106)
+width = 6.0
+width_curve = SubResource("Curve_g8rrs")
+joint_mode = 2
+begin_cap_mode = 2
+end_cap_mode = 2
+script = ExtResource("1_2gtl1")

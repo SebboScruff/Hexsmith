@@ -11,9 +11,9 @@ func _init(input_black:int, input_colourless:int):
 	# NOTE: Colors declared as RGBA[0,1] so these are all defaulted opaque white
 	colors = [
 		Color(0,0,0,1), # Spell's Primary Color
-		Color(0,0,0,1), # Spell's Secondary Color
+		Color(0.1,0.1,0.1,1), # Spell's Secondary Color
 		Color(0,0,0,1), # Spell's Tertiary Color
-		Color(0,0,0,1), # Spell's Primary Effect Color (trails, particles, additional bits)
+		Color(0.1,0.1,0.1,1), # Spell's Primary Effect Color (trails, particles, additional bits)
 		Color(0,0,0,1) # Spell's Secondary Effect Color (trails, particles, additional bits)
 	]
 	# TODO Initialise Prefix Sound Effects.

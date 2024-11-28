@@ -1,8 +1,11 @@
-# TODO This probably wants to turn into a generic, inheritable SpellProjectile
-# class - so the majority of the initialisation can be kept consistent.
+# Behavioural outline for the Bolt Suffix's spawned projectile:
+# - Travel in a straight line until hitting an enemy or wall
+# - Deal damage if necessary, then destroy itself
+
 extends SpellProjectile
 
 func _ready() -> void:
+	
 	pass # Replace with function body.
 
 # Make the project look the correct way
@@ -12,6 +15,8 @@ func initialise_shader(colors:Array[Color]) -> void:
 	# 3, 4 are Effect Colors.
 	mat.set_shader_parameter("PrimaryColor", colors[0])
 	mat.set_shader_parameter("SecondaryColor", colors[1])
+	var trail := $Trail
+	trail.default_color = colors[3] # For now, set the trail as the Primary Effect color
 	mat.set_shader_parameter("TertiaryColor", colors[2])
 
 # Add specific effects from Prefix Color Combos.
@@ -38,10 +43,12 @@ _white:int, _black:int, _colorless:int, ) -> void:
 		pass
 	elif(_white > 0):
 		# Create a small light and instantiate as child to the projectile
-		pass
+		# TODO Also apply this to the bolt's trail, or otherwise have it linger for a while.
+		var light := preload("res://scene_prefabs/circle_light.tscn")
+		add_child(light.instantiate())
 	elif(_black > 0):
 		# Adjust the bolt's collision mask so it doesnt hit terrain (Layer 2)
-		pass
+		set_collision_mask_value(2, false)
 
 func _physics_process(delta: float) -> void:
 	# Do movement via SpellProjectile base class's physics process.

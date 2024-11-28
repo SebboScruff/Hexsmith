@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=4 uid="uid://cmrnsctc7ttig"]
+[gd_scene load_steps=11 format=4 uid="uid://cmrnsctc7ttig"]
 
 [ext_resource type="TileSet" uid="uid://cx22yeu87jm6g" path="res://test-scenes/moon_cave_tiles.tres" id="1_uusty"]
 [ext_resource type="TileSet" uid="uid://cqrk7a85o14vw" path="res://test-scenes/woodland_tiles.tres" id="1_yxvjh"]
@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bhapy03ndyqo8" path="res://scene_prefabs/characters/player/player.tscn" id="4_hxfac"]
 [ext_resource type="PackedScene" uid="uid://dwe3cvo2ke1rg" path="res://scene_prefabs/obstacles_and_decor/interactible_sign.tscn" id="6_yex5h"]
 [ext_resource type="PackedScene" uid="uid://dfx1jxj6g8eos" path="res://scene_prefabs/movement_areas/surfaceable_water.tscn" id="7_0niuc"]
+[ext_resource type="PackedScene" uid="uid://7l80r1bnvir3" path="res://scene_prefabs/spell_objects/projectiles/bolt_projectile.tscn" id="8_uejjl"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_hyje5"]
 
@@ -94,7 +95,6 @@ occluder = SubResource("OccluderPolygon2D_7cyns")
 
 [node name="Player" parent="." instance=ExtResource("4_hxfac")]
 position = Vector2(-66, -1)
-basic_melee_damage = 0.0
 
 [node name="InteractibleSign" parent="." instance=ExtResource("6_yex5h")]
 position = Vector2(-36, 0)
@@ -103,3 +103,6 @@ display_text = "Hope you can swim!"
 [node name="InteractibleSign2" parent="." instance=ExtResource("6_yex5h")]
 position = Vector2(-246, 0)
 display_text = "Watch out for the drop!"
+
+[node name="BoltProjectile" parent="." instance=ExtResource("8_uejjl")]
+position = Vector2(-213, 123)

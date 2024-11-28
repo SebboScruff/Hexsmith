@@ -14,8 +14,8 @@ func _init(input_blue:int, input_colourless:int):
 		Color(0.016,0,1,1), # Spell's Primary Color: dark blue
 		Color(0.369,0.353,1,1), # Spell's Secondary Color: mid blue
 		Color(0,0.878,1,1), # Spell's Tertiary Color: light blue
-		Color(1,1,1,1), # Spell's Primary Effect Color (trails, particles, additional bits)
-		Color(1,1,1,1) # Spell's Secondary Effect Color (trails, particles, additional bits)
+		Color(0.369,0.353,1,1), # Spell's Primary Effect Color (trails, particles, additional bits)
+		Color(0.016,0,1,1) # Spell's Secondary Effect Color (trails, particles, additional bits)
 	]
 	# TODO Initialise Prefix Sound Effects.
 	

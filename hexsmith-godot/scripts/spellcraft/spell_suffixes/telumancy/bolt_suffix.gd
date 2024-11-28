@@ -1,6 +1,6 @@
 class_name BoltSuffix extends SpellSuffix
 
-const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/bolt_projectile.tscn")
+const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/projectiles/bolt_projectile.tscn")
 
 func _init() -> void:
 	suffix_name = "Bolt"

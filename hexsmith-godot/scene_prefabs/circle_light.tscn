@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://blenuo2hq4qlt"]
+
+[ext_resource type="Texture2D" uid="uid://rtnnscsp6kqi" path="res://assets/sprites/circle.png" id="1_4ssa6"]
+
+[node name="CircleLight" type="PointLight2D"]
+texture = ExtResource("1_4ssa6")

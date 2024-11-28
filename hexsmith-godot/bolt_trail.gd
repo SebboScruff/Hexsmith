@@ -1,7 +1,3 @@
-# meta-name: Casted Spell
-# meta-description: Spell Suffix with CAST-WITH-COOLDOWN Cast Type
-# meta-default: true
-# meta-space-indent: 4
 class_name SuffixName extends SpellSuffix
 
 # If the spell spawns a projectile, reference the prefab here. Otherwise, delete this.
@@ -38,3 +34,4 @@ num_colourless:int):
 	
 	#player.add_sibling(new_projectile)
 	#endregion
+

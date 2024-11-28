@@ -13,7 +13,7 @@ func _init(input_green:int, input_colourless:int):
 		Color(0,1,0,1), # Spell's Primary Color
 		Color(1,1,1,1), # Spell's Secondary Color
 		Color(1,1,1,1), # Spell's Tertiary Color
-		Color(1,1,1,1), # Spell's Primary Effect Color (trails, particles, additional bits)
+		Color(0.329,0.561,0.157,1), # Spell's Primary Effect Color (trails, particles, additional bits)
 		Color(1,1,1,1) # Spell's Secondary Effect Color (trails, particles, additional bits)
 	]
 	# TODO Initialise Prefix Sound Effects.
