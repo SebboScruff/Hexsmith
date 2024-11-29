@@ -1,0 +1,56 @@
+[gd_scene load_steps=2 format=3 uid="uid://d3lff853ihggj"]
+
+[ext_resource type="Script" path="res://scene_prefabs/characters/fire_system_entity.gd" id="1_ke41b"]
+
+[node name="FireSystemEntity" type="Area2D"]
+collision_layer = 1024
+collision_mask = 1024
+script = ExtResource("1_ke41b")
+
+[node name="FireDamageInterval" type="Timer" parent="."]
+
+[node name="DebugReadout" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+z_index = 10
+offset_right = 130.0
+offset_bottom = 104.0
+scale = Vector2(0.235669, 0.257426)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="DebugReadout"]
+layout_mode = 2
+
+[node name="DebugIgnite" type="Label" parent="DebugReadout/VBoxContainer"]
+layout_mode = 2
+text = "Ignite: True"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DebugExtinguish" type="Label" parent="DebugReadout/VBoxContainer"]
+layout_mode = 2
+text = "Extinguish: True"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DebugFlammable" type="Label" parent="DebugReadout/VBoxContainer"]
+layout_mode = 2
+text = "Flammable: True"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="DebugReadout/VBoxContainer"]
+layout_mode = 2
+
+[node name="DebugOnFire" type="Label" parent="DebugReadout/VBoxContainer"]
+layout_mode = 2
+text = "On Fire: True"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DebugExtinguishable" type="Label" parent="DebugReadout/VBoxContainer"]
+layout_mode = 2
+text = "Extinguishable: True"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="FireDamageInterval" to="." method="_on_fire_damage_interval_timeout"]
