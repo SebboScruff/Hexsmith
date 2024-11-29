@@ -2,10 +2,10 @@ class_name FireSystemEntity
 extends Area2D
 
 #region Control Bools
-@export var is_igniter:bool # Igniters will set any Flammable object to On Fire
-@export var is_flammable:bool # Flammable Objects are recognised by Igniters
-@export var is_extinguisher:bool # Extinguishers will set 
-@export var is_extinguishable:bool # Some fires cannot be put out
+@export var is_igniter:bool ## Will this entity Set Fire to any Flammable Objects it collides?
+@export var is_flammable:bool ## Can this entity be set on fire by Igniters?
+@export var is_extinguisher:bool ## Can this entity put out fires?
+@export var is_extinguishable := true ## Can this entity be put out if it is on fire?
 
 @export var is_on_fire:bool # Activates visuals, damage instances, etc.
 #endregion
@@ -18,7 +18,9 @@ const FIRE_DAMAGE_TYPE := CombatEntity.DAMAGE_TYPES.RED
 #endregion
 
 #region Visuals
-# Add some child object particle systems for fire/smoke/steam
+@onready var on_fire_particles: GPUParticles2D = $SmokeParticles
+@onready var extinguish_particles: GPUParticles2D = $ExtinguishParticles
+
 # Also add a PointLight2D that gets toggled on/off if it's on fire.
 #endregion 
 
@@ -37,6 +39,9 @@ const FIRE_DAMAGE_TYPE := CombatEntity.DAMAGE_TYPES.RED
 func _ready() -> void:
 	attached_combat_entity = get_parent().get_node_or_null("CombatEntity")
 	debug_readout.set_visible(show_debug)
+	
+	on_fire_particles.set_visible(is_on_fire)
+	on_fire_particles.emitting = is_on_fire
 
 func _process(delta: float) -> void:
 	if(show_debug):
@@ -58,24 +63,33 @@ func disable_entity() -> void:
 
 func try_ignite_self() -> void:
 	if(is_flammable && !is_on_fire):
-		print("%s just got set ablaze"%[get_parent().name])
-		is_on_fire = true
-		# TODO Enable Fire Particles
-		# TODO Play Ignition Sound
-		# TODO Enable Point Light
+		# Internal State Management
+		is_on_fire = true 
 		fire_damage_interval.set_paused(false)
-	
+		
+		# Visuals
+		on_fire_particles.set_visible(true)
+		on_fire_particles.emitting = true
+		extinguish_particles.set_visible(false)
+		extinguish_particles.emitting = false
+		# TODO Sound Effects
+		# TODO Lighting
+
 func try_extinguish_self() -> void:
 	if(is_on_fire && is_extinguishable):
-		print("%s just got extinguished"%[get_parent().name])
+		# Internal State Management
 		is_on_fire = false
-		# TODO Disable Fire Particles
-		# TODO Enable Steam Particles
-		
-		# TODO Play Hissing Extinguish Sound
-		
-		# TODO Disable Point Light
 		fire_damage_interval.set_paused(true)
+		
+		# Visuals
+		on_fire_particles.set_visible(false)
+		on_fire_particles.emitting = false
+		extinguish_particles.set_visible(true)
+		extinguish_particles.emitting = true
+		
+		# TODO Sound Effects
+		# TODO Lighting
+
 
 func do_fire_damage() -> void:
 	if(attached_combat_entity != null):
@@ -83,7 +97,6 @@ func do_fire_damage() -> void:
 
 # TODO This could probably be made more efficient
 static func do_entity_interaction(entity_1:FireSystemEntity, entity_2:FireSystemEntity):
-	print("Doing fire Interaction between %s and %s"%[entity_1.get_parent().name, entity_2.get_parent().name])
 	## NOTE: This is called twice per Fire Entity Collision, since both areas overlap 
 	## at the same time and therefore call this function, with technically both entities
 	## taking turns at being "entity 1" and "entity 2"
@@ -118,3 +131,5 @@ func _on_area_entered(area: Area2D) -> void:
 		return
 	## Getting to this point means this Fire Entity has overlapped with another
 	do_entity_interaction(self, fse)
+	monitoring = false
+	monitoring = true

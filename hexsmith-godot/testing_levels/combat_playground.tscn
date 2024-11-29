@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://duu4huxagxd5m"]
+[gd_scene load_steps=15 format=4 uid="uid://duu4huxagxd5m"]
 
 [ext_resource type="TileSet" uid="uid://cx22yeu87jm6g" path="res://test-scenes/moon_cave_tiles.tres" id="1_igoux"]
 [ext_resource type="PackedScene" uid="uid://bhapy03ndyqo8" path="res://scene_prefabs/characters/player/player.tscn" id="2_xluce"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://didj2uga56d07" path="res://scene_prefabs/obstacles_and_decor/hurt_zone.tscn" id="4_ebexm"]
 [ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png" id="5_w32fg"]
 [ext_resource type="PackedScene" uid="uid://d3lff853ihggj" path="res://scene_prefabs/characters/fire_system_entity.tscn" id="6_k6tgm"]
+[ext_resource type="Texture2D" uid="uid://br4rm2qchwgnp" path="res://test-scenes/basic_bush.png" id="7_1xygr"]
 
 [sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_x1ebv"]
 polygon = PackedVector2Array(-688, -192, -320, -192)
@@ -17,8 +18,14 @@ polygon = PackedVector2Array(-688, -192, -320, -192)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4tfeq"]
 size = Vector2(119, 116)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wtosr"]
+size = Vector2(48.3171, 48.0509)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jv6vl"]
-size = Vector2(48, 48)
+size = Vector2(48.3172, 48.0509)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywmij"]
+size = Vector2(44.4563, 13.3707)
 
 [node name="CombatPlayground" type="Node2D"]
 
@@ -92,27 +99,59 @@ texture = ExtResource("5_w32fg")
 [node name="TargetDummy2" parent="." instance=ExtResource("3_ig88k")]
 position = Vector2(256, -66)
 
-[node name="ExtinguishingBox" parent="." instance=ExtResource("6_k6tgm")]
-position = Vector2(548, -48)
+[node name="ExtinguishBox" type="Sprite2D" parent="."]
+self_modulate = Color(0, 1, 1, 1)
+position = Vector2(451.731, -49.0509)
 scale = Vector2(1.69712, 1.99788)
+texture = ExtResource("5_w32fg")
+
+[node name="FireSystemEntity" parent="ExtinguishBox" instance=ExtResource("6_k6tgm")]
+position = Vector2(-17.677, -15.5164)
+scale = Vector2(1, 1)
 is_extinguisher = true
 
-[node name="Visual" type="Sprite2D" parent="ExtinguishingBox"]
-self_modulate = Color(0, 1, 1, 1)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExtinguishBox/FireSystemEntity"]
+position = Vector2(17.677, 15.5165)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_wtosr")
+
+[node name="IgnitionBox" type="Sprite2D" parent="."]
+self_modulate = Color(0.794861, 0.421278, 0.113983, 1)
+position = Vector2(583.731, -49.0509)
+scale = Vector2(1.69712, 1.99788)
 texture = ExtResource("5_w32fg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExtinguishingBox"]
-shape = SubResource("RectangleShape2D_jv6vl")
-
-[node name="IgnitionBox" parent="." instance=ExtResource("6_k6tgm")]
-position = Vector2(648, -48)
-scale = Vector2(1.69712, 1.99788)
+[node name="FireSystemEntity" parent="IgnitionBox" instance=ExtResource("6_k6tgm")]
+position = Vector2(-20.6232, -15.5164)
+scale = Vector2(1, 1)
 is_igniter = true
 
-[node name="Visual" type="Sprite2D" parent="IgnitionBox"]
-self_modulate = Color(0.794861, 0.421278, 0.113983, 1)
-texture = ExtResource("5_w32fg")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="IgnitionBox"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IgnitionBox/FireSystemEntity"]
+position = Vector2(20.6232, 15.5165)
+scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_jv6vl")
 debug_color = Color(0.642438, 0.51834, 0.211242, 0.42)
+
+[node name="FlammableBush" type="Sprite2D" parent="."]
+position = Vector2(734.731, -28.0509)
+scale = Vector2(3.69429, 1.72017)
+texture = ExtResource("7_1xygr")
+
+[node name="FireSystemEntity" parent="FlammableBush" instance=ExtResource("6_k6tgm")]
+position = Vector2(0, 8.72004)
+scale = Vector2(0.718485, 1)
+is_flammable = true
+show_debug = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FlammableBush/FireSystemEntity"]
+position = Vector2(0, 0.290668)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_ywmij")
+debug_color = Color(0, 0.628998, 0.48692, 0.42)
+
+[node name="Label" type="Label" parent="."]
+offset_left = 490.0
+offset_top = -120.0
+offset_right = 731.0
+offset_bottom = -97.0
+text = "FIRE SYSTEM TESTING GROUND"

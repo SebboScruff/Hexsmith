@@ -1,6 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://d3lff853ihggj"]
+[gd_scene load_steps=8 format=3 uid="uid://d3lff853ihggj"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/fire_system_entity.gd" id="1_ke41b"]
+[ext_resource type="Material" uid="uid://ddt5nxpbp5ra" path="res://assets/particles/smoke_particle_material.tres" id="2_4ugpj"]
+[ext_resource type="Texture2D" uid="uid://de7054sav1weg" path="res://assets/particles/fire_particles_texture.png" id="3_8kmbp"]
+[ext_resource type="Material" uid="uid://b1pq8f2aaudjy" path="res://assets/particles/fire_particle_material.tres" id="4_8bx70"]
+
+[sub_resource type="Curve" id="Curve_s7rkr"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.321033, 0.773141), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_2mmpk"]
+curve = SubResource("Curve_s7rkr")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bis0y"]
+particle_flag_disable_z = true
+direction = Vector3(1, 1, 0)
+spread = 180.0
+initial_velocity_max = 280.13
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 49.51
+radial_accel_max = 49.51
+tangential_accel_min = 55.37
+tangential_accel_max = 55.37
+scale_curve = SubResource("CurveTexture_2mmpk")
+color = Color(0.843137, 0.843137, 0.843137, 0.815686)
 
 [node name="FireSystemEntity" type="Area2D"]
 collision_layer = 1024
@@ -51,6 +74,31 @@ layout_mode = 2
 text = "Extinguishable: True"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SmokeParticles" type="GPUParticles2D" parent="."]
+visible = false
+amount = 25
+process_material = ExtResource("2_4ugpj")
+texture = ExtResource("3_8kmbp")
+local_coords = true
+
+[node name="FireParticles" type="GPUParticles2D" parent="SmokeParticles"]
+amount = 18
+process_material = ExtResource("4_8bx70")
+texture = ExtResource("3_8kmbp")
+visibility_rect = Rect2(-32, -32, 64, 113.829)
+local_coords = true
+
+[node name="ExtinguishParticles" type="GPUParticles2D" parent="."]
+visible = false
+emitting = false
+amount = 50
+process_material = SubResource("ParticleProcessMaterial_bis0y")
+texture = ExtResource("3_8kmbp")
+lifetime = 0.3
+one_shot = true
+explosiveness = 1.0
+local_coords = true
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="timeout" from="FireDamageInterval" to="." method="_on_fire_damage_interval_timeout"]

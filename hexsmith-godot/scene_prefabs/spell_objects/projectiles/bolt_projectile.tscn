@@ -14,7 +14,6 @@ shader_parameter/PrimaryColor = Color(0, 0, 0, 1)
 radius = 8.06226
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_41qcm"]
-radius = 10.0
 
 [node name="BoltProjectile" type="Area2D"]
 top_level = true
@@ -41,6 +40,8 @@ position = Vector2(0, 0)
 points = PackedVector2Array(9, 11)
 
 [node name="FireSystemEntity" parent="." instance=ExtResource("5_iynfq")]
+z_index = 2
+scale = Vector2(0.540303, 0.567984)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FireSystemEntity"]
 shape = SubResource("CircleShape2D_41qcm")
