@@ -106,6 +106,7 @@ maximum_mana = 100.0
 mana_regen_rate = 2.0
 
 [node name="minimap_panelcontainer" type="PanelContainer" parent="overworld_hud"]
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.741

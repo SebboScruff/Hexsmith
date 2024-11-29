@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://7l80r1bnvir3"]
+[gd_scene load_steps=9 format=3 uid="uid://7l80r1bnvir3"]
 
 [ext_resource type="Shader" uid="uid://tevvfu1m7nqh" path="res://assets/shaders/shader_bolt.tres" id="1_a0clq"]
 [ext_resource type="Script" path="res://scene_prefabs/spell_objects/projectiles/bolt_projectile.gd" id="2_5nkeb"]
 [ext_resource type="Texture2D" uid="uid://chmu6o2p1l4jw" path="res://assets/sprites/spells/bolt_projectile.png" id="2_16vlx"]
 [ext_resource type="PackedScene" uid="uid://bdyeyuetq00l1" path="res://scene_prefabs/spell_objects/effects/trail.tscn" id="4_4bkwe"]
+[ext_resource type="PackedScene" uid="uid://d3lff853ihggj" path="res://scene_prefabs/characters/fire_system_entity.tscn" id="5_iynfq"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_d2gjb"]
 shader = ExtResource("1_a0clq")
@@ -12,6 +13,8 @@ shader_parameter/PrimaryColor = Color(0, 0, 0, 1)
 [sub_resource type="CircleShape2D" id="CircleShape2D_cyqf4"]
 radius = 8.06226
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_41qcm"]
+
 [node name="BoltProjectile" type="Area2D"]
 top_level = true
 z_index = 3
@@ -19,7 +22,7 @@ material = SubResource("ShaderMaterial_d2gjb")
 scale = Vector2(0.4, 0.4)
 collision_mask = 194
 script = ExtResource("2_5nkeb")
-travel_speed = 250.0
+travel_speed = 25.0
 damage_per_mana = 10.0
 
 [node name="visual" type="Sprite2D" parent="."]
@@ -35,5 +38,13 @@ debug_color = Color(0.964706, 0, 0.494118, 0.419608)
 [node name="Trail" parent="." instance=ExtResource("4_4bkwe")]
 position = Vector2(0, 0)
 points = PackedVector2Array(9, 11)
+
+[node name="FireSystemEntity" parent="." instance=ExtResource("5_iynfq")]
+z_index = 2
+scale = Vector2(0.540303, 0.567984)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FireSystemEntity"]
+shape = SubResource("CircleShape2D_41qcm")
+debug_color = Color(0.0854342, 0.648943, 0, 0.42)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -32,7 +32,7 @@ incoming_damage_multipliers = {
 2: 2.0,
 3: 1.1,
 4: 4.0,
-5: 0.0
+5: 1.5
 }
 max_health = 99999.0
 
