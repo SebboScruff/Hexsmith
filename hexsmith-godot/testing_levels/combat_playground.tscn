@@ -107,12 +107,10 @@ texture = ExtResource("5_w32fg")
 
 [node name="FireSystemEntity" parent="ExtinguishBox" instance=ExtResource("6_k6tgm")]
 position = Vector2(-17.677, -15.5164)
-scale = Vector2(1, 1)
 is_extinguisher = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExtinguishBox/FireSystemEntity"]
 position = Vector2(17.677, 15.5165)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_wtosr")
 
 [node name="IgnitionBox" type="Sprite2D" parent="."]
@@ -123,12 +121,10 @@ texture = ExtResource("5_w32fg")
 
 [node name="FireSystemEntity" parent="IgnitionBox" instance=ExtResource("6_k6tgm")]
 position = Vector2(-20.6232, -15.5164)
-scale = Vector2(1, 1)
 is_igniter = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="IgnitionBox/FireSystemEntity"]
 position = Vector2(20.6232, 15.5165)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_jv6vl")
 debug_color = Color(0.642438, 0.51834, 0.211242, 0.42)
 
@@ -145,7 +141,6 @@ show_debug = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FlammableBush/FireSystemEntity"]
 position = Vector2(0, 0.290668)
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_ywmij")
 debug_color = Color(0, 0.628998, 0.48692, 0.42)
 

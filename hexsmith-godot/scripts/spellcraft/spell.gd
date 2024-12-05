@@ -50,10 +50,9 @@ func calculate_mana_cost() -> Array[float]:
 	return costs
 
 func precast_spell():
-	# This will either print a message and do nothing (Toggles and Passives)
-	# Or call the generic SpellSuffix precast() function
 	suffix.precast()
 
+# Either cast the spell if CAST_WITH_COOLDOWN, or set active state if TOGGLE
 func cast_spell():
 	# Actual behaviour here determined by the spell cast type. This behavioural split has to 
 	# happen here because the player just activates this generic function from their input hotkey.
@@ -69,16 +68,55 @@ func cast_spell():
 				print("%s Spells are on Cooldown!")
 				return
 		
-		# Toggles and passives have their numbers passed into suffix.do_effect. Subject to
+		# NOTE: Toggles have their numbers passed into suffix.do_effect. Subject to
 		# change depending on how tedious it gets.
 		SpellSuffix.CAST_TYPES.TOGGLE:
-			suffix.toggle()
-			
-		SpellSuffix.CAST_TYPES.PASSIVE:
-			print("Tried to cast %s but it is a Passive Spell."%[spell_name])
+			# Need to track what state this spell was in originally, so we
+			# know where it should end up after this toggle takes place.
+			var original_state := suffix.is_active
+			# Turn off every Toggled Spell with the same suffix as this spell, then
+			# set the value for this spell accordingly
+			for s in player.active_spells:
+				if(s == null || s.suffix.cast_type != SpellSuffix.CAST_TYPES.TOGGLE):
+					continue
+				if(s.get_suffix_id() == suffix.suffix_id):
+					s.suffix.set_active(false)
+					print("Toggled %s off"%[s.get_spell_name()])
+			if(original_state == false):
+				suffix.set_active(true)
+				print("Toggled %s on"%[get_spell_name()])
+
+func do_passive_effect(_delta:float):
+	suffix.do_effect(prefix.num_red_mana, prefix.num_blue_mana, prefix.num_green_mana, 
+	prefix.num_white_mana, prefix.num_black_mana, prefix.num_colorless_mana)
+	do_mana_cost(_delta)
+
+# TODO Try finding a way to refactor check_mana_cost and do_mana_cost 
+# into a single function to reduce the number of iterative loops per frame.
+## Check whether the player has enough mana to cast a spell or keep it active.
+func check_mana_cost() -> bool:
+	
+	for i in 6:
+		var color_mana_cost := mana_cost[i]
+		var color_mana_bar := player.mana_value_trackers[i] as ManaValueTracker
+		if(color_mana_bar.current_mana < color_mana_cost):
+			# i.e. Player does not have enough mana to cast this spell, 
+			# or continue having this spell active.
+			return false 
+	
+	return true
+
+func do_mana_cost(delta:=1.0):
+	## Reduce the player's mana values according to this spell's cost.
+	for i in 6:
+		var color_mana_cost := mana_cost[i] * delta
+		var color_mana_bar := player.mana_value_trackers[i] as ManaValueTracker
+		color_mana_bar.current_mana -= color_mana_cost
 
 
 ## Assorted Getters ##
+func get_spell_name() -> String:
+	return spell_name
 
 func get_mana_cost() -> float:
 	return suffix.mana_cost
@@ -92,3 +130,5 @@ func get_suffix_name() -> String:
 	return self.suffix.suffix_name
 func get_suffix_id() -> int:
 	return self.suffix.suffix_id
+func get_cast_type() -> SpellSuffix.CAST_TYPES:
+	return self.suffix.cast_type

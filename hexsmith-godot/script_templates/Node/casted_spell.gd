@@ -2,10 +2,10 @@
 # meta-description: Spell Suffix with CAST-WITH-COOLDOWN Cast Type
 # meta-default: true
 # meta-space-indent: 4
-class_name SuffixName extends SpellSuffix
+class_name CastedSpell extends SpellSuffix
 
 # If the spell spawns a projectile, reference the prefab here. Otherwise, delete this.
-const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/spell_projectile.tscn")
+const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/projectiles/spell_projectile.tscn")
 
 func _init() -> void:
 	suffix_name = "Suffix Name"

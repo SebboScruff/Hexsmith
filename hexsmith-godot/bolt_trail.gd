@@ -1,7 +1,7 @@
 class_name SuffixName extends SpellSuffix
 
 # If the spell spawns a projectile, reference the prefab here. Otherwise, delete this.
-const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/spell_projectile.tscn")
+const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/projectiles/spell_projectile.tscn")
 
 func _init() -> void:
 	suffix_name = "Suffix Name"
@@ -34,4 +34,3 @@ num_colourless:int):
 	
 	#player.add_sibling(new_projectile)
 	#endregion
-

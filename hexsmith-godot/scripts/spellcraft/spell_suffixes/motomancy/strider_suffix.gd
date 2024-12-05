@@ -3,7 +3,7 @@ class_name StriderSuffix extends SpellSuffix
 func _init() -> void:
 	suffix_name = "Strider"
 	
-	cast_type = CAST_TYPES.PASSIVE
+	cast_type = CAST_TYPES.TOGGLE
 	is_active = true
 	target_type = TARGET_TYPES.SELF
 	

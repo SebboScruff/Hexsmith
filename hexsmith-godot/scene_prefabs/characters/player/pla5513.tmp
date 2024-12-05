@@ -1,0 +1,455 @@
+[gd_scene load_steps=40 format=3 uid="uid://bhapy03ndyqo8"]
+
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
+[ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
+[ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
+[ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
+[ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
+size = Vector2(10, 25)
+
+[sub_resource type="Animation" id="Animation_10cu0"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite/melee_attack_hitbox:monitoring")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BodySprite/melee_attack_hitbox:monitorable")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BodySprite/melee_attack_hitbox:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:is_using_melee")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_e4bs4"]
+resource_name = "melee_attack_1"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BodySprite/melee_attack_hitbox:monitorable")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.4, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("BodySprite/melee_attack_hitbox:monitoring")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.4, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("BodySprite/melee_attack_hitbox:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.4, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/3/type = "method"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("BodySprite")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [&"basic_melee_1", 1.0, false],
+"method": &"play"
+}]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".:is_using_melee")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gyl4d"]
+_data = {
+"RESET": SubResource("Animation_10cu0"),
+"melee_attack_1": SubResource("Animation_e4bs4")
+}
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yrrqc"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(0, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ckkuf"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_akc3f"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(96, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2fyak"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(144, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rll83"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(192, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0v8co"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(240, 144, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d1o63"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dnuqf"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_se8kd"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mj3h4"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_es38j"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_takae"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ggqhd"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(96, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ix86b"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(144, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wnmr8"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(0, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sx2rg"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vudot"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(0, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_15llf"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wb88t"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(96, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ctv04"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(144, 240, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1f57y"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(0, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xe5gs"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(48, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wmkij"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(96, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svx54"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(144, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0imcl"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(192, 48, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dhyhg"]
+atlas = ExtResource("2_mr4py")
+region = Rect2(240, 48, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p7kgc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yrrqc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ckkuf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_akc3f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2fyak")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rll83")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0v8co")
+}],
+"loop": true,
+"name": &"basic_melee_1",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_d1o63")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dnuqf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_se8kd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mj3h4")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_es38j")
+}],
+"loop": true,
+"name": &"jump_fall",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_takae")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ggqhd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ix86b")
+}],
+"loop": true,
+"name": &"jump_land",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wnmr8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sx2rg")
+}],
+"loop": true,
+"name": &"jump_start",
+"speed": 13.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vudot")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_15llf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wb88t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ctv04")
+}],
+"loop": true,
+"name": &"jump_whole",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1f57y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xe5gs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wmkij")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_svx54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0imcl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dhyhg")
+}],
+"loop": true,
+"name": &"run",
+"speed": 6.0
+}, {
+"frames": [],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wfc76"]
+radius = 9.0
+
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter")]
+z_index = 6
+collision_mask = 711
+script = ExtResource("1_nvfm5")
+hud_manager = NodePath("PlayerHUD")
+spellcrafter = NodePath("SpellcraftManager")
+
+[node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
+unique_name_in_owner = true
+position = Vector2(-33, 0)
+show_damage_debug = true
+max_health = 100.0
+health_regen_rate = 2.0
+
+[node name="hitbox" type="CollisionShape2D" parent="."]
+position = Vector2(0, -12.5)
+shape = SubResource("RectangleShape2D_0o7oo")
+
+[node name="SpellcraftManager" type="Node" parent="." node_paths=PackedStringArray("hud_manager")]
+unique_name_in_owner = true
+script = ExtResource("3_ckdda")
+hud_manager = NodePath("../PlayerHUD")
+
+[node name="spellcraft_cast_cd" type="Timer" parent="SpellcraftManager"]
+process_callback = 0
+wait_time = 0.1
+one_shot = true
+
+[node name="SpellCooldowns" type="Node" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_gyl4d")
+}
+
+[node name="BodySprite" type="AnimatedSprite2D" parent="."]
+position = Vector2(1, -24)
+sprite_frames = SubResource("SpriteFrames_p7kgc")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="melee_attack_hitbox" type="Area2D" parent="BodySprite"]
+visible = false
+collision_mask = 192
+monitoring = false
+monitorable = false
+script = ExtResource("3_x6rab")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BodySprite/melee_attack_hitbox"]
+position = Vector2(16, 11)
+shape = SubResource("CircleShape2D_wfc76")
+debug_color = Color(0.964076, 2.88785e-07, 0.49492, 0.42)
+
+[node name="melee_attack_cooldown" type="Timer" parent="BodySprite/melee_attack_hitbox"]
+one_shot = true
+
+[node name="cast_origin" type="Marker2D" parent="BodySprite"]
+position = Vector2(6, 9)
+
+[node name="OxygenMeter" type="TextureProgressBar" parent="."]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 6.0
+offset_top = -25.0
+offset_right = 38.0
+offset_bottom = 7.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.2, 0.2)
+value = 100.0
+fill_mode = 3
+texture_under = ExtResource("5_doyrg")
+texture_progress = ExtResource("5_doyrg")
+tint_under = Color(0.144063, 0.144063, 0.144063, 1)
+tint_progress = Color(0, 0.794772, 0.794772, 1)
+
+[node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
+unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+z_index = 1
+position = Vector2(-7, -40)
+zoom = Vector2(3, 3)
+
+[connection signal="damage_taken" from="CombatEntity" to="." method="_on_combat_entity_damage_taken"]
+[connection signal="has_died" from="CombatEntity" to="." method="_on_combat_entity_has_died"]
+[connection signal="healed" from="CombatEntity" to="." method="_on_combat_entity_healed"]
+[connection signal="timeout" from="SpellcraftManager/spellcraft_cast_cd" to="." method="_on_spellcraft_cast_cd_timeout"]
+[connection signal="body_entered" from="BodySprite/melee_attack_hitbox" to="BodySprite/melee_attack_hitbox" method="_on_body_entered"]
+[connection signal="timeout" from="BodySprite/melee_attack_hitbox/melee_attack_cooldown" to="." method="_on_melee_attack_cooldown_timeout"]
