@@ -1,14 +1,12 @@
-[gd_scene load_steps=43 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=41 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
 [ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_idle_state.gd" id="3_pidp4"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_walk_state.gd" id="4_ow5mu"]
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
@@ -364,23 +362,16 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_wfc76"]
 radius = 9.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter")]
 z_index = 6
 collision_mask = 711
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
 
-[node name="StateMachineRunner" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="StateMachineRunner" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
-initial_state = NodePath("PlayerIdleState")
-
-[node name="PlayerIdleState" type="Node" parent="StateMachineRunner"]
-script = ExtResource("3_pidp4")
-
-[node name="PlayerWalkState" type="Node" parent="StateMachineRunner"]
-script = ExtResource("4_ow5mu")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true

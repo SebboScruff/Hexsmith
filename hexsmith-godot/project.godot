@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 
 gsm="*res://scene_prefabs/game_state_manager.tscn"
 
+[global_group]
+
+Player=""
+
 [input]
 
 overworld_move_left={

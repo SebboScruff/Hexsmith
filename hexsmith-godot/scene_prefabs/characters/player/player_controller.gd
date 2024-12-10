@@ -102,8 +102,8 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 
 # The player's State Machine Runner for determining basically all
 # runtime behaviours
-@onready var smr: StateMachineRunner = %StateMachineRunner
-@export var state_machine_runner := smr as StateMachineRunner
+@onready var smr = %StateMachineRunner
+@export var state_machine_runner := smr as PlayerFSMRunner
 
 # All of the player's health management is done through this CombatEntity
 @onready var player_combat_entity: CombatEntity = %CombatEntity

@@ -1,3 +1,4 @@
+## Changes the input style to Spellcraft. Allows the player to make new spells to use.
 class_name PlayerSpellcraftState
 extends AgentState
 

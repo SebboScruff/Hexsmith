@@ -1,4 +1,5 @@
-class_name PlayerState 
+## Stops time, opens the pause menu, disables all other input.
+class_name PlayerPauseState 
 extends AgentState
 
 var player:Player
