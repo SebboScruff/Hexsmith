@@ -98,7 +98,12 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 # The player's Spellcraft Manager (SCM) is the backbone of the game's spellcrafting system.
 # Main behavioural body is in spellcraft_manager.gd
 @onready var scm: Node = %SpellcraftManager
-@export var spellcrafter: SpellcraftManager = scm as SpellcraftManager
+@export var spellcrafter := scm as SpellcraftManager
+
+# The player's State Machine Runner for determining basically all
+# runtime behaviours
+@onready var smr: StateMachineRunner = %StateMachineRunner
+@export var state_machine_runner := smr as StateMachineRunner
 
 # All of the player's health management is done through this CombatEntity
 @onready var player_combat_entity: CombatEntity = %CombatEntity

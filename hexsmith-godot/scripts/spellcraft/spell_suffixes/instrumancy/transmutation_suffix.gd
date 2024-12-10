@@ -14,18 +14,7 @@ func _init() -> void:
 # NOTE: No inherited behaviours for set_active()
 # so that base class's method is used
 
-func precast() -> void:
-	#is_active = true
-	# Need to Refactor the player into a State Machine so that we can disable movement and whatnot.
-	pass
-
 func do_effect(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):
-	pass
-
-func cast(num_red:int, num_blue:int, 
-num_green:int, num_white:int, num_black:int, 
-num_colourless:int) -> void:
-	#is_active = false
 	pass

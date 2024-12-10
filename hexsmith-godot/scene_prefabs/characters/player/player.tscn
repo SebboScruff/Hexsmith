@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=41 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
+[ext_resource type="PackedScene" uid="uid://dk2rkhymam184" path="res://scripts/agent_states/state_machine_runner.tscn" id="8_yxcid"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -361,12 +362,13 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_wfc76"]
 radius = 9.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter")]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter", "state_machine_runner")]
 z_index = 6
 collision_mask = 711
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
+state_machine_runner = NodePath("StateMachineRunner")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true
@@ -446,6 +448,9 @@ unique_name_in_owner = true
 z_index = 1
 position = Vector2(-7, -40)
 zoom = Vector2(3, 3)
+
+[node name="StateMachineRunner" parent="." instance=ExtResource("8_yxcid")]
+unique_name_in_owner = true
 
 [connection signal="damage_taken" from="CombatEntity" to="." method="_on_combat_entity_damage_taken"]
 [connection signal="has_died" from="CombatEntity" to="." method="_on_combat_entity_has_died"]
