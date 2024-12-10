@@ -1,8 +1,8 @@
 # meta-name: Casted Spell
-# meta-description: Spell Suffix with CAST-WITH-COOLDOWN Cast Type
+# meta-description: Spell Suffix with SINGLE_CAST Cast Type
 # meta-default: true
 # meta-space-indent: 4
-class_name CastedSpell extends SpellSuffix
+class_name SingleCastSpell extends SpellSuffix
 
 # If the spell spawns a projectile, reference the prefab here. Otherwise, delete this.
 const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/projectiles/spell_projectile.tscn")
@@ -11,7 +11,7 @@ func _init() -> void:
 	suffix_name = "Suffix Name"
 	suffix_id = 0 # This is very important for cooldown management and lookup tables.
 	
-	cast_type = CAST_TYPES.CAST_WITH_COOLDOWN
+	cast_type = CAST_TYPES.SINGLE_CAST
 	is_active = true
 	target_type = TARGET_TYPES.RAW_DIRECTION
 	base_mana_cost = 10

@@ -52,14 +52,14 @@ func calculate_mana_cost() -> Array[float]:
 func precast_spell():
 	suffix.precast()
 
-# Either cast the spell if CAST_WITH_COOLDOWN, or set active state if TOGGLE
+# Either cast the spell if SINGLE_CAST, or set active state if TOGGLE
 func cast_spell():
 	# Actual behaviour here determined by the spell cast type. This behavioural split has to 
 	# happen here because the player just activates this generic function from their input hotkey.
 	match(suffix.cast_type):
 		# "One-and-done" spells require colour input here to determine their 
 		# specific numbers, and cannot be cast if on cooldown.
-		SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN:
+		SpellSuffix.CAST_TYPES.SINGLE_CAST:
 			if(!is_on_cooldown):
 				suffix.cast(prefix.num_red_mana, prefix.num_blue_mana, 
 				prefix.num_green_mana, prefix.num_white_mana, 

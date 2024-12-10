@@ -7,7 +7,7 @@ func _init() -> void:
 	suffix_name = "Suffix Name"
 	suffix_id = 0 # This is very important for cooldown management and lookup tables.
 	
-	cast_type = CAST_TYPES.CAST_WITH_COOLDOWN
+	cast_type = CAST_TYPES.SINGLE_CAST
 	is_active = true
 	target_type = TARGET_TYPES.RAW_DIRECTION
 	base_mana_cost = 10

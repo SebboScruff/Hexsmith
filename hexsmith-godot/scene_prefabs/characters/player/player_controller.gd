@@ -483,7 +483,7 @@ func cast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
 	# Checks 2 and 3 only apply to Casted Spells with Cooldowns.
-	elif(active_spells[spell_index].get_cast_type() == SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
+	elif(active_spells[spell_index].get_cast_type() == SpellSuffix.CAST_TYPES.SINGLE_CAST):
 		# Fail check 2: That spell is on Cooldown.
 		if(active_spells[spell_index].is_on_cooldown):
 			print("%s Spells are on Cooldown!"%[active_spells[spell_index].suffix.suffix_name])
@@ -505,7 +505,7 @@ func cast_active_spell(spell_index:int):
 	# by adding a new cooldown timer to the list.
 	# NOTE: Timers are initialised with the same ID as the Suffix so the 
 	# Cooldown Progression algorithm in _ready() can work correctly.
-	if(active_spells[spell_index].suffix.cast_type == SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
+	if(active_spells[spell_index].suffix.cast_type == SpellSuffix.CAST_TYPES.SINGLE_CAST):
 		var new_cd_timer:SpellCooldownTimer
 		var casted_suffix:SpellSuffix = active_spells[spell_index].suffix
 		new_cd_timer = SpellCooldownTimer.create_new_cooldown_timer(casted_suffix.suffix_id, casted_suffix.cooldown_max)
@@ -578,7 +578,7 @@ func active_spell_management(_delta_time:float) -> void:
 		# - Further Behaviours Depend On Cast Type - #
 		
 		## If the spell is a Cooldown Cast, we need to check if its suffix is currently on cooldown:
-		if(spell.suffix.cast_type == SpellSuffix.CAST_TYPES.CAST_WITH_COOLDOWN):
+		if(spell.suffix.cast_type == SpellSuffix.CAST_TYPES.SINGLE_CAST):
 			# Set the spell to be off-cooldown initially, then overwrite to being 
 			# on cooldown where necessary.
 			spell.is_on_cooldown = false

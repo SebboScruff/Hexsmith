@@ -1,9 +1,9 @@
 class_name SpellSuffix extends Node2D
 
 enum CAST_TYPES{
-	CAST_WITH_COOLDOWN, # One used, goes on cooldown
-	TOGGLE				# Has an on-off switch.
-	# PASSIVES REMOVED IN FAVOUR OF ONLY HAVING TOGGLES OR CASTS
+	SINGLE_CAST, # One used, goes on cooldown
+	TOGGLE,				# Has an on-off switch.
+	PRESS_AND_HOLD		# Has to  be held down for continual effect. Disables movement?
 }
 
 enum TARGET_TYPES{
@@ -38,6 +38,9 @@ var cooldown_max: float
 # and Shader Initialisation.
 var colors_from_prefix:Array[Color]
 
+# TODO Pass in a "Damage Multiplier Matrix" from the Prefix. Each Prefix wants to have
+# a different set of effectivenesses (e.g. Red resisted by Blue; Red-White strong against Blue)
+
 func _init() -> void:
 	pass
 
@@ -47,7 +50,7 @@ func _init() -> void:
 # particle/animation on the player's sprite.
 # For Toggles, this is not used.
 func precast() -> void:
-	if(cast_type != CAST_TYPES.CAST_WITH_COOLDOWN):
+	if(cast_type != CAST_TYPES.SINGLE_CAST):
 		print("No default pre-cast behaviours for %s Spells."%[suffix_name])
 		return
 	# NOTE: If it gets here, it's a cast with cooldown
@@ -56,7 +59,7 @@ func precast() -> void:
 	# make sure the Cursor/ Crosshair is visible,
 	# and start the pre-cast particles.
 
-## This must be overridden in all CAST_WITH_COOLDOWN Suffixes
+## This must be overridden in all SINGLE_CAST Suffixes
 ## Determines all cast behaviours: whether something needs to be instantiated, 
 ## activating or deactivating certain aspects of the player's prefab,
 ## moving the player in some way, or anything else.
@@ -64,7 +67,7 @@ func precast() -> void:
 # Called on KeyUp, to initiate all post-cast behaviours of the spell.
 func cast(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
-num_colourless:int):
+num_colourless:int) -> void:
 	print("Casted a %s Spell. No cast behaviour implemented in inherited class!"%[suffix_name])
 
 ## This must be overridden along with do_effect() into Toggled Suffixes.
