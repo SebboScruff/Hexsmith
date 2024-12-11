@@ -23,6 +23,6 @@ func _ready() -> void:
 
 # I have no clue why hooking the timeout() signal doesnt work
 # so our shitty bandaid replacement is a condition check every frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if(self.time_left <= 0):
 		queue_free()

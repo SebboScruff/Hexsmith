@@ -24,6 +24,7 @@ func update_cd_visual(_max:float, _current:float) -> void:
 
 # Pass in corresponding x, y, w, h values for a new region in the hotkey
 # images texture atlas.
+@warning_ignore("unused_parameter")
 func set_hotkey_visual(new_x:int, new_y:int, new_w:int, new_h:int) -> void:
 	# TODO Use the incoming atlas co-ordinates to change the visual hotkey
 	# on the spell icon.

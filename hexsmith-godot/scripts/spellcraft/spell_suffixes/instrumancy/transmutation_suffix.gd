@@ -14,6 +14,7 @@ func _init() -> void:
 # NOTE: No inherited behaviours for set_active()
 # so that base class's method is used
 
+@warning_ignore("unused_parameter")
 func do_effect(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):

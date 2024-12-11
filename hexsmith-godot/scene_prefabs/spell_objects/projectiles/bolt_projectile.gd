@@ -10,15 +10,16 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 # Make the project look the correct way
-func initialise_shader(colors:Array[Color]) -> void:
+func initialise_shader(_colors:Array[Color]) -> void:
 	# Takes in the Color Array from the Prefix:
 	# 0, 1, 2 are Primary, Secondary, Tertiary respectively.
 	# 3, 4 are Effect Colors.
-	mat.set_shader_parameter("PrimaryColor", colors[0])
-	mat.set_shader_parameter("SecondaryColor", colors[1])
+	mat.set_shader_parameter("PrimaryColor", _colors[0])
+	mat.set_shader_parameter("SecondaryColor", _colors[1])
+	mat.set_shader_parameter("TertiaryColor", _colors[2])
+	
 	var trail := $Trail
-	trail.default_color = colors[3] # For now, set the trail as the Primary Effect color
-	mat.set_shader_parameter("TertiaryColor", colors[2])
+	trail.default_color = _colors[3] # For now, set the trail as the Primary Effect color
 
 # Add specific effects from Prefix Color Combos.
 func initialise_prefix_effects(_red:int, _blue:int, _green:int, 

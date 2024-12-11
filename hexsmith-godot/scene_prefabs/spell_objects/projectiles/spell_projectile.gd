@@ -40,15 +40,15 @@ func _ready() -> void:
 	pass # Replace with function body.
 
 # Make the project look the correct way
-func initialise_shader(colors:Array[Color]) -> void:
+func initialise_shader(_colors:Array[Color]) -> void:
 	# Takes in the Color Array from the Prefix:
 	# 0, 1, 2 are Primary, Secondary, Tertiary respectively.
-	mat.set_shader_parameter("PrimaryColor", colors[0])
-	mat.set_shader_parameter("SecondaryColor", colors[1])
-	mat.set_shader_parameter("TertiaryColor", colors[2])
+	mat.set_shader_parameter("PrimaryColor", _colors[0])
+	mat.set_shader_parameter("SecondaryColor", _colors[1])
+	mat.set_shader_parameter("TertiaryColor", _colors[2])
 	# 3, 4 are Effect Colors.
-	mat.set_shader_parameter("EffectColor1", colors[3])
-	mat.set_shader_parameter("EffectColor2", colors[4])
+	mat.set_shader_parameter("EffectColor1", _colors[3])
+	mat.set_shader_parameter("EffectColor2", _colors[4])
 
 # Add specific effects from Prefix Color Combos.
 func initialise_prefix_effects(_red:int, _blue:int, _green:int, 
@@ -62,6 +62,7 @@ func _physics_process(delta: float) -> void:
 	var move_dir = Vector2.LEFT.rotated(self.rotation)
 	self.position += move_dir * delta * travel_speed
 
+@warning_ignore("unused_parameter")
 func _on_body_entered(body: Node2D) -> void:
 	print("NOTE: Calling Base SpellProjectile class on_body_entered(). Destroying this projectile.")
 	queue_free()

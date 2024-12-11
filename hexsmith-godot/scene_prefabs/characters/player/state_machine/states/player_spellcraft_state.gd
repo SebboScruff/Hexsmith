@@ -8,23 +8,66 @@ func _init() -> void:
 	self.state_id = 1
 
 func on_state_enter() -> void:
-	print("Player entered SPELLCRAFT State")
+	print("Player entered Spellcraft State")
 	player.is_spellcrafting = true
+	player.can_cast = false
 	# Timescale to 0.1
+	Engine.time_scale = 0.1
 	# Open Spellcraft Menu
+	hud_manager.change_active_menu(hud_manager.spellcraft_hud)
 	#pass
 
 func on_state_process(delta:float) -> void:
-	pass
+	super.on_state_process(delta)
 
 func on_state_physics_process(delta:float) -> void:
-	# Return to Idle if the Spellcraft Menu Button is pressed again
+	super.on_state_physics_process(delta)
+	
+	## Check for Menu Transitions first
+	# 1 - Back to Overworld
 	if(Input.is_action_just_pressed("toggle_spellcraft_menu")):
-		State_Transition.emit(self, "idle")
-	## SPELLCRAFT CONTROLS HERE
-	pass
+		player.spellcrafter.menu_cleanup()
+	# 2  - Into Journal/Spellbook Menu
+	if(Input.is_action_just_pressed("spellcraft_open_spellbook")):
+		player.spellcrafter.clear_active_mana()
+		State_Transition.emit(self, "paused")
+	
+	## Check for Spellcraft Controls
+	#region Mana Addition
+	if(Input.is_action_just_pressed("spellcraft_add_red")):
+		player.spellcrafter.add_active_mana_instance(player.spellcrafter.MANA_COLOURS.RED)
+	elif(Input.is_action_just_pressed("spellcraft_add_blue")):
+		player.spellcrafter.add_active_mana_instance(player.spellcrafter.MANA_COLOURS.BLUE)
+	elif(Input.is_action_just_pressed("spellcraft_add_green")):
+		player.spellcrafter.add_active_mana_instance(player.spellcrafter.MANA_COLOURS.GREEN)
+	elif(Input.is_action_just_pressed("spellcraft_add_white")):
+		player.spellcrafter.add_active_mana_instance(player.spellcrafter.MANA_COLOURS.WHITE)
+	elif(Input.is_action_just_pressed("spellcraft_add_black")):
+		player.spellcrafter.add_active_mana_instance(player.spellcrafter.MANA_COLOURS.BLACK)
+	elif(Input.is_action_just_pressed("spellcraft_add_colorless")):
+		player.spellcrafter.add_active_mana_instance(player.spellcrafter.MANA_COLOURS.COLOURLESS)
+	#endregion
+	#region Mana Removal
+	elif(Input.is_action_just_pressed("spellcraft_remove_mana")):
+		player.spellcrafter.remove_last_instance()
+	elif(Input.is_action_just_pressed("spellcraft_clear_mana")):
+		player.spellcrafter.clear_active_mana()
+	#endregion
+	#region Spell Slot Assignment
+	elif(Input.is_action_just_pressed("spellcraft_bind_spellslot1")):
+		player.spellcrafter.craft_and_bind(0)
+		player.postcraft_cast_cd.start()
+	elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
+		player.spellcrafter.craft_and_bind(1)
+		player.postcraft_cast_cd.start()
+	elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
+		player.spellcrafter.craft_and_bind(2)
+		player.postcraft_cast_cd.start()
+	elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
+		player.spellcrafter.craft_and_bind(3)
+		player.postcraft_cast_cd.start()
+	#endregion
 
 func on_state_exit() -> void:
 	print("Player exited Spellcraft State")
 	player.is_spellcrafting = false
-	# pass

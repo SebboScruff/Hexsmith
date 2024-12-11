@@ -22,8 +22,6 @@ func cast(num_red:int, num_blue:int,
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int) -> void:
 	# Spell Functionality here:
-	# Get Direction
-	var travel_dir:float = player.get_dir_to_crosshair()
 	# Instantiate Bolt prefab with correct shader and
 	# colour bonuses.
 	var new_projectile = PROJECTILE_PREFAB.instantiate()

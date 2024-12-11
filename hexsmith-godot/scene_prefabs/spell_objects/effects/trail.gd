@@ -8,6 +8,7 @@ extends Line2D
 const MAX_POINTS := 200 # cap the maximum points in the curve for performance and visual tail length
 @onready var curve := Curve2D.new()
 
+@warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	# Every frame, add a new point to the curve where the moving object is
 	curve.add_point(get_parent().global_position)

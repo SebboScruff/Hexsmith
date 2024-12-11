@@ -104,9 +104,9 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 @export var spellcrafter := scm as SpellcraftManager
 
 # The player's State Machine Runner for determining basically all
-# runtime behaviours
+# runtime behaviours and state transitions.
 @onready var smr = %StateMachineRunner
-@export var state_machine_runner := smr as PlayerFSMRunner
+@export var state_machine_runner:PlayerFSMRunner = smr as PlayerFSMRunner
 
 # All of the player's health management is done through this CombatEntity
 @onready var player_combat_entity: CombatEntity = %CombatEntity
@@ -121,6 +121,8 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 # Set a whole bunch of initialisation values.
 # TODO Most of these need to become saveable, readable data.
 func _ready() -> void:
+	state_machine_runner.reset_to_idle()
+	
 	is_precasting = false
 	active_spells = [null, null, null, null]
 	is_melee_ready = true
@@ -147,6 +149,7 @@ func _ready() -> void:
 # All Resource Management - Mana & Health Regeneration, Oxygen while underwater,
 # and other constant over-time effects like that will happen in here
 func _process(delta: float) -> void:
+#TODO Move to Swim State on_state_process()
 #region Oxygen Management
 	# TODO Eventually add a HasWaterbreathing bool. Blue-Mana Cloaks will give waterbreathing,
 	# as well as maybe some consumable items.
@@ -190,274 +193,26 @@ func _process(delta: float) -> void:
 # than _input() for now because I want it updated at a consistent rate
 ## TODO Full refactor of Input Management, ideally to move it out of _physics_process
 ## and also change it away from being a bunch of ugly if-chains.
+@warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
-	# Menu Changing Checks are done first, so that we can pause the game at the start
-	# of a frame rather than partway through.
-#region Menu Input Checks
-	match(gsm.current_game_state):
-		GameStates.GAME_STATES.OVERWORLD:
-			if(Input.is_action_just_pressed("global_system_pause")):
-				gsm.change_game_state(GameStates.GAME_STATES.PAUSED)
-				hud_manager.change_active_menu(2)
-			elif(Input.is_action_just_pressed("toggle_spellcraft_menu")):
-				gsm.change_game_state(GameStates.GAME_STATES.SPELLCRAFTING)
-				hud_manager.change_active_menu(1)
-				can_cast = false
-		
-		GameStates.GAME_STATES.SPELLCRAFTING:
-			# Clear out the active mana selection before changing menus
-			if(Input.is_action_just_pressed("spellcraft_open_spellbook")):
-				spellcrafter.clear_active_mana()
-				gsm.change_game_state(GameStates.GAME_STATES.PAUSED)
-				# TODO Extend this to specifically open the pause menu ON the Spellbook tab
-				hud_manager.change_active_menu(2)
-			elif(Input.is_action_just_pressed("toggle_spellcraft_menu")):
-				spellcrafter.clear_active_mana()
-				gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
-				hud_manager.change_active_menu(0)
-				postcraft_cast_cd.start()
-		
-		GameStates.GAME_STATES.PAUSED:
-			if(Input.is_action_just_pressed("global_system_pause")):
-				gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
-				hud_manager.change_active_menu(0)
-		
-		GameStates.GAME_STATES.CUTSCENE:
-			if(Input.is_action_just_pressed("global_system_pause") ||
-			Input.is_action_just_pressed("overworld_interact")):
-				gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
-				hud_manager.change_active_menu(0)
-#endregion
+	pass
 
-	# If paused, ignore all player-based physics processes.
-	if(gsm.current_game_state == GameStates.GAME_STATES.PAUSED):
-		return
-	
-#region Gravity
-	# Gravity processing is the first thing to be checked, so that the player will still 
-	# fall even if they are in the Spellcraft Menu
-	# Gravity has different effective strengths depending on the player's movement state.
-	match(current_movement_style):
-		MOVEMENT_STYLES.NORMAL:
-			gravity_scale = 1.0
-		MOVEMENT_STYLES.SWIMMING:
-			gravity_scale = 0.5
-		MOVEMENT_STYLES.CLIMBING:
-			gravity_scale = 0
-		MOVEMENT_STYLES.FLYING:
-			gravity_scale = 0
-	
-	# Then apply gravity where necessary
+## NOTE: Extracted out into a function so that it can be called in State Behaviours
+func _apply_gravity(delta):
 	if not is_on_floor():
 		velocity += get_gravity() * delta * gravity_scale
-#endregion
-	
-	# If in a cutscene, register gravity-based movement but don't accept other controls
-	# so if the player starts reading a sign mid-air they still fall to the ground
-	if(gsm.current_game_state == GameStates.GAME_STATES.CUTSCENE):
-		move_and_slide()
-		return
-	
-	# NOTE: Direction is declared outside of any input checks because otherwise
-	# the animation code will break. It's used in movement and animation.
-	var direction := Input.get_axis("overworld_move_left", "overworld_move_right")
 
-# TODO Refactor Spellcraft inputs to not be a horrible if-chain
-#region Spellcraft Menu Controls
-	if(gsm.current_game_state == GameStates.GAME_STATES.SPELLCRAFTING):
-		#region Mana Addition
-		if(Input.is_action_just_pressed("spellcraft_add_red")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.RED)
-		elif(Input.is_action_just_pressed("spellcraft_add_blue")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLUE)
-		elif(Input.is_action_just_pressed("spellcraft_add_green")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.GREEN)
-		elif(Input.is_action_just_pressed("spellcraft_add_white")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.WHITE)
-		elif(Input.is_action_just_pressed("spellcraft_add_black")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.BLACK)
-		elif(Input.is_action_just_pressed("spellcraft_add_colorless")):
-			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.COLOURLESS)
-		#endregion
-		#region Mana Removal
-		elif(Input.is_action_just_pressed("spellcraft_remove_mana")):
-			spellcrafter.remove_last_instance()
-		elif(Input.is_action_just_pressed("spellcraft_clear_mana")):
-			spellcrafter.clear_active_mana()
-		#endregion
-		#region Spell Slot Assignment
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot1")):
-			spellcrafter.craft_and_bind(0)
-			postcraft_cast_cd.start()
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot2")):
-			spellcrafter.craft_and_bind(1)
-			postcraft_cast_cd.start()
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot3")):
-			spellcrafter.craft_and_bind(2)
-			postcraft_cast_cd.start()
-		elif(Input.is_action_just_pressed("spellcraft_bind_spellslot4")):
-			spellcrafter.craft_and_bind(3)
-			postcraft_cast_cd.start()
-		#endregion
-#endregion
-
-#region Overworld Controls
-	#region Movement
-	if(gsm.current_game_state == GameStates.GAME_STATES.OVERWORLD):
-		## BEGINNING OF MOVEMENT INPUT PROCESSING: ##
-		# Horizontal Movement is done at the end of this match block.
-		# The player's vertical movmement, speed, etc. are all set differently depending on 
-		# their current movement state
-		match(current_movement_style):
-			# Regular Overworld Controls
-			MOVEMENT_STYLES.NORMAL:
-				# Check for Sprint inputs
-				# This will eventually be expanded for many movement categories
-				if(is_on_floor() && Input.is_action_just_pressed("overworld_down")):
-					current_speed = CRAWL_SPEED
-					# TODO Also reduce hitbox size
-				elif(Input.is_action_pressed("overworld_toggle_sprint")):
-					current_speed = RUN_SPEED
-				else:
-					current_speed = BASE_SPEED
-				# Handle jump.
-				if Input.is_action_pressed("overworld_jump"):
-					if(is_on_floor() || can_surface):
-						velocity.y = JUMP_VELOCITY
-			
-			# Underwater Movement Controls
-			MOVEMENT_STYLES.SWIMMING:
-				current_speed = SWIM_SPEED
-				# Get the player's vertical movement as well
-				var dir_v := Input.get_axis("overworld_up", "overworld_down")
-				# If moving upwards, disregard gravity and replace with input.
-				if(dir_v != 0):
-					velocity -= get_gravity() * delta * gravity_scale
-					velocity.y = dir_v * current_speed
-				# Otherwise use (reduced) gravity value to make the player sink.
-				else:
-					velocity.y = get_gravity().y * delta * gravity_scale
-				
-				# If the player is within a surfaceable region, they can jump out of the water.
-				if Input.is_action_pressed("overworld_jump") and can_surface:
-					velocity.y = JUMP_VELOCITY
-			
-			# Ladder/ Climbable Wall Controls 
-			MOVEMENT_STYLES.CLIMBING:
-				# Free Vertical Movement with No Gravity. Gravity is already set to 0
-				var dir_v := Input.get_axis("overworld_up", "overworld_down")
-				velocity.y = dir_v * current_speed
-			
-			# Flight Spell Controls. NOTE: Loses mana per second while active.
-			MOVEMENT_STYLES.FLYING:
-				print("TODO Implement Flying")
-				pass
-		
-		# Horizontal Deceleration: if not moving, reduce speed back to 0 gradually
-		if direction:
-			velocity.x = direction * current_speed
-		else:
-			velocity.x = move_toward(velocity.x, 0, current_speed)
-			
-	# Apply the MoveAndSlide regardless of whether the game is in Overworld
-	# or Spellcraft, so that the player will continue falling due to gravity
-	# even if Spellcrafting
+## NOTE: Similar to gravity, this has been turned into a function to allow for access within State Behaviours.
+@warning_ignore("unused_parameter")
+func _apply_movement(delta:float, h_dir:float, v_dir:float = 0):
+	if(h_dir != 0):
+		velocity.x = h_dir * current_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+	if(v_dir != 0):
+		velocity.y = v_dir * current_speed
+	
 	move_and_slide()
-	#endregion
-	
-	# After moving, check for Spellcasting and Combat inputs:
-	#region Spellcasting and Combat
-	if(gsm.current_game_state == GameStates.GAME_STATES.OVERWORLD):
-		# Melee Input Check
-		if(is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
-				# TODO this can eventually have an int parameter for Combo Count
-				# i.e. for hit 2 in the combo you call basic_melee(2)
-				# or ideally basic_melee(current_melee_combo =+ 1)
-				basic_melee()
-		
-		# TODO Eventually change this to animation_player.play(spellcast)
-		# and call cast_active_spell through that. Gonna be a headache trying
-		# to fanagle the right parameters.
-		## TODO Once I start implementing player progression, also need to check
-		## If the player has unlocked this spell slot. Probably will be intrinsically managed
-		## in the previous conditional & the spellcraft menu: if the slot isnt unlocked, it just
-		## wont complete the craft step and therefore the spell will be null
-		
-		# If precasting, release the selected spell.
-		if(is_precasting):
-			if(Input.is_action_just_released("overworld_cast_spellslot1")):
-				cast_active_spell(0)
-			elif(Input.is_action_just_released("overworld_cast_spellslot2")):
-				cast_active_spell(1)
-			elif(Input.is_action_just_released("overworld_cast_spellslot3")):
-				cast_active_spell(2)
-			elif(Input.is_action_just_released("overworld_cast_spellslot4")):
-				cast_active_spell(3)
-		
-		# Otherwise, the player is allowed to start precasting
-		elif(can_cast):
-			if(Input.is_action_just_pressed("overworld_cast_spellslot1")):
-				precast_active_spell(0)
-			elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
-				precast_active_spell(1)
-			elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
-				precast_active_spell(2)
-			elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
-				precast_active_spell(3)
-			
-	#endregion
-#endregion
-
-#region SPRITE ANIMATION
-	# Flip depending on Movement Direction
-	# NOTE: This is a scale manipulation rather than a sprite.flip_h() call
-	# because the melee hitbox is childed to the sprite. The whole set needs
-	# to be inverted in order for the hitboxes to be correct.
-	# TODO Eventually this wants to change to be based on the cursor->player
-	# angle if the player is precasting so they dont fire projectiles behind them
-	if direction > 0:
-		body_sprite.scale.x = 1
-	elif direction < 0:
-		body_sprite.scale.x = -1
-		
-	#Then determine animations
-	if(gsm.current_game_state == GameStates.GAME_STATES.SPELLCRAFTING):
-		# If the player is in Spellcraft Mode, play a "Thinking" animation
-		# and break out from _physics_process to ignore future animations
-		# overwriting this.
-		return
-
-	# Melee attacks override all other animations
-	if(is_using_melee):
-		return
-	
-	# If not in Spellcrafting, the animations will depend entirely on the player's
-	# current movement state.
-	match(current_movement_style):
-		MOVEMENT_STYLES.NORMAL:
-			if is_on_floor():
-				if direction == 0:
-					body_sprite.play("idle")
-				else:
-					body_sprite.play("run")
-			else:
-				body_sprite.play("jump_whole")
-		MOVEMENT_STYLES.SWIMMING:
-			# TODO Swimming animations go here
-			# Can probably toggle between swimming and treading water?
-			pass
-		MOVEMENT_STYLES.CLIMBING:
-			# TODO Climbing animations go here
-			# Will need a way to play/pause based on whether the player is moving
-			# Either Horizontally or Vertically
-			# and not play these until the player isn't on the ground.
-			pass
-		MOVEMENT_STYLES.FLYING:
-			# Any flying animations go here.
-			pass
-#end of _physics_process function body.
-
-#endregion SPRITE ANIMATION
 
 # Simple State Switch
 func set_movement_style(new_style:MOVEMENT_STYLES):
@@ -533,6 +288,7 @@ func _on_melee_attack_cooldown_timeout() -> void:
 	is_melee_ready = true
 
 #region Combat Entity Signals
+@warning_ignore("unused_parameter")
 func _on_combat_entity_damage_taken(raw_amount: float, amount: float, type: CombatEntity.DAMAGE_TYPES) -> void:
 	pass
 	# TODO Play a "Take Damage" animation of some description

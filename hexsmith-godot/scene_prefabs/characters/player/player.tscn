@@ -366,14 +366,18 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_wfc76"]
 radius = 9.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter", "state_machine_runner") groups=["Player"]]
 z_index = 6
 collision_mask = 711
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
+state_machine_runner = NodePath("StateMachineRunner")
 
-[node name="DebugStateLabel" type="Label" parent="."]
+[node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
+unique_name_in_owner = true
+
+[node name="DebugCurrentState" type="Label" parent="."]
 offset_left = -18.0
 offset_top = -32.0
 offset_right = 129.0
@@ -383,22 +387,39 @@ text = "Current State: IDLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateMachineRunner" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
+[node name="DebugPreviousState" type="Label" parent="."]
+offset_left = -18.0
+offset_top = -38.0
+offset_right = 129.0
+offset_bottom = -15.0
+scale = Vector2(0.263351, 0.288206)
+text = "Prev State: ---"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="StateMachineRunner" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
-initial_state = NodePath("PlayerIdleState")
 
-[node name="PlayerIdleState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerIdleState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
 script = ExtResource("3_pidp4")
+player = NodePath("../..")
+hud_manager = NodePath("../../PlayerHUD")
 
-[node name="PlayerSpellcraftState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerSpellcraftState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
 script = ExtResource("4_n1gi1")
+player = NodePath("../..")
+hud_manager = NodePath("../../PlayerHUD")
 
-[node name="PlayerPauseState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerPauseState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
 script = ExtResource("5_xuwid")
+player = NodePath("../..")
+hud_manager = NodePath("../../PlayerHUD")
 
-[node name="PlayerWalkState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerWalkState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
 script = ExtResource("4_ow5mu")
+player = NodePath("../..")
+hud_manager = NodePath("../../PlayerHUD")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true
@@ -470,9 +491,6 @@ texture_under = ExtResource("5_doyrg")
 texture_progress = ExtResource("5_doyrg")
 tint_under = Color(0.144063, 0.144063, 0.144063, 1)
 tint_progress = Color(0, 0.794772, 0.794772, 1)
-
-[node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
-unique_name_in_owner = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 z_index = 1

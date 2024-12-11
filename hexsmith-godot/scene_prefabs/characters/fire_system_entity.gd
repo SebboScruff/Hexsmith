@@ -43,6 +43,7 @@ func _ready() -> void:
 	on_fire_particles.set_visible(is_on_fire)
 	on_fire_particles.emitting = is_on_fire
 
+@warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	if(show_debug):
 		debug_ignite.text = "Ignite: " + var_to_str(is_igniter)

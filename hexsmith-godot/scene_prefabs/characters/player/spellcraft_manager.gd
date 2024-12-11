@@ -25,7 +25,7 @@ enum MANA_COLOURS{
 # ------------------------------------
 #region VARIABLE DECLARATIONS
 # Direct reference to the player, so it can be passed into crafted spells.
-@onready var player: Player = $".."
+var player: Player
 
 # Data Structure instances for keeping track of 
 # A) Total Mana Used, and B) Current Active Colours
@@ -62,6 +62,8 @@ const WHITE_MANA_ICON = preload("res://scene_prefabs/menus_and_guis/spellcraft_m
 #endregion
 
 func _ready() -> void:
+	player = get_parent() as Player
+	
 	# Initialise the Colour Tracker to all false
 	# And the Mana Tracker to All Zeroes
 	spellcraft_act = ActiveColourTracker.new(false, false, false, false, false)
@@ -419,5 +421,4 @@ func determine_suffix() -> SpellSuffix:
 # Spellcraft Menu
 func menu_cleanup():
 	clear_active_mana()
-	gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
-	hud_manager.change_active_menu(0)
+	player.state_machine_runner.reset_to_idle()

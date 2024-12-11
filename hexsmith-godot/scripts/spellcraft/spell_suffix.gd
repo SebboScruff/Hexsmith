@@ -65,6 +65,7 @@ func precast() -> void:
 ## moving the player in some way, or anything else.
 ## Prefix-specific aspects will also be defined here.
 # Called on KeyUp, to initiate all post-cast behaviours of the spell.
+@warning_ignore("unused_parameter")
 func cast(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int) -> void:
@@ -80,6 +81,7 @@ func set_active(new_state:bool):
 ## This must be overridden in all Toggled suffixes.
 ## As long as isActive is true, this will take place.
 ## Requires a Delta-Time pass-in to deal with any over-time effects like Mana Costs.
+@warning_ignore("unused_parameter")
 func do_effect(num_red:int, num_blue:int, 
 num_green:int, num_white:int, num_black:int, 
 num_colourless:int):

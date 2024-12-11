@@ -23,7 +23,7 @@ var current_active_menu
 	
 # Load up the Overworld HUD on Start
 func _ready() -> void:
-	change_active_menu(0)
+	change_active_menu(overworld_hud)
 	
 	# Load up the Spell Icon arrays
 	# TODO This is awful to look at and extremely fragile, definitely refactor this
@@ -35,25 +35,13 @@ func _ready() -> void:
 # Deactivate all menus, then reactivate the one that is passed
 # as a parameter.
 # TODO try to do this in a marginally less horrible way
-func change_active_menu(new_menu_index:int) -> void:
+func change_active_menu(new_menu_parent:Control) -> void:
 	deactivate_hud_group(overworld_hud)
 	deactivate_hud_group(spellcraft_hud)
 	deactivate_hud_group(menu_hud)
 	
 	# TODO Definitely need to get rid of these magic numbers at some point
-	match new_menu_index:
-		0:
-			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-			activate_hud_group(overworld_hud)
-		1:
-			Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-			activate_hud_group(spellcraft_hud)
-		2:
-			Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
-			activate_hud_group(menu_hud)
-		_:
-			print("Attempted to change to menu with invalid index. Check HudManager array.")
-			return
+	activate_hud_group(new_menu_parent)
 
 func activate_hud_group(parent:Control):
 	parent.set_process(true)

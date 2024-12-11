@@ -10,6 +10,7 @@ func _input(event: InputEvent) -> void:
 		crosshair_visual.show() # make sure it's visible immediately when moved. This could probably be moved.
 		crosshair_visual.set_global_position(event.position - (crosshair_visual.get_rect().size/2))
 
+@warning_ignore("unused_parameter")
 func _process(delta: float) -> void:
 	pass # TODO Finish implementing hiding the visual after timer runs out.
 
