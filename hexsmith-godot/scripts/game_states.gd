@@ -1,4 +1,4 @@
-class_name States
+class_name GameStates
 
 enum GAME_STATES{
 	LOADING,		# Before the game has started. This is questionably necessary

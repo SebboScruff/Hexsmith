@@ -4,13 +4,15 @@
 class_name PlayerFSMRunner
 extends Node
 
+@onready var debug_state_label: Label = $"../DebugStateLabel"
+
 var states = {} #NOTE: String Names as keys, State Classes as values.
 @export var initial_state:PlayerState
 
 var current_state:PlayerState
 var previous_state:PlayerState
 
-## States must be assigned as child nodes to this object.
+## PlayerStates must be assigned as child nodes to this object.
 func _ready():
 	for child in get_children():
 		if(child is PlayerState):
@@ -24,6 +26,7 @@ func _ready():
 		current_state = initial_state
 
 func _process(delta: float) -> void:
+	debug_state_label.text = "Current State: %s"%[current_state.state_name]
 	if(current_state):
 		current_state.on_state_process(delta)
 	
@@ -33,6 +36,7 @@ func _physics_process(delta: float) -> void:
 
 func change_state(_old_state:PlayerState, _new_state_name:String):
 	var new_state:PlayerState = states.get(_new_state_name.to_lower())
+	print("State Transition Called: %s to %s"%[_old_state.state_name, new_state.state_name])
 	
 	if(!new_state):
 		print("No state with name %s found in States Dictionary!"%[_new_state_name])

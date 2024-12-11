@@ -7,6 +7,9 @@
 class_name Player
 extends CharacterBody2D
 
+@export var is_paused:= false
+@export var is_spellcrafting:= false
+
 #region Movement Parameters
 # Used for altering the player's fundamental movement behaviours.
 enum MOVEMENT_STYLES{ 
@@ -192,42 +195,42 @@ func _physics_process(delta: float) -> void:
 	# of a frame rather than partway through.
 #region Menu Input Checks
 	match(gsm.current_game_state):
-		States.GAME_STATES.OVERWORLD:
-			if(Input.is_action_just_pressed("global_pause")):
-				gsm.change_game_state(States.GAME_STATES.PAUSED)
+		GameStates.GAME_STATES.OVERWORLD:
+			if(Input.is_action_just_pressed("global_system_pause")):
+				gsm.change_game_state(GameStates.GAME_STATES.PAUSED)
 				hud_manager.change_active_menu(2)
 			elif(Input.is_action_just_pressed("toggle_spellcraft_menu")):
-				gsm.change_game_state(States.GAME_STATES.SPELLCRAFTING)
+				gsm.change_game_state(GameStates.GAME_STATES.SPELLCRAFTING)
 				hud_manager.change_active_menu(1)
 				can_cast = false
 		
-		States.GAME_STATES.SPELLCRAFTING:
+		GameStates.GAME_STATES.SPELLCRAFTING:
 			# Clear out the active mana selection before changing menus
 			if(Input.is_action_just_pressed("spellcraft_open_spellbook")):
 				spellcrafter.clear_active_mana()
-				gsm.change_game_state(States.GAME_STATES.PAUSED)
+				gsm.change_game_state(GameStates.GAME_STATES.PAUSED)
 				# TODO Extend this to specifically open the pause menu ON the Spellbook tab
 				hud_manager.change_active_menu(2)
 			elif(Input.is_action_just_pressed("toggle_spellcraft_menu")):
 				spellcrafter.clear_active_mana()
-				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+				gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
 				hud_manager.change_active_menu(0)
 				postcraft_cast_cd.start()
 		
-		States.GAME_STATES.PAUSED:
-			if(Input.is_action_just_pressed("global_pause")):
-				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+		GameStates.GAME_STATES.PAUSED:
+			if(Input.is_action_just_pressed("global_system_pause")):
+				gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
 				hud_manager.change_active_menu(0)
 		
-		States.GAME_STATES.CUTSCENE:
-			if(Input.is_action_just_pressed("global_pause") ||
+		GameStates.GAME_STATES.CUTSCENE:
+			if(Input.is_action_just_pressed("global_system_pause") ||
 			Input.is_action_just_pressed("overworld_interact")):
-				gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+				gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
 				hud_manager.change_active_menu(0)
 #endregion
 
 	# If paused, ignore all player-based physics processes.
-	if(gsm.current_game_state == States.GAME_STATES.PAUSED):
+	if(gsm.current_game_state == GameStates.GAME_STATES.PAUSED):
 		return
 	
 #region Gravity
@@ -251,7 +254,7 @@ func _physics_process(delta: float) -> void:
 	
 	# If in a cutscene, register gravity-based movement but don't accept other controls
 	# so if the player starts reading a sign mid-air they still fall to the ground
-	if(gsm.current_game_state == States.GAME_STATES.CUTSCENE):
+	if(gsm.current_game_state == GameStates.GAME_STATES.CUTSCENE):
 		move_and_slide()
 		return
 	
@@ -261,7 +264,7 @@ func _physics_process(delta: float) -> void:
 
 # TODO Refactor Spellcraft inputs to not be a horrible if-chain
 #region Spellcraft Menu Controls
-	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
+	if(gsm.current_game_state == GameStates.GAME_STATES.SPELLCRAFTING):
 		#region Mana Addition
 		if(Input.is_action_just_pressed("spellcraft_add_red")):
 			spellcrafter.add_active_mana_instance(spellcrafter.MANA_COLOURS.RED)
@@ -300,7 +303,7 @@ func _physics_process(delta: float) -> void:
 
 #region Overworld Controls
 	#region Movement
-	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
+	if(gsm.current_game_state == GameStates.GAME_STATES.OVERWORLD):
 		## BEGINNING OF MOVEMENT INPUT PROCESSING: ##
 		# Horizontal Movement is done at the end of this match block.
 		# The player's vertical movmement, speed, etc. are all set differently depending on 
@@ -364,7 +367,7 @@ func _physics_process(delta: float) -> void:
 	
 	# After moving, check for Spellcasting and Combat inputs:
 	#region Spellcasting and Combat
-	if(gsm.current_game_state == States.GAME_STATES.OVERWORLD):
+	if(gsm.current_game_state == GameStates.GAME_STATES.OVERWORLD):
 		# Melee Input Check
 		if(is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
 				# TODO this can eventually have an int parameter for Combo Count
@@ -418,7 +421,7 @@ func _physics_process(delta: float) -> void:
 		body_sprite.scale.x = -1
 		
 	#Then determine animations
-	if(gsm.current_game_state == States.GAME_STATES.SPELLCRAFTING):
+	if(gsm.current_game_state == GameStates.GAME_STATES.SPELLCRAFTING):
 		# If the player is in Spellcraft Mode, play a "Thinking" animation
 		# and break out from _physics_process to ignore future animations
 		# overwriting this.

@@ -15,12 +15,21 @@ func on_state_enter() -> void:
 	#pass
 
 func on_state_process(delta:float) -> void:
-	pass
+	super.on_state_process(delta)
 
 func on_state_physics_process(delta:float) -> void:
+	super.on_state_physics_process(delta)
+	# Idle is the base overworld state, and need a big transition tree based on input:
+	# Walking or Running
 	if(Input.get_axis("overworld_move_left", "overworld_move_right") != 0):
 		State_Transition.emit(self, "walk")
-	pass
+	# Jumping
+	# Falling
+	# Climbing
+	# Swimming
+	# Pre-casting a Spell
+	# Pressing and Holding a Spell
+	
 
 func on_state_exit() -> void:
 	print("Player exited IDLE State")

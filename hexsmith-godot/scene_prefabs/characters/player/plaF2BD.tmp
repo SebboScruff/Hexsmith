@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=43 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
@@ -8,10 +8,8 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_idle_state.gd" id="3_pidp4"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_spellcraft_state.gd" id="4_n1gi1"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_walk_state.gd" id="4_ow5mu"]
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_pause_state.gd" id="5_xuwid"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -373,16 +371,6 @@ script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
 
-[node name="DebugStateLabel" type="Label" parent="."]
-offset_left = -18.0
-offset_top = -32.0
-offset_right = 129.0
-offset_bottom = -9.0
-scale = Vector2(0.263351, 0.288206)
-text = "Current State: IDLE"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="StateMachineRunner" type="Node" parent="." node_paths=PackedStringArray("initial_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
@@ -390,12 +378,6 @@ initial_state = NodePath("PlayerIdleState")
 
 [node name="PlayerIdleState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("3_pidp4")
-
-[node name="PlayerSpellcraftState" type="Node" parent="StateMachineRunner"]
-script = ExtResource("4_n1gi1")
-
-[node name="PlayerPauseState" type="Node" parent="StateMachineRunner"]
-script = ExtResource("5_xuwid")
 
 [node name="PlayerWalkState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("4_ow5mu")

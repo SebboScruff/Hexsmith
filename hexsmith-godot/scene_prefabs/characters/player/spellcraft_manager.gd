@@ -419,5 +419,5 @@ func determine_suffix() -> SpellSuffix:
 # Spellcraft Menu
 func menu_cleanup():
 	clear_active_mana()
-	gsm.change_game_state(States.GAME_STATES.OVERWORLD)
+	gsm.change_game_state(GameStates.GAME_STATES.OVERWORLD)
 	hud_manager.change_active_menu(0)

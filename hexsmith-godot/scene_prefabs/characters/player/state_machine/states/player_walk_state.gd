@@ -14,9 +14,11 @@ func on_state_enter() -> void:
 	#pass
 
 func on_state_process(delta:float) -> void:
-	pass
+	super.on_state_process(delta)
 
 func on_state_physics_process(delta:float) -> void:
+	super.on_state_physics_process(delta)
+	
 	if(Input.get_axis("overworld_move_left", "overworld_move_right") == 0):
 		State_Transition.emit(self, "idle")
 	pass
