@@ -3,9 +3,9 @@ extends Area2D
 
 
 func _on_body_entered(body: Node2D) -> void:
-	if(body.name == "Player"):
-		body.set_movement_style(Player.MOVEMENT_STYLES.CLIMBING)
+	if(body is Player):
+		body.is_climbing = true
 
 func _on_body_exited(body: Node2D) -> void:
-	if(body.name == "Player"):
-		body.set_movement_style(Player.MOVEMENT_STYLES.NORMAL)
+	if(body is Player):
+		body.is_climbing = false

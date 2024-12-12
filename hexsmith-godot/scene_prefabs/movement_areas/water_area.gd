@@ -18,12 +18,12 @@ extends Node2D
 # the Underwater Area or not.
 # TODO Probably needs to be slightly more safe than just a direct name check
 func _on_underwater_area_body_entered(body: Node2D) -> void:
-	if(body.name == "Player"):
-		body.set_movement_style(Player.MOVEMENT_STYLES.SWIMMING)
+	if(body is Player):
+		body.is_swimming = true
 
 func _on_underwater_area_body_exited(body: Node2D) -> void:
-	if(body.name == "Player"):
-		body.set_movement_style(Player.MOVEMENT_STYLES.NORMAL)
+	if(body is Player):
+		body.is_swimming = false
 
 # ---
 ## NOTE: This has been moved to a separate scene, surfaceable_water.tscn

@@ -93,7 +93,7 @@ position = Vector2(0, 1)
 occluder = SubResource("OccluderPolygon2D_7cyns")
 
 [node name="Player" parent="." instance=ExtResource("4_hxfac")]
-position = Vector2(-66, -1)
+position = Vector2(-75, -145)
 
 [node name="InteractibleSign" parent="." instance=ExtResource("6_yex5h")]
 position = Vector2(-36, 0)

@@ -9,7 +9,10 @@ extends Node
 
 var states = {} #NOTE: String Names as keys, State Classes as values.
 
+# Track current state to determine runtime behaviours
 var current_state:PlayerState = null
+# Track previous state so that the runner doesn't necessarily have to default to Idle
+# e.g. after unpausing, we can return to whichever state the player was already in before pausing
 var previous_state:PlayerState = null
 
 ## PlayerStates must be assigned as child nodes to this object.
@@ -17,8 +20,8 @@ func _ready():
 	for child in get_children():
 		if(child is PlayerState):
 			states[child.state_name.to_lower()] = child
-			#child.player = get_parent() as Player
-			#child.hud_manager = child.player.hud_manager
+			child.player = get_parent() as Player 
+			child.hud_manager = child.player.hud_manager
 			child.State_Transition.connect(change_state)
 			print("Initialised State: %s"%[child.state_name.to_lower()])
 
@@ -57,3 +60,10 @@ func change_state(_old_state:PlayerState, _new_state_name:String):
 func reset_to_idle():
 	print("Resetting Player State Machine to Overworld Idle")
 	change_state(current_state, "idle")
+
+func reset_to_previous_state():
+	if(previous_state == null):
+		print("Tried going to previous state but it is null!")
+		return
+	
+	change_state(current_state, previous_state.state_name.to_lower())

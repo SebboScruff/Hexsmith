@@ -33,8 +33,14 @@ func on_state_physics_process(delta:float) -> void:
 	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
 	super.on_state_physics_process(delta)
 	if(Input.is_action_just_pressed("global_system_pause")):
-		State_Transition.emit(self, "idle")
+		# When unpausing, rather than resetting immediately to idle,
+		# go back to whichever state the player was last in
+		player.state_machine_runner.reset_to_previous_state()
 
 func on_state_exit() -> void:
 	print("Player exited %s State"%[state_name])
+	## NOTE: Resetting to overworld hud and standard timescale here because
+	## the FSM Runner's previous state may not set these in on_state_enter()
+	hud_manager.change_active_menu(hud_manager.overworld_hud)
+	Engine.time_scale = 1.0
 	player.is_paused = false

@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=50 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
@@ -12,6 +12,11 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_walk_state.gd" id="4_ow5mu"]
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_pause_state.gd" id="5_xuwid"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_run_state.gd" id="8_228p4"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_jump_state.gd" id="9_lxw88"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_fall_state.gd" id="10_0g12v"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_climb_state.gd" id="11_hppqs"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_swim_state.gd" id="12_jc20l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -302,7 +307,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ix86b")
 }],
-"loop": true,
+"loop": false,
 "name": &"jump_land",
 "speed": 5.0
 }, {
@@ -313,7 +318,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_sx2rg")
 }],
-"loop": true,
+"loop": false,
 "name": &"jump_start",
 "speed": 13.0
 }, {
@@ -401,25 +406,32 @@ vertical_alignment = 1
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
 
-[node name="PlayerIdleState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
+[node name="PlayerIdleState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("3_pidp4")
-player = NodePath("../..")
-hud_manager = NodePath("../../PlayerHUD")
 
-[node name="PlayerSpellcraftState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
+[node name="PlayerSpellcraftState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("4_n1gi1")
-player = NodePath("../..")
-hud_manager = NodePath("../../PlayerHUD")
 
-[node name="PlayerPauseState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
+[node name="PlayerPauseState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("5_xuwid")
-player = NodePath("../..")
-hud_manager = NodePath("../../PlayerHUD")
 
-[node name="PlayerWalkState" type="Node" parent="StateMachineRunner" node_paths=PackedStringArray("player", "hud_manager")]
+[node name="PlayerWalkState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("4_ow5mu")
-player = NodePath("../..")
-hud_manager = NodePath("../../PlayerHUD")
+
+[node name="PlayerRunState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("8_228p4")
+
+[node name="PlayerJumpState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("9_lxw88")
+
+[node name="PlayerFallState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("10_0g12v")
+
+[node name="PlayerClimbState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("11_hppqs")
+
+[node name="PlayerSwimState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("12_jc20l")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true
@@ -452,7 +464,7 @@ libraries = {
 [node name="BodySprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -24)
 sprite_frames = SubResource("SpriteFrames_p7kgc")
-animation = &"idle"
+animation = &"jump_land"
 autoplay = "idle"
 
 [node name="melee_attack_hitbox" type="Area2D" parent="BodySprite"]

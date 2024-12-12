@@ -3,8 +3,9 @@
 class_name PlayerState
 extends Node
 
-@export var player:Player
-@export var hud_manager:HudManager
+var player:Player
+var hud_manager:HudManager
+
 var state_name:String
 var state_id: int
 
@@ -19,18 +20,65 @@ func on_state_process(delta:float) -> void:
 	
 @warning_ignore("unused_parameter")
 func on_state_physics_process(delta:float) -> void:
-	# All States require the capability to go to the following States:
-	# 1 - System Pause
+	## NOTE: Any State Transitions that must be possible from any other state are done here,
+	## and inherited into all other state classes via super.on_state_physics_process()
+	# All states must be able to go to System Pause
 	if(Input.is_action_just_pressed("global_system_pause")):
 		State_Transition.emit(self, "paused")
-	# 2 - Loadout Pause
-	elif(Input.is_action_just_pressed("global_loadout_pause")):
+	# All states must be able to go to Loadout Pause 
+	elif(!player.is_paused && Input.is_action_just_pressed("global_loadout_pause")):
 		State_Transition.emit(self, "paused")
-	# 3 - Spellcraft (if not paused)
-	elif(!player.is_paused && Input.is_action_just_pressed("toggle_spellcraft_menu")):
+	# All States (other than the pauses) must be able to go to the Spellcraft State.
+	elif(!player.is_paused && !player.is_in_loadout &&
+	Input.is_action_just_pressed("toggle_spellcraft_menu")):
 		State_Transition.emit(self, "spellcraft")
-	# 4 - Cutscene/ Dialogue
-	#TODO Add generic transition into cutscenes and dialogue
+	# All states must also be able to enter Cutscenes and Dialogue.
+	## TODO Add generic transition into cutscenes and dialogue
 	
 func on_state_exit() -> void:
 	pass
+	
+func check_spellcast_transitions():
+	if(Input.is_action_just_pressed("overworld_cast_spellslot1")):
+		if(player.active_spells[0] != null):
+			match(player.active_spells[0].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## Maybe I need to move toggle behaviours here idk
+				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					State_Transition.emit(self, "spell focus")
+	elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
+		if(player.active_spells[1] != null):
+			match(player.active_spells[1].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## Maybe I need to move toggle behaviours here idk
+				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					State_Transition.emit(self, "spell focus")
+	elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
+		if(player.active_spells[2] != null):
+			match(player.active_spells[2].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## Maybe I need to move toggle behaviours here idk
+				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					State_Transition.emit(self, "spell focus")
+	elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
+		if(player.active_spells[3] != null):
+			match(player.active_spells[3].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## Maybe I need to move toggle behaviours here idk
+				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					State_Transition.emit(self, "spell focus")
+
+func change_player_sprite_direction(direction:float):
+## NOTE: Sprite "flipping" is done via x-axis scale to make sure attack hitboxes spawn in the right place.
+	if direction > 0:
+		player.body_sprite.scale.x = 1
+	elif direction < 0:
+		player.body_sprite.scale.x = -1

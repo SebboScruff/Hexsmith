@@ -7,8 +7,13 @@
 class_name Player
 extends CharacterBody2D
 
-@export var is_paused:= false
-@export var is_spellcrafting:= false
+## Bools used for FSM State Management
+var is_paused:= false # Turned on when in System Pause
+var is_in_loadout:=false # Turned on when in Loadout/Inventory Pause
+var is_spellcrafting:= false # Turned on when in Spellcraft Menu
+var is_climbing := false # Turned on when within a climbable zone
+var is_swimming := false # Turns on when within a swimming zone
+var can_surface := false # Subset of swimming zones for when you can jump out
 
 #region Movement Parameters
 # Used for altering the player's fundamental movement behaviours.
@@ -36,7 +41,6 @@ var current_speed : float # this will be set to any of the const SPEED values ab
 	#region Underwater Parameters
 # SWIM_SPEED must be multiplied and made negative to overcome
 # gravity and move in the correct direction
-var can_surface:bool = false # turned on whenever player is within a surfaceable region - usually water shores
 const MAX_OXYGEN = 5 ## Number of seconds the player can remain underwater by default
 var current_oxygen:float
 @onready var oxygen_meter:TextureProgressBar = %OxygenMeter # on-HUD meter for monitoring time left.
@@ -204,13 +208,13 @@ func _apply_gravity(delta):
 
 ## NOTE: Similar to gravity, this has been turned into a function to allow for access within State Behaviours.
 @warning_ignore("unused_parameter")
-func _apply_movement(delta:float, h_dir:float, v_dir:float = 0):
-	if(h_dir != 0):
-		velocity.x = h_dir * current_speed
-	else:
+func _apply_movement(delta:float, _h_dir:float = 0, _v_dir:float = 0):
+	if(_h_dir != 0):
+		velocity.x = _h_dir * current_speed
+	else: # i.e. if h_dir == 0
 		velocity.x = move_toward(velocity.x, 0, current_speed)
-	if(v_dir != 0):
-		velocity.y = v_dir * current_speed
+	if(_v_dir != 0):
+		velocity.y = _v_dir * current_speed
 	
 	move_and_slide()
 

@@ -9,10 +9,10 @@ func _init() -> void:
 	self.state_id = 4
 
 func on_state_enter() -> void:
-	print("Player entered WALK State")
+	print("Player entered %s State"%[state_name])
 	player.current_speed = player.BASE_SPEED
-	# Play Idle Animation
-	#pass
+	# Play Walk Animation
+	player.body_sprite.play("run")
 
 func on_state_process(delta:float) -> void:
 	super.on_state_process(delta)
@@ -20,19 +20,37 @@ func on_state_process(delta:float) -> void:
 func on_state_physics_process(delta:float) -> void:
 	super.on_state_physics_process(delta)
 	
-	## STATE TRANSITIONS:
+#region State Transitions
+	# Idle
 	if(Input.get_axis("overworld_move_left", "overworld_move_right") == 0):
 		State_Transition.emit(self, "idle")
-	
-	## PHYSICS BEHAVIOURS
+	# Run
+	elif(Input.is_action_pressed("overworld_toggle_sprint")):
+		State_Transition.emit(self, "run")
+	# Jump
+	elif(Input.is_action_just_pressed("overworld_jump")):
+		State_Transition.emit(self, "jump")
+	# Fall
+	elif(!player.is_on_floor()):
+		State_Transition.emit(self, "fall")
+	# Crawl
+	elif(player.is_on_floor() && Input.is_action_just_pressed("overworld_down")):
+		State_Transition.emit(self, "crawl")
+	# Climb
+	elif(player.is_climbing):
+		State_Transition.emit(self, "climb")
+	# Spellcasting
+	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
+#endregion
+
+#region PHYSICS BEHAVIOURS
 	direction = Input.get_axis("overworld_move_left", "overworld_move_right")
-	## NOTE: Sprite "flipping" is done via x-axis scale to make sure attack hitboxes spawn in the right place.
-	if direction > 0:
-		player.body_sprite.scale.x = 1
-	elif direction < 0:
-		player.body_sprite.scale.x = -1
+	## NOTE: Function Body in base class, player_state.gd
+	change_player_sprite_direction(direction)
 	# else direction is exactly 0 (i.e. no input) and sprite should stay in current orientation
+	player._apply_gravity(delta)
+	player._apply_movement(delta, direction)
+#endregion
 
 func on_state_exit() -> void:
-	print("Player exited WALK State")
-	# pass
+	print("Player exited %s State"%[state_name])
