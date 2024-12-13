@@ -8,7 +8,6 @@ func _init() -> void:
 	self.state_id = 0
 
 func on_state_enter() -> void:
-	print("Player entered %s State"%[state_name])
 	player.can_cast = true
 	player.gravity_scale = 1.0
 	# Set Engine Timescale to 1.0
@@ -56,8 +55,8 @@ func on_state_physics_process(delta:float) -> void:
 	
 	## STANDARD PHYSICS BEHAVIOURS
 	player._apply_gravity(delta)
-	player._apply_movement(delta, 0)
+	player.move_and_slide()
 
 func on_state_exit() -> void:
-	print("Player exited %s State"%[state_name])
-	# pass
+	# No exit behaviours needed for leaving Idle
+	pass

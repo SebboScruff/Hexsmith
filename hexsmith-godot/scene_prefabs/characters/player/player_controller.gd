@@ -41,6 +41,7 @@ var current_speed : float # this will be set to any of the const SPEED values ab
 	#region Underwater Parameters
 # SWIM_SPEED must be multiplied and made negative to overcome
 # gravity and move in the correct direction
+var is_underwater := false
 const MAX_OXYGEN = 5 ## Number of seconds the player can remain underwater by default
 var current_oxygen:float
 @onready var oxygen_meter:TextureProgressBar = %OxygenMeter # on-HUD meter for monitoring time left.
@@ -157,7 +158,7 @@ func _process(delta: float) -> void:
 #region Oxygen Management
 	# TODO Eventually add a HasWaterbreathing bool. Blue-Mana Cloaks will give waterbreathing,
 	# as well as maybe some consumable items.
-	if(current_movement_style == MOVEMENT_STYLES.SWIMMING and !can_surface):
+	if(is_underwater):
 		# Player is underwater
 		current_oxygen -= delta
 		if(current_oxygen < 0):current_oxygen=0
@@ -206,17 +207,22 @@ func _apply_gravity(delta):
 	if not is_on_floor():
 		velocity += get_gravity() * delta * gravity_scale
 
-## NOTE: Similar to gravity, this has been turned into a function to allow for access within State Behaviours.
+## NOTE: Similar to gravity, these have been turned into a function to 
+## allow for access within State Behaviours.
+## move_and_slide() MUST be called within state physics updates. 
 @warning_ignore("unused_parameter")
-func _apply_movement(delta:float, _h_dir:float = 0, _v_dir:float = 0):
+func _apply_horizontal_input(delta:float, _h_dir:float = 0):
 	if(_h_dir != 0):
 		velocity.x = _h_dir * current_speed
 	else: # i.e. if h_dir == 0
 		velocity.x = move_toward(velocity.x, 0, current_speed)
+
+@warning_ignore("unused_parameter")
+func _apply_vertical_input(delta:float, _v_dir:float = 0) -> void:
 	if(_v_dir != 0):
 		velocity.y = _v_dir * current_speed
-	
-	move_and_slide()
+	else:
+		velocity.y = move_toward(velocity.y, 0, current_speed)
 
 # Simple State Switch
 func set_movement_style(new_style:MOVEMENT_STYLES):

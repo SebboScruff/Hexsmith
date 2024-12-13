@@ -15,12 +15,8 @@ func _init() -> void:
 ## for example changing the HUD Style, setting bools, altering the game's Time Scale, or
 ## Removing Momentum.
 func on_state_enter() -> void:
-	print("Player entered %s State"%[state_name])
-	# Set the player pause bool
-	player.is_paused = true
-	# Stop time in the game
+	player.is_paused = true # Used in player_state.on_physics_process to determine universal state transitions
 	Engine.time_scale = 0
-	# Open the pause menu
 	hud_manager.change_active_menu(hud_manager.menu_hud)
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
@@ -34,11 +30,11 @@ func on_state_physics_process(delta:float) -> void:
 	super.on_state_physics_process(delta)
 	if(Input.is_action_just_pressed("global_system_pause")):
 		# When unpausing, rather than resetting immediately to idle,
-		# go back to whichever state the player was last in
+		# go back to whichever state the player was last in; removes the "stutter frame"
+		# if going e.g. pause -> idle -> fall
 		player.state_machine_runner.reset_to_previous_state()
 
 func on_state_exit() -> void:
-	print("Player exited %s State"%[state_name])
 	## NOTE: Resetting to overworld hud and standard timescale here because
 	## the FSM Runner's previous state may not set these in on_state_enter()
 	hud_manager.change_active_menu(hud_manager.overworld_hud)

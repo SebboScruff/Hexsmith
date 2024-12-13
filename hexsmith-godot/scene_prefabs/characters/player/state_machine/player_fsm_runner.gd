@@ -43,9 +43,6 @@ func change_state(_old_state:PlayerState, _new_state_name:String):
 	
 	var new_state:PlayerState = states.get(_new_state_name.to_lower())
 	
-	if(_old_state != null):
-		print("State Transition Called: %s to %s"%[_old_state.state_name, new_state.state_name])
-		
 	if(_old_state == new_state):
 		print("Trying to change to current State!")
 		return
@@ -58,7 +55,7 @@ func change_state(_old_state:PlayerState, _new_state_name:String):
 	current_state.on_state_enter()
 
 func reset_to_idle():
-	print("Resetting Player State Machine to Overworld Idle")
+	print("Reset To Idle called!")
 	change_state(current_state, "idle")
 
 func reset_to_previous_state():

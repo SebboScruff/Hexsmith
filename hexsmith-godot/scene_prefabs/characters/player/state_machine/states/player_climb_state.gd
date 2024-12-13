@@ -17,7 +17,6 @@ func _init() -> void:
 ## for example changing the HUD Style, setting bools, altering the game's Time Scale, or
 ## Removing Momentum.
 func on_state_enter() -> void:
-	print("Player exited %s State"%[state_name])
 	player.body_sprite.play("idle")
 	player.gravity_scale = 0
 
@@ -35,6 +34,8 @@ func on_state_physics_process(delta:float) -> void:
 	if(!player.is_climbing):
 		if(player.is_on_floor()):
 			State_Transition.emit(self, "idle")
+		elif(Input.is_action_just_pressed("overworld_jump")):
+			State_Transition.emit(self, "jump")
 		else:
 			State_Transition.emit(self, "fall")
 #endregion
@@ -43,14 +44,10 @@ func on_state_physics_process(delta:float) -> void:
 	movement_dir.x = Input.get_axis("overworld_move_left", "overworld_move_right")
 	change_player_sprite_direction(movement_dir.x)
 	movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
-	player._apply_movement(delta, movement_dir.x, movement_dir.y)
+	player._apply_horizontal_input(delta, movement_dir.x)
+	player._apply_vertical_input(delta, movement_dir.y)
+	player.move_and_slide()
 #endregion
 
 func on_state_exit() -> void:
-	print("Player exited %s State"%[state_name])
 	player.gravity_scale = 1.0
-	## Anything that has to happen as the player leaves this state goes here.
-	## For example, resetting timescale, starting cooldowns, turning off bools, etc.
-	## Remember that the next incoming state will have its on_enter() function called immediately
-	## after this.
-	# pass

@@ -1,33 +1,67 @@
-[gd_scene load_steps=4 format=3 uid="uid://86anbq0ljjt5"]
+[gd_scene load_steps=7 format=3 uid="uid://86anbq0ljjt5"]
 
 [ext_resource type="Script" path="res://scene_prefabs/movement_areas/water_area.gd" id="1_yjoft"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_7mqw3"]
 size = Vector2(20, 1)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_72dwc"]
+size = Vector2(17.8605, 2)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fx8iy"]
+size = Vector2(20, 18.9837)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_51q1x"]
+size = Vector2(1.66575, 2.21951)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bbtel"]
+size = Vector2(1.80456, 2.21951)
 
 [node name="WaterZone" type="Node2D"]
 script = ExtResource("1_yjoft")
 
-[node name="water_surface" type="StaticBody2D" parent="."]
+[node name="water_max_height" type="Marker2D" parent="."]
+position = Vector2(0, -1)
+gizmo_extents = 12.0
+
+[node name="water_walkable" type="StaticBody2D" parent="."]
 position = Vector2(0, 1)
 collision_layer = 32
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="water_surface"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="water_walkable"]
 position = Vector2(0, -1.5)
 shape = SubResource("RectangleShape2D_7mqw3")
 one_way_collision = true
 debug_color = Color(1.55944e-05, 0.551344, 0.988961, 0.862745)
 
+[node name="water_surface" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="water_surface"]
+shape = SubResource("RectangleShape2D_72dwc")
+debug_color = Color(7.21961e-07, 0.51464, 0.600525, 0.42)
+
 [node name="underwater_area" type="Area2D" parent="."]
 collision_layer = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="underwater_area"]
-position = Vector2(0, 10)
+position = Vector2(0, 10.5)
 shape = SubResource("RectangleShape2D_fx8iy")
-debug_color = Color(0, 0.380392, 0.447059, 0.564706)
+debug_color = Color(6.01634e-08, 0.245472, 0.291481, 0.564706)
 
+[node name="exit_zone" type="Area2D" parent="."]
+
+[node name="left" type="CollisionShape2D" parent="exit_zone"]
+position = Vector2(-8.5, 0)
+shape = SubResource("RectangleShape2D_51q1x")
+debug_color = Color(0.690196, 0.498039, 0, 0.156863)
+
+[node name="right" type="CollisionShape2D" parent="exit_zone"]
+position = Vector2(8.5, 0)
+shape = SubResource("RectangleShape2D_bbtel")
+debug_color = Color(0.690196, 0.498039, 0, 0.156863)
+
+[connection signal="body_entered" from="water_surface" to="." method="_on_water_surface_body_entered"]
 [connection signal="body_entered" from="underwater_area" to="." method="_on_underwater_area_body_entered"]
 [connection signal="body_exited" from="underwater_area" to="." method="_on_underwater_area_body_exited"]
+[connection signal="body_entered" from="exit_zone" to="." method="_on_exit_zone_body_entered"]

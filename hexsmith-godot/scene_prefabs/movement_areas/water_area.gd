@@ -1,37 +1,37 @@
-# Used for monitoring when the player enters and exits a patch of water.
-# All relevant in-game changes are done through player_controller - this is just
-# a signal manager.
+# Used for monitoring when the player enters and exits a patch of water. This is basically just a 
+# standalone state manager.
 
 # Water Zone Node Tree Explanation:
-# - water_surface (StaticBody2D) is the hard one-way collider that allows agents to move on
+# - water_max_height (marker) signifies the highest vertical co-ordinate of this body of water.
+# It is used to determine how high up the player can go while in the Swim State
+# - water_walkable (StaticBody2D) is the hard one-way collider that allows agents to move on
 # the water's surface - for example, the player with Aqua Strider. Collision Layer = 6
-
-# - underwater_area (Area2D) is the whole area that transitions the player into the 
-# SWIMMING movement style. Collision Layer = 5
-
-# - surfaceable_region (Area2D) is the very top of the Underwater Region, and switches
-# a bool that allows the player to jump and exit the water. Collision Layer = 5
+# - water_surface (Area2D) is the collision area that puts the player into the Swim State,
+# allowing for free vertical movement up to a certain height.
+# - underwater_area (Area2D) is the area that puts the player into the Underwater State,
+# allowing for free vertical movement and draining oxygen.
+# - exit_zone (Area2D) is the collision area that enables the player to jump out of the water.
 
 extends Node2D
 
-# Modify the player's movement state based on whether they are within
-# the Underwater Area or not.
-# TODO Probably needs to be slightly more safe than just a direct name check
+@onready var water_max_height: Marker2D = $water_max_height
+
+# Into basic Swim State.
+func _on_water_surface_body_entered(body: Node2D) -> void:
+	if(body is Player):
+		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "swim")
+		body.state_machine_runner.current_state.max_height = water_max_height.global_position.y
+
+# In and out of Underwater State
 func _on_underwater_area_body_entered(body: Node2D) -> void:
 	if(body is Player):
-		body.is_swimming = true
+		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "underwater")
 
 func _on_underwater_area_body_exited(body: Node2D) -> void:
 	if(body is Player):
-		body.is_swimming = false
+		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "swim")
+		body.state_machine_runner.current_state.max_height = water_max_height.global_position.y
 
-# ---
-## NOTE: This has been moved to a separate scene, surfaceable_water.tscn
-## to prevent the player from being able to "Water Jump"
-#func _on_surfaceable_region_body_entered(body: Node2D) -> void:
-	#if(body.name == "Player"):
-		#body.can_surface = true
-#
-#func _on_surfaceable_region_body_exited(body: Node2D) -> void:
-	#if(body.name == "Player"):
-		#body.can_surface = false
+func _on_exit_zone_body_entered(body: Node2D) -> void:
+	if(body is Player):
+		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "water exit")

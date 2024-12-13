@@ -1,10 +1,11 @@
-[gd_scene load_steps=50 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=52 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
 [ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_underwater_state.gd" id="3_eykxq"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_idle_state.gd" id="3_pidp4"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
@@ -17,6 +18,7 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_fall_state.gd" id="10_0g12v"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_climb_state.gd" id="11_hppqs"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_swim_state.gd" id="12_jc20l"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_water_exit_state.gd" id="13_5hxvw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -433,6 +435,12 @@ script = ExtResource("11_hppqs")
 [node name="PlayerSwimState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("12_jc20l")
 
+[node name="PlayerWaterExitState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("13_5hxvw")
+
+[node name="PlayerUnderwaterState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("3_eykxq")
+
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true
 position = Vector2(-33, 0)
@@ -464,7 +472,7 @@ libraries = {
 [node name="BodySprite" type="AnimatedSprite2D" parent="."]
 position = Vector2(1, -24)
 sprite_frames = SubResource("SpriteFrames_p7kgc")
-animation = &"jump_land"
+animation = &"idle"
 autoplay = "idle"
 
 [node name="melee_attack_hitbox" type="Area2D" parent="BodySprite"]

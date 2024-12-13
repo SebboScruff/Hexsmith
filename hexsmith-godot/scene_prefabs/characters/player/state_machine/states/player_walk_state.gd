@@ -9,10 +9,8 @@ func _init() -> void:
 	self.state_id = 4
 
 func on_state_enter() -> void:
-	print("Player entered %s State"%[state_name])
 	player.current_speed = player.BASE_SPEED
-	# Play Walk Animation
-	player.body_sprite.play("run")
+	player.body_sprite.play("run") # TODO Change this to walk animation rather than run
 
 func on_state_process(delta:float) -> void:
 	super.on_state_process(delta)
@@ -49,8 +47,10 @@ func on_state_physics_process(delta:float) -> void:
 	change_player_sprite_direction(direction)
 	# else direction is exactly 0 (i.e. no input) and sprite should stay in current orientation
 	player._apply_gravity(delta)
-	player._apply_movement(delta, direction)
+	player._apply_horizontal_input(delta, direction)
+	player.move_and_slide()
 #endregion
 
 func on_state_exit() -> void:
-	print("Player exited %s State"%[state_name])
+	# No behaviours needed for exiting Walk
+	pass
