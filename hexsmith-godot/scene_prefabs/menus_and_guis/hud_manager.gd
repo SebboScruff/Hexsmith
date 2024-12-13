@@ -60,3 +60,15 @@ func change_spell_icon(_index:int, _frame:CompressedTexture2D, _icon:CompressedT
 	
 	spell_icons[_index].set_icon(_icon)
 	spell_icons[_index].set_frame(_frame)
+
+func set_spell_slot_highlight(_index:int, _new_highlight_state:bool):
+	if(spell_icons[_index] == null):
+		print("Spell Icons were not correctly assigned. Breaking out of GUI Assignment.")
+		return
+	
+	if(_new_highlight_state == true):
+		# TODO Enable the visual border that shows the spell as "currently active"
+		pass
+	else:
+		# TODO Disable the visual border that shows the spell as "currently active"
+		pass

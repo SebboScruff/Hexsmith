@@ -391,7 +391,7 @@ func determine_suffix() -> SpellSuffix:
 		SpellClassSelector.SPELL_CLASSES.INSTRUMANCY:
 			match(spellcraft_amt.total_current_mana):
 				1:
-					suffix = TransmutationSuffix.new()
+					suffix = FocusSuffix.new()
 					#print("Suffix Found: " + suffix.suffix_name)
 					return suffix
 				2:

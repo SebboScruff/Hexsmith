@@ -85,6 +85,8 @@ func cast_spell():
 			if(original_state == false):
 				suffix.set_active(true)
 				print("Toggled %s on"%[get_spell_name()])
+		SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+			suffix.set_active(false)
 
 func do_passive_effect(_delta:float):
 	suffix.do_effect(prefix.num_red_mana, prefix.num_blue_mana, prefix.num_green_mana, 

@@ -200,6 +200,7 @@ func _process(delta: float) -> void:
 ## and also change it away from being a bunch of ugly if-chains.
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
+	# print("Angle to crosshair: %f"%[get_dir_to_crosshair()])
 	pass
 
 ## NOTE: Extracted out into a function so that it can be called in State Behaviours

@@ -1,5 +1,5 @@
-## Any time the player is in free-fall: walking off a ledge, after jumping, after being knocked upwards
-## or any other effect. 
+## Any time the player is in free-fall: walking off a ledge, after jumping, 
+## after being knocked upwards, or any other effect. 
 
 ## NOTE:
 ## Perform a State Transitions with State_Transition.emit(self, "new_state_name")
@@ -32,12 +32,17 @@ func on_state_physics_process(delta:float) -> void:
 	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
 	super.on_state_physics_process(delta)
 #region STATE TRANSITIONS
+	# 1 - Idle
 	if(player.is_on_floor()):
 		State_Transition.emit(self, "idle")
+	# 2 - Climb
 	elif(player.is_climbing):
 		State_Transition.emit(self, "climb")
+	# 3 - Swim
 	elif(player.is_swimming):
 		State_Transition.emit(self, "swim")
+	# 4 - Spellcasting
+	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 
 #region PHYSICS BEHAVIOURS

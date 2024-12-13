@@ -41,10 +41,14 @@ func on_state_physics_process(delta:float) -> void:
 	# Fall if moving downwards
 	if(!player.is_on_floor() && player.velocity.y > 0):
 		State_Transition.emit(self, "fall")
+	# If the player somehow jumps directly up onto a floor, go straight to idle
 	elif(player.is_on_floor()):
 		State_Transition.emit(self, "idle")
+	# If the player jumps into a climb zone, go straight to climb
 	elif(player.is_climbing):
 		State_Transition.emit(self, "climb")
+	# And check for Spellcast Inputs.
+	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 
 #region PHYSICS BEHAVIOURS

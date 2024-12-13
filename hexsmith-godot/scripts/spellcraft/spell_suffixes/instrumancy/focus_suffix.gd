@@ -1,7 +1,7 @@
-class_name TransmutationSuffix extends SpellSuffix
+class_name FocusSuffix extends SpellSuffix
 
 func _init() -> void:
-	suffix_name = "Transmutation"
+	suffix_name = "Focus"
 	suffix_id = 10 # Very important for lookup tables.
 	
 	cast_type = CAST_TYPES.PRESS_AND_HOLD

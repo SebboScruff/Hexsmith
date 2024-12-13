@@ -3,7 +3,7 @@ class_name SpellSuffix extends Node2D
 enum CAST_TYPES{
 	SINGLE_CAST, # One used, goes on cooldown
 	TOGGLE,				# Has an on-off switch.
-	PRESS_AND_HOLD		# Has to  be held down for continual effect. Disables movement?
+	PRESS_AND_HOLD		# Has to  be held down for continual effect.
 }
 
 enum TARGET_TYPES{
@@ -16,7 +16,9 @@ var suffix_name:String
 var suffix_id:int ## NOTE: Very important for managing Cooldowns and Toggles
 
 var cast_type: CAST_TYPES
-var is_active: bool # Whether or not a TOGGLE spell is currently turned on.
+# Whether or not a TOGGLE spell is currently turned on, 
+# or a PRESS_AND_HOLD spell is currently held down.
+var is_active: bool 
 var target_type: TARGET_TYPES
 
 ## This will be per-cast (and generally higher) for CAST_WILL_COOLDOWN spells
@@ -50,14 +52,15 @@ func _init() -> void:
 # particle/animation on the player's sprite.
 # For Toggles, this is not used.
 func precast() -> void:
-	if(cast_type != CAST_TYPES.SINGLE_CAST):
-		print("No default pre-cast behaviours for %s Spells."%[suffix_name])
-		return
-	# NOTE: If it gets here, it's a cast with cooldown
-	print("%s is precasting a %s Spell"%[player.name, suffix_name])
-	# TODO Start a little time-slow effect for JUICE,
-	# make sure the Cursor/ Crosshair is visible,
-	# and start the pre-cast particles.
+	match(cast_type):
+		CAST_TYPES.SINGLE_CAST:
+			print("%s is precasting a %s Spell"%[player.name, suffix_name])
+			#TODO start the pre-cast particles.
+		CAST_TYPES.TOGGLE:
+			print("No default pre-cast behaviours for %s Spells."%[suffix_name])
+		CAST_TYPES.PRESS_AND_HOLD:
+			print("%s Spell turned on"%[suffix_name])
+			set_active(true)
 
 ## This must be overridden in all SINGLE_CAST Suffixes
 ## Determines all cast behaviours: whether something needs to be instantiated, 

@@ -49,7 +49,6 @@ func on_state_physics_process(delta:float) -> void:
 	elif(player.is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
 		State_Transition.emit(self, "basic melee")
 	## 8 - Casting a Spell - has different Transitions based on the spell type and hotkey
-	# TODO Look into this and try to make it look less bad
 	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 	

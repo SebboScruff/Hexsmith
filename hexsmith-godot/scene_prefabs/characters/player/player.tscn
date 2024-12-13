@@ -1,4 +1,4 @@
-[gd_scene load_steps=52 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=54 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
@@ -19,6 +19,8 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_climb_state.gd" id="11_hppqs"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_swim_state.gd" id="12_jc20l"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_water_exit_state.gd" id="13_5hxvw"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_precast_state.gd" id="15_70npk"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_channel_state.gd" id="16_qivuu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -384,7 +386,7 @@ state_machine_runner = NodePath("StateMachineRunner")
 [node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
 unique_name_in_owner = true
 
-[node name="DebugCurrentState" type="Label" parent="."]
+[node name="CurrentMovementState" type="Label" parent="."]
 offset_left = -18.0
 offset_top = -32.0
 offset_right = 129.0
@@ -394,7 +396,7 @@ text = "Current State: IDLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="DebugPreviousState" type="Label" parent="."]
+[node name="PreviousMovementState" type="Label" parent="."]
 offset_left = -18.0
 offset_top = -38.0
 offset_right = 129.0
@@ -404,9 +406,12 @@ text = "Prev State: ---"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateMachineRunner" type="Node" parent="."]
+[node name="StateMachineRunner" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
+debug_current_state = NodePath("../CurrentMovementState")
+debug_previous_state = NodePath("../PreviousMovementState")
+show_debug_info = true
 
 [node name="PlayerIdleState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("3_pidp4")
@@ -440,6 +445,12 @@ script = ExtResource("13_5hxvw")
 
 [node name="PlayerUnderwaterState" type="Node" parent="StateMachineRunner"]
 script = ExtResource("3_eykxq")
+
+[node name="PlayerPrecastState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("15_70npk")
+
+[node name="PlayerChannelState" type="Node" parent="StateMachineRunner"]
+script = ExtResource("16_qivuu")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true

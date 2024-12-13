@@ -4,8 +4,9 @@
 class_name PlayerFSMRunner
 extends Node
 
-@onready var debug_current_state: Label = $"../DebugCurrentState"
-@onready var debug_previous_state: Label = $"../DebugPreviousState"
+@export var debug_current_state:Label
+@export var debug_previous_state:Label
+@export var show_debug_info:bool
 
 var states = {} #NOTE: String Names as keys, State Classes as values.
 
@@ -26,6 +27,8 @@ func _ready():
 			print("Initialised State: %s"%[child.state_name.to_lower()])
 
 func _process(delta: float) -> void:
+	debug_current_state.set_visible(show_debug_info)
+	debug_previous_state.set_visible(show_debug_info)
 	if(previous_state != null):
 		debug_previous_state.text = "Prev State: %s"%[previous_state.state_name]
 	if(current_state):
