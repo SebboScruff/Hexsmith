@@ -422,7 +422,7 @@ func determine_suffix() -> SpellSuffix:
 func menu_cleanup():
 	clear_active_mana()
 	## Need this bizarre condition check to stop the player from getting stuck in a menu loop
-	if(player.state_machine_runner.previous_state.state_name.to_lower() == "paused"):
-		player.state_machine_runner.reset_to_idle() # Default back to Overworld Idle
+	if(player.movement_state_machine.previous_state.state_name.to_lower() == "paused"):
+		player.movement_state_machine.reset_to_idle() # Default back to Overworld Idle
 	else:
-		player.state_machine_runner.reset_to_previous_state() # If the player was already in a movement state, go back there.
+		player.movement_state_machine.reset_to_previous_state() # If the player was already in a movement state, go back there.

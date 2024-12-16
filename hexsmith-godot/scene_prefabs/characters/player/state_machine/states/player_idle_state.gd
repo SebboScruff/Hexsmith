@@ -48,13 +48,10 @@ func on_state_physics_process(delta:float) -> void:
 	## 7 - Basic Melee Attack
 	elif(player.is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
 		State_Transition.emit(self, "basic melee")
-	## 8 - Casting a Spell - has different Transitions based on the spell type and hotkey
-	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 	
 	## STANDARD PHYSICS BEHAVIOURS
 	player._apply_gravity(delta)
-	player.move_and_slide()
 
 func on_state_exit() -> void:
 	# No exit behaviours needed for leaving Idle

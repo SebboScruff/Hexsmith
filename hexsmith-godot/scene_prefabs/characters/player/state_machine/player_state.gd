@@ -44,45 +44,45 @@ func check_spellcast_transitions():
 			match(player.active_spells[0].get_cast_type()):
 				SpellSuffix.CAST_TYPES.SINGLE_CAST:
 					State_Transition.emit(self, "precast")
-					player.state_machine_runner.current_state.spell_slot_index = 0
+					player.spellcast_state_machine.current_state.spell_slot_index = 0
 				SpellSuffix.CAST_TYPES.TOGGLE:
 					pass ## Maybe I need to move toggle behaviours here idk
 				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
 					State_Transition.emit(self, "channel")
-					player.state_machine_runner.current_state.spell_slot_index = 0
+					player.spellcast_state_machine.current_state.spell_slot_index = 0
 	elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
 		if(player.active_spells[1] != null):
 			match(player.active_spells[1].get_cast_type()):
 				SpellSuffix.CAST_TYPES.SINGLE_CAST:
 					State_Transition.emit(self, "precast")
-					player.state_machine_runner.current_state.spell_slot_index = 1
+					player.spellcast_state_machine.current_state.spell_slot_index = 1
 				SpellSuffix.CAST_TYPES.TOGGLE:
 					pass ## Maybe I need to move toggle behaviours here idk
 				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
 					State_Transition.emit(self, "channel")
-					player.state_machine_runner.current_state.spell_slot_index = 1
+					player.spellcast_state_machine.current_state.spell_slot_index = 1
 	elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
 		if(player.active_spells[2] != null):
 			match(player.active_spells[2].get_cast_type()):
 				SpellSuffix.CAST_TYPES.SINGLE_CAST:
 					State_Transition.emit(self, "precast")
-					player.state_machine_runner.current_state.spell_slot_index = 2
+					player.spellcast_state_machine.current_state.spell_slot_index = 2
 				SpellSuffix.CAST_TYPES.TOGGLE:
 					pass ## Maybe I need to move toggle behaviours here idk
 				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
 					State_Transition.emit(self, "channel")
-					player.state_machine_runner.current_state.spell_slot_index = 2
+					player.spellcast_state_machine.current_state.spell_slot_index = 2
 	elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
 		if(player.active_spells[3] != null):
 			match(player.active_spells[3].get_cast_type()):
 				SpellSuffix.CAST_TYPES.SINGLE_CAST:
 					State_Transition.emit(self, "precast")
-					player.state_machine_runner.current_state.spell_slot_index = 3
+					player.spellcast_state_machine.current_state.spell_slot_index = 3
 				SpellSuffix.CAST_TYPES.TOGGLE:
 					pass ## Maybe I need to move toggle behaviours here idk
 				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
 					State_Transition.emit(self, "channel")
-					player.state_machine_runner.current_state.spell_slot_index = 3
+					player.spellcast_state_machine.current_state.spell_slot_index = 3
 
 func change_player_sprite_direction(direction:float):
 ## NOTE: Sprite "flipping" is done via x-axis scale to make sure attack hitboxes spawn in the right place.

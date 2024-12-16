@@ -1,4 +1,4 @@
-[gd_scene load_steps=54 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=55 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
@@ -21,6 +21,7 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_water_exit_state.gd" id="13_5hxvw"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_precast_state.gd" id="15_70npk"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_channel_state.gd" id="16_qivuu"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_idlecast_state.gd" id="17_0goyt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -375,81 +376,113 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_wfc76"]
 radius = 9.0
 
-[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter", "state_machine_runner") groups=["Player"]]
+[node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter", "movement_state_machine", "spellcast_state_machine") groups=["Player"]]
 z_index = 6
 collision_mask = 711
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
-state_machine_runner = NodePath("StateMachineRunner")
+movement_state_machine = NodePath("MovementStateMachine")
+spellcast_state_machine = NodePath("SpellcastStateMachine")
 
 [node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
 unique_name_in_owner = true
 
 [node name="CurrentMovementState" type="Label" parent="."]
+visible = false
 offset_left = -18.0
 offset_top = -32.0
 offset_right = 129.0
 offset_bottom = -9.0
 scale = Vector2(0.263351, 0.288206)
-text = "Current State: IDLE"
+text = "Current Move State: IDLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="PreviousMovementState" type="Label" parent="."]
+visible = false
 offset_left = -18.0
 offset_top = -38.0
 offset_right = 129.0
 offset_bottom = -15.0
 scale = Vector2(0.263351, 0.288206)
-text = "Prev State: ---"
+text = "Prev Move State: ---"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="StateMachineRunner" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
+[node name="CurrentCastState" type="Label" parent="."]
+offset_left = -18.0
+offset_top = -32.0
+offset_right = 129.0
+offset_bottom = -9.0
+scale = Vector2(0.263351, 0.288206)
+text = "Current Cast State: IDLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PreviousCastState" type="Label" parent="."]
+offset_left = -18.0
+offset_top = -38.0
+offset_right = 129.0
+offset_bottom = -15.0
+scale = Vector2(0.263351, 0.288206)
+text = "Prev Cast State: ---"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
 debug_current_state = NodePath("../CurrentMovementState")
 debug_previous_state = NodePath("../PreviousMovementState")
 show_debug_info = true
 
-[node name="PlayerIdleState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerIdleState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("3_pidp4")
 
-[node name="PlayerSpellcraftState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerSpellcraftState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("4_n1gi1")
 
-[node name="PlayerPauseState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerPauseState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("5_xuwid")
 
-[node name="PlayerWalkState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerWalkState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("4_ow5mu")
 
-[node name="PlayerRunState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerRunState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("8_228p4")
 
-[node name="PlayerJumpState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerJumpState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("9_lxw88")
 
-[node name="PlayerFallState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerFallState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("10_0g12v")
 
-[node name="PlayerClimbState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerClimbState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("11_hppqs")
 
-[node name="PlayerSwimState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerSwimState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("12_jc20l")
 
-[node name="PlayerWaterExitState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerWaterExitState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("13_5hxvw")
 
-[node name="PlayerUnderwaterState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerUnderwaterState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("3_eykxq")
 
-[node name="PlayerPrecastState" type="Node" parent="StateMachineRunner"]
+[node name="SpellcastStateMachine" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
+unique_name_in_owner = true
+script = ExtResource("2_4j2m3")
+debug_current_state = NodePath("../CurrentCastState")
+debug_previous_state = NodePath("../PreviousCastState")
+
+[node name="PlayerIdleCastState" type="Node" parent="SpellcastStateMachine"]
+script = ExtResource("17_0goyt")
+
+[node name="PlayerPrecastState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("15_70npk")
 
-[node name="PlayerChannelState" type="Node" parent="StateMachineRunner"]
+[node name="PlayerChannelState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("16_qivuu")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]

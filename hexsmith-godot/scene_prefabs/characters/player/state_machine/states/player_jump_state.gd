@@ -47,17 +47,14 @@ func on_state_physics_process(delta:float) -> void:
 	# If the player jumps into a climb zone, go straight to climb
 	elif(player.is_climbing):
 		State_Transition.emit(self, "climb")
-	# And check for Spellcast Inputs.
-	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 
 #region PHYSICS BEHAVIOURS
-	h_dir = Input.get_axis("overworld_move_left", "overworld_move_right")
-	change_player_sprite_direction(h_dir)
-	
 	player._apply_gravity(delta)
-	player._apply_horizontal_input(delta, h_dir)
-	player.move_and_slide()
+	if(player.accept_movement_input):
+		h_dir = Input.get_axis("overworld_move_left", "overworld_move_right")
+		change_player_sprite_direction(h_dir)
+		player._apply_horizontal_input(delta, h_dir)
 #endregion
 
 func on_state_exit() -> void:

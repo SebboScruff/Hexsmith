@@ -41,12 +41,12 @@ func on_state_physics_process(delta:float) -> void:
 #endregion
 
 #region PHYSICS BEHAVIOURS
-	movement_dir.x = Input.get_axis("overworld_move_left", "overworld_move_right")
-	change_player_sprite_direction(movement_dir.x)
-	movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
-	player._apply_horizontal_input(delta, movement_dir.x)
-	player._apply_vertical_input(delta, movement_dir.y)
-	player.move_and_slide()
+	if(player.accept_movement_input):
+		player._apply_horizontal_input(delta, movement_dir.x)
+		player._apply_vertical_input(delta, movement_dir.y)
+		movement_dir.x = Input.get_axis("overworld_move_left", "overworld_move_right")
+		movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
+		change_player_sprite_direction(movement_dir.x)
 #endregion
 
 func on_state_exit() -> void:

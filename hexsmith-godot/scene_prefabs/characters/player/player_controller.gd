@@ -8,9 +8,11 @@ class_name Player
 extends CharacterBody2D
 
 ## Bools used for FSM State Management
+## TODO Try and find a way to remove these because it kinda removes the purpose of the
+## State Machine in a couple of ways. Most of them are unnecessary I think.
+var accept_movement_input:= true # turned off when channeling a PRESS AND HOLD spell.
 var is_paused:= false # Turned on when in System Pause
 var is_in_loadout:=false # Turned on when in Loadout/Inventory Pause
-var is_spellcrafting:= false # Turned on when in Spellcraft Menu
 var is_climbing := false # Turned on when within a climbable zone
 var is_swimming := false # Turns on when within a swimming zone
 var can_surface := false # Subset of swimming zones for when you can jump out
@@ -108,10 +110,13 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 @onready var scm: Node = %SpellcraftManager
 @export var spellcrafter := scm as SpellcraftManager
 
-# The player's State Machine Runner for determining basically all
+# The player's State Machine Runners for determining basically all
 # runtime behaviours and state transitions.
-@onready var smr = %StateMachineRunner
-@export var state_machine_runner:PlayerFSMRunner = smr as PlayerFSMRunner
+@onready var movement_sm: PlayerFSMRunner = %MovementStateMachine
+@export var movement_state_machine:PlayerFSMRunner = movement_sm as PlayerFSMRunner
+
+@onready var spellcast_sm: PlayerFSMRunner = %SpellcastStateMachine
+@export var spellcast_state_machine:PlayerFSMRunner = spellcast_sm as PlayerFSMRunner
 
 # All of the player's health management is done through this CombatEntity
 @onready var player_combat_entity: CombatEntity = %CombatEntity
@@ -126,7 +131,8 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 # Set a whole bunch of initialisation values.
 # TODO Most of these need to become saveable, readable data.
 func _ready() -> void:
-	state_machine_runner.reset_to_idle()
+	movement_state_machine.reset_to_idle()
+	spellcast_state_machine.reset_to_idle()
 	
 	is_precasting = false
 	active_spells = [null, null, null, null]
@@ -201,7 +207,7 @@ func _process(delta: float) -> void:
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	# print("Angle to crosshair: %f"%[get_dir_to_crosshair()])
-	pass
+	move_and_slide()
 
 ## NOTE: Extracted out into a function so that it can be called in State Behaviours
 func _apply_gravity(delta):

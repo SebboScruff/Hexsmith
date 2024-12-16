@@ -13,7 +13,7 @@ extends PlayerSpellcastState
 
 func _init() -> void:
 	self.state_name = "Precast" # This is used as the dictionary Key
-	self.state_id = 14 # Check Obsidian for IDs; these are maybe not useful.
+	self.state_id = 15 # Check Obsidian for IDs; these are maybe not useful.
 
 ## All behaviours that take place as the player enters this state go here,
 ## for example changing the HUD Style, setting bools, altering the game's Time Scale, or
@@ -38,22 +38,22 @@ func on_state_physics_process(delta:float) -> void:
 		0:
 			if(Input.is_action_just_released("overworld_cast_spellslot1")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		1:
 			if(Input.is_action_just_released("overworld_cast_spellslot2")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		2:
 			if(Input.is_action_just_released("overworld_cast_spellslot3")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		3:
 			if(Input.is_action_just_released("overworld_cast_spellslot4")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		_:
 			print("Invalid state index in Precast State!")
-			player.state_machine_runner.reset_to_idle()
+			player.spellcast_state_machine.reset_to_idle()
 #endregion
 
 #region PHYSICS BEHAVIOURS

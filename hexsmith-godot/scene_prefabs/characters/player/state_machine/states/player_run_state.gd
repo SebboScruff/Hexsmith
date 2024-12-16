@@ -54,17 +54,15 @@ func on_state_physics_process(delta:float) -> void:
 	# Climb
 	elif(player.is_climbing):
 		State_Transition.emit(self, "climb")
-	# Spellcasting
-	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 
 #region PHYSICS BEHAVIOURS
-	direction = Input.get_axis("overworld_move_left", "overworld_move_right")
-	change_player_sprite_direction(direction)
-	# else direction is exactly 0 (i.e. no input) and sprite should stay in current orientation
 	player._apply_gravity(delta)
-	player._apply_horizontal_input(delta, direction)
-	player.move_and_slide()
+	
+	if(player.accept_movement_input):
+		direction = Input.get_axis("overworld_move_left", "overworld_move_right")
+		change_player_sprite_direction(direction)
+		player._apply_horizontal_input(delta, direction)
 #endregion
 
 func on_state_exit() -> void:

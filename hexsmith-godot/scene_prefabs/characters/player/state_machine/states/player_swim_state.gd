@@ -41,21 +41,20 @@ func on_state_physics_process(delta:float) -> void:
 	## detection in water_area.gd
 #endregion
 #region PHYSICS BEHAVIOURS
-	movement_dir.x = Input.get_axis("overworld_move_left", "overworld_move_right")
-	change_player_sprite_direction(movement_dir.x)
-	player._apply_horizontal_input(delta, movement_dir.x)
-	
-	movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
-	# As long as player is below the maximum height, allow free vertical movement.
-	if(movement_dir.y != 0 && player.position.y >= max_height):
-		# Cancel out gravity and replace with vertical swim speed
-		player.velocity -= player.get_gravity() * delta * player.gravity_scale
-		player._apply_vertical_input(delta, movement_dir.y)
-		player.move_and_slide()
-	else:
-		# Apply the (weakened) gravity to make the player sink
-		player.velocity.y = player.get_gravity().y * delta * player.gravity_scale
-		player.move_and_slide()
+	if(player.accept_movement_input):
+		movement_dir.x = Input.get_axis("overworld_move_left", "overworld_move_right")
+		change_player_sprite_direction(movement_dir.x)
+		player._apply_horizontal_input(delta, movement_dir.x)
+		
+		movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
+		# As long as player is below the maximum height, allow free vertical movement.
+		if(movement_dir.y != 0 && player.position.y >= max_height):
+			# Cancel out gravity and replace with vertical swim speed
+			player.velocity -= player.get_gravity() * delta * player.gravity_scale
+			player._apply_vertical_input(delta, movement_dir.y)
+		else:
+			# Apply the (weakened) gravity to make the player sink
+			player.velocity.y = player.get_gravity().y * delta * player.gravity_scale
 #endregion
 
 func on_state_exit() -> void:

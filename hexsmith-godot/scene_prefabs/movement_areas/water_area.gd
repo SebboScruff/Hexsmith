@@ -19,19 +19,19 @@ extends Node2D
 # Into basic Swim State.
 func _on_water_surface_body_entered(body: Node2D) -> void:
 	if(body is Player):
-		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "swim")
-		body.state_machine_runner.current_state.max_height = water_max_height.global_position.y
+		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "swim")
+		body.movement_state_machine.current_state.max_height = water_max_height.global_position.y
 
 # In and out of Underwater State
 func _on_underwater_area_body_entered(body: Node2D) -> void:
 	if(body is Player):
-		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "underwater")
+		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "underwater")
 
 func _on_underwater_area_body_exited(body: Node2D) -> void:
 	if(body is Player):
-		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "swim")
-		body.state_machine_runner.current_state.max_height = water_max_height.global_position.y
+		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "swim")
+		body.movement_state_machine.current_state.max_height = water_max_height.global_position.y
 
 func _on_exit_zone_body_entered(body: Node2D) -> void:
 	if(body is Player):
-		body.state_machine_runner.change_state(body.state_machine_runner.current_state, "water exit")
+		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "water exit")

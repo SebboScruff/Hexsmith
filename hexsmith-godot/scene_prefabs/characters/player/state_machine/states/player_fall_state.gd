@@ -41,17 +41,15 @@ func on_state_physics_process(delta:float) -> void:
 	# 3 - Swim
 	elif(player.is_swimming):
 		State_Transition.emit(self, "swim")
-	# 4 - Spellcasting
-	check_spellcast_transitions() ## NOTE: Function Body in base class, player_state.gd
 #endregion
 
 #region PHYSICS BEHAVIOURS
-	h_dir = Input.get_axis("overworld_move_left", "overworld_move_right")
-	change_player_sprite_direction(h_dir)
-	
 	player._apply_gravity(delta)
-	player._apply_horizontal_input(delta, h_dir)
-	player.move_and_slide()
+	
+	if(player.accept_movement_input):
+		h_dir = Input.get_axis("overworld_move_left", "overworld_move_right")
+		change_player_sprite_direction(h_dir)
+		player._apply_horizontal_input(delta, h_dir)
 #endregion
 
 func on_state_exit() -> void:

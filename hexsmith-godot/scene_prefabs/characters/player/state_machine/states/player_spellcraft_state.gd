@@ -8,7 +8,6 @@ func _init() -> void:
 	self.state_id = 1
 
 func on_state_enter() -> void:
-	player.is_spellcrafting = true
 	player.can_cast = false
 	## Timescale to 0.1 so the game slows down while crafting.
 	Engine.time_scale = 0.1
@@ -68,9 +67,7 @@ func on_state_physics_process(delta:float) -> void:
 	
 	## And apply regular physics
 	player._apply_gravity(delta)
-	player.move_and_slide()
 
 func on_state_exit() -> void:
-	player.is_spellcrafting = false
 	hud_manager.change_active_menu(hud_manager.overworld_hud)
 	Engine.time_scale = 1.0

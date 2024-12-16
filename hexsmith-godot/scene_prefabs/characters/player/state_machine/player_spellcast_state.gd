@@ -19,13 +19,12 @@ var can_move:bool # whether or not the player can move
 
 func _init() -> void:
 	self.state_name = "SpellcastBase" # This is used as the dictionary Key
-	self.state_id = 13 # This state technically doesnt need an ID because the player is never going to be in it
+	self.state_id = 16 
 
 ## All behaviours that take place as the player enters this state go here,
 ## for example changing the HUD Style, setting bools, altering the game's Time Scale, or
 ## Removing Momentum.
 func on_state_enter() -> void:
-	print("Player entered %s State"%[state_name])
 	hud_manager.set_spell_slot_highlight(spell_slot_index, true)
 	# pass
 
@@ -44,17 +43,9 @@ func on_state_physics_process(delta:float) -> void:
 #endregion
 	
 #region PHYSICS BEHAVIOURS
-	# Apply movement if the spell type allows it
-	if(can_move):
-		h_dir = Input.get_axis("overworld_move_left", "overworld_move_right")
-		player._apply_horizontal_input(delta, h_dir)
 	
-	# Gravity and movement always applied
-	player._apply_gravity(delta)
-	player.move_and_slide()
 #endregion
 
 func on_state_exit() -> void:
-	print("Player exited %s State"%[state_name])
 	hud_manager.set_spell_slot_highlight(spell_slot_index, false)
 	# pass

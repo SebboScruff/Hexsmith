@@ -21,7 +21,7 @@ func on_state_enter() -> void:
 	super.on_state_enter()
 	# Precast for PRESS_AND_HOLD spells just sets them to be active.
 	player.precast_active_spell(spell_slot_index)
-	can_move = false
+	player.accept_movement_input = false
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
 func on_state_process(delta:float) -> void:
@@ -37,22 +37,22 @@ func on_state_physics_process(delta:float) -> void:
 		0:
 			if(Input.is_action_just_released("overworld_cast_spellslot1")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		1:
 			if(Input.is_action_just_released("overworld_cast_spellslot2")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		2:
 			if(Input.is_action_just_released("overworld_cast_spellslot3")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		3:
 			if(Input.is_action_just_released("overworld_cast_spellslot4")):
 				player.cast_active_spell(spell_slot_index)
-				player.state_machine_runner.reset_to_previous_state()
+				player.spellcast_state_machine.reset_to_previous_state()
 		_:
 			print("Invalid state index in Precast State!")
-			player.state_machine_runner.reset_to_idle()
+			player.spellcast_state_machine.reset_to_idle()
 #region STATE TRANSITIONS
 	
 #endregion
@@ -63,3 +63,4 @@ func on_state_physics_process(delta:float) -> void:
 
 func on_state_exit() -> void:
 	super.on_state_exit()
+	player.accept_movement_input = true

@@ -32,7 +32,7 @@ func on_state_physics_process(delta:float) -> void:
 		# When unpausing, rather than resetting immediately to idle,
 		# go back to whichever state the player was last in; removes the "stutter frame"
 		# if going e.g. pause -> idle -> fall
-		player.state_machine_runner.reset_to_previous_state()
+		player.movement_state_machine.reset_to_previous_state()
 
 func on_state_exit() -> void:
 	## NOTE: Resetting to overworld hud and standard timescale here because
