@@ -12,6 +12,7 @@ func on_state_enter() -> void:
 	## Timescale to 0.1 so the game slows down while crafting.
 	Engine.time_scale = 0.1
 	hud_manager.change_active_menu(hud_manager.spellcraft_hud)
+	player.spellcast_state_machine.change_state(player.spellcast_state_machine.current_state, "no cast")
 	#TODO Play Spellcrafting Animation
 
 func on_state_process(delta:float) -> void:
@@ -70,4 +71,5 @@ func on_state_physics_process(delta:float) -> void:
 
 func on_state_exit() -> void:
 	hud_manager.change_active_menu(hud_manager.overworld_hud)
+	player.spellcast_state_machine.change_state(player.spellcast_state_machine.current_state, "idle", 0.1)
 	Engine.time_scale = 1.0

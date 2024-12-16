@@ -16,6 +16,17 @@ config/features=PackedStringArray("4.3", "Forward Plus")
 run/max_fps=120
 config/icon="res://icon.svg"
 
+[file_customization]
+
+folder_colors={
+"res://scene_prefabs/characters/enemies/": "red",
+"res://scene_prefabs/characters/npcs/": "yellow",
+"res://scene_prefabs/characters/player/": "green",
+"res://scene_prefabs/characters/player/state_machine/states/movement/": "orange",
+"res://scene_prefabs/characters/player/state_machine/states/spellcasting/": "purple",
+"res://scene_prefabs/spell_objects/": "purple"
+}
+
 [global_group]
 
 Player=""

@@ -39,7 +39,7 @@ func _physics_process(delta: float) -> void:
 	if(current_state):
 		current_state.on_state_physics_process(delta)
 
-func change_state(_old_state:PlayerState, _new_state_name:String):
+func change_state(_old_state:PlayerState, _new_state_name:String, _delay_seconds:float = 0.0):
 	if(!states.keys().has(_new_state_name)):
 		print("No state with name %s found in States Dictionary!"%[_new_state_name])
 		return
@@ -49,6 +49,11 @@ func change_state(_old_state:PlayerState, _new_state_name:String):
 	if(_old_state == new_state):
 		print("Trying to change to current State!")
 		return
+	
+	## If a delay between state transitions was given, wait for that amount of
+	## time before proceeding.
+	if(_delay_seconds != 0.0):
+		await get_tree().create_timer(abs(_delay_seconds)).timeout
 	
 	if(current_state):
 		current_state.on_state_exit()

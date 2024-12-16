@@ -1,27 +1,28 @@
-[gd_scene load_steps=55 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=56 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
 [ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_underwater_state.gd" id="3_eykxq"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_idle_state.gd" id="3_pidp4"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_underwater_state.gd" id="3_eykxq"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_idle_state.gd" id="3_pidp4"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_spellcraft_state.gd" id="4_n1gi1"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_walk_state.gd" id="4_ow5mu"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_spellcraft_state.gd" id="4_n1gi1"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_walk_state.gd" id="4_ow5mu"]
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_pause_state.gd" id="5_xuwid"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_run_state.gd" id="8_228p4"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_jump_state.gd" id="9_lxw88"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_fall_state.gd" id="10_0g12v"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_climb_state.gd" id="11_hppqs"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_swim_state.gd" id="12_jc20l"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_water_exit_state.gd" id="13_5hxvw"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_precast_state.gd" id="15_70npk"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_channel_state.gd" id="16_qivuu"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/player_idlecast_state.gd" id="17_0goyt"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_pause_state.gd" id="5_xuwid"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_run_state.gd" id="8_228p4"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_jump_state.gd" id="9_lxw88"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_fall_state.gd" id="10_0g12v"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_climb_state.gd" id="11_hppqs"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_swim_state.gd" id="12_jc20l"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_water_exit_state.gd" id="13_5hxvw"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_precast_state.gd" id="15_70npk"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_channel_state.gd" id="16_qivuu"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_idlecast_state.gd" id="17_0goyt"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_no_cast_state.gd" id="18_0c5lk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0o7oo"]
 size = Vector2(10, 25)
@@ -435,7 +436,6 @@ unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
 debug_current_state = NodePath("../CurrentMovementState")
 debug_previous_state = NodePath("../PreviousMovementState")
-show_debug_info = true
 
 [node name="PlayerIdleState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("3_pidp4")
@@ -475,6 +475,7 @@ unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
 debug_current_state = NodePath("../CurrentCastState")
 debug_previous_state = NodePath("../PreviousCastState")
+show_debug_info = true
 
 [node name="PlayerIdleCastState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("17_0goyt")
@@ -484,6 +485,9 @@ script = ExtResource("15_70npk")
 
 [node name="PlayerChannelState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("16_qivuu")
+
+[node name="PlayerNoCastState" type="Node" parent="SpellcastStateMachine"]
+script = ExtResource("18_0c5lk")
 
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true

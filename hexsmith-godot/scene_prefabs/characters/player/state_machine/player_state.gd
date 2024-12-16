@@ -46,8 +46,8 @@ func check_spellcast_transitions():
 					State_Transition.emit(self, "precast")
 					player.spellcast_state_machine.current_state.spell_slot_index = 0
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## Maybe I need to move toggle behaviours here idk
-				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
 					State_Transition.emit(self, "channel")
 					player.spellcast_state_machine.current_state.spell_slot_index = 0
 	elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
@@ -57,8 +57,8 @@ func check_spellcast_transitions():
 					State_Transition.emit(self, "precast")
 					player.spellcast_state_machine.current_state.spell_slot_index = 1
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## Maybe I need to move toggle behaviours here idk
-				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
 					State_Transition.emit(self, "channel")
 					player.spellcast_state_machine.current_state.spell_slot_index = 1
 	elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
@@ -68,8 +68,8 @@ func check_spellcast_transitions():
 					State_Transition.emit(self, "precast")
 					player.spellcast_state_machine.current_state.spell_slot_index = 2
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## Maybe I need to move toggle behaviours here idk
-				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
 					State_Transition.emit(self, "channel")
 					player.spellcast_state_machine.current_state.spell_slot_index = 2
 	elif(Input.is_action_just_pressed("overworld_cast_spellslot4")):
@@ -79,8 +79,8 @@ func check_spellcast_transitions():
 					State_Transition.emit(self, "precast")
 					player.spellcast_state_machine.current_state.spell_slot_index = 3
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## Maybe I need to move toggle behaviours here idk
-				SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
 					State_Transition.emit(self, "channel")
 					player.spellcast_state_machine.current_state.spell_slot_index = 3
 

@@ -1,4 +1,4 @@
-## Storage script for every type of Spell Prefix, and their
+## Data Container class for every type of Spell Prefix, and their
 ## associated Mana Colour Combinations.
 
 ## All prefixes have support for their input colours as well as colourless mana,
@@ -19,6 +19,7 @@ var spell_icon_frame : CompressedTexture2D
 # var precast_particles : GPUParticles2D # TODO Fill in every prefix with a precast particle
 
 var colors : Array[Color]
+# TODO Eventually add other Shader Parameters like 'Jaggedness'
 # TODO var sound_effect_source
 
 # Specific Mana Quantities
@@ -36,8 +37,12 @@ var num_colorless_mana : int
 #########################################################
 
 # Universal getter for Mana Values as a compact float.
-# Values are in order Red (index 0), Blue, Green, White, Black, Colorless (index 5)
+# Compresses mana values into an Array and returns it.
+## NOTE:  Values are in order Red (index 0), Blue, Green, White, Black, Colorless (index 5)
 func get_mana_values() -> Array[float]:
-	var mana_values = [num_red_mana,num_blue_mana,num_green_mana,
+	var mana_values:Array[float] = [num_red_mana,num_blue_mana,num_green_mana,
 	num_white_mana,num_black_mana,num_colorless_mana]
 	return mana_values
+
+func get_colors() -> Array[Color]:
+	return colors

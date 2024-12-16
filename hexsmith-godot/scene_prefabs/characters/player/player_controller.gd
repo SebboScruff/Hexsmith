@@ -69,7 +69,6 @@ const hp_bar_path = "mana_hp_panelcontainer/HBoxContainer/hp_centercontainer"
 @onready var postcraft_cast_cd: Timer = $SpellcraftManager/spellcraft_cast_cd
 var can_cast:bool = true 
 
-var is_precasting:bool 
 #endregion
 
 #region Combat Parameters
@@ -86,7 +85,7 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 # that wants an inbuilt, controllable delay. For example, melee attacks and dying.
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-# Reference to the player's visual body
+# Reference to the player's visual body, for animation work and projectile instantiation
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
 @onready var cast_origin: Marker2D = $BodySprite/cast_origin # this is where spell projectiles originate from. Child of Body Sprite.
 
@@ -124,7 +123,7 @@ func _ready() -> void:
 	movement_state_machine.reset_to_idle()
 	spellcast_state_machine.reset_to_idle()
 	
-	is_precasting = false
+	## TODO Save/Load System to read in the player's active spells from save data.
 	active_spells = [null, null, null, null]
 	is_melee_ready = true
 	
@@ -140,6 +139,7 @@ func _ready() -> void:
 	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_black") as ManaValueTracker,
 	hud_manager.overworld_hud.get_node(mana_tracker_path+"/mana_tracker_colourless") as ManaValueTracker]
 	
+	
 	player_combat_entity.health_bar_visual = hud_manager.overworld_hud.get_node(hp_bar_path+"/hp_bar") as TextureProgressBar
 	player_combat_entity.update_health_visual()
 	
@@ -150,7 +150,6 @@ func _ready() -> void:
 # All Resource Management - Mana & Health Regeneration, Oxygen while underwater,
 # and other constant over-time effects like that will happen in here
 func _process(delta: float) -> void:
-#TODO Move to Swim State on_state_process()
 #region Oxygen Management
 	# TODO Eventually add a HasWaterbreathing bool. Blue-Mana Cloaks will give waterbreathing,
 	# as well as maybe some consumable items.
@@ -197,8 +196,10 @@ func _process(delta: float) -> void:
 @warning_ignore("unused_parameter")
 func _physics_process(delta: float) -> void:
 	# print("Angle to crosshair: %f"%[get_dir_to_crosshair()])
+	# TODO Check for Item Usage Inputs when I get round to implementing Items.
 	move_and_slide()
 
+#region Movement Functions
 ## NOTE: Extracted out into a function so that it can be called in State Behaviours
 func _apply_gravity(delta):
 	if not is_on_floor():
@@ -207,38 +208,35 @@ func _apply_gravity(delta):
 ## NOTE: Similar to gravity, these have been turned into a function to 
 ## allow for access within State Behaviours.
 ## move_and_slide() MUST be called within state physics updates. 
-@warning_ignore("unused_parameter")
-func _apply_horizontal_input(delta:float, _h_dir:float = 0):
+func _apply_horizontal_input(_delta:float, _h_dir:float = 0):
 	if(_h_dir != 0):
 		velocity.x = _h_dir * current_speed
 	else: # i.e. if h_dir == 0
 		velocity.x = move_toward(velocity.x, 0, current_speed)
 
-@warning_ignore("unused_parameter")
-func _apply_vertical_input(delta:float, _v_dir:float = 0) -> void:
+func _apply_vertical_input(_delta:float, _v_dir:float = 0) -> void:
 	if(_v_dir != 0):
 		velocity.y = _v_dir * current_speed
 	else:
 		velocity.y = move_toward(velocity.y, 0, current_speed)
+#endregion
 
+#region Spellcasting Functions
 # Allow the player to cast after exiting Spellcraft. Has a short delay to prevent autocasting.
 func _on_spellcraft_cast_cd_timeout() -> void:
 	can_cast = true
 
-# Nullcheck into external function call.
+## spell_index parameter determines which of the player's active spells is being cast.
+## should not ever be highter than active_spells.length
 func precast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
 	else:
-		# TODO Play a "start-up" particle system and animation.
-		# The animation will be tied to the player; the particles tied to the prefix.
-		is_precasting = true
-		active_spells[spell_index].on_precast_spell()
+		active_spells[spell_index].precast_spell()
 
-# Mana management and external function call.
+## As with precast_active_spell, the parameter here is the slot index and should be lower than
+## active_spells.length
 func cast_active_spell(spell_index:int):
-	# TODO Turn off precast particles here.
-	is_precasting = false
 	# Fail check 1: Player doesn't have a spell in that spell slot
 	if(active_spells[spell_index] == null):
 		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
@@ -257,13 +255,11 @@ func cast_active_spell(spell_index:int):
 		active_spells[spell_index].do_mana_cost()
 	
 	## All failchecks passed; now the spell can be cast.
-	# Call that spell's Cast function - specific spell behaviours
-	# are determined on a per-class basis
-	active_spells[spell_index].on_cast_spell()
+	active_spells[spell_index].cast_spell()
 	
 	# If the casted spell has a cooldown, apply it after casting
 	# by adding a new cooldown timer to the list.
-	# NOTE: Timers are initialised with the same ID as the Suffix so the 
+	# Timers are initialised with the same ID as the Suffix so the 
 	# Cooldown Progression algorithm in _ready() can work correctly.
 	if(active_spells[spell_index].suffix.cast_type == SpellSuffix.CAST_TYPES.SINGLE_CAST):
 		var new_cd_timer:SpellCooldownTimer
@@ -271,10 +267,10 @@ func cast_active_spell(spell_index:int):
 		new_cd_timer = SpellCooldownTimer.create_new_cooldown_timer(casted_suffix.suffix_id, casted_suffix.cooldown_max)
 		
 		spell_cooldowns_parent.add_child(new_cd_timer)
+#endregion
 
 # TODO have an int parameter for tracking melee combos.
 func basic_melee():
-	is_precasting = false
 	#print("TODO Basic Melee")
 	animation_player.play("melee_attack_1")
 	is_melee_ready = false
@@ -327,10 +323,10 @@ func get_dir_to_crosshair() -> float:
 func active_spell_management(_delta_time:float) -> void:
 	for n in active_spells.size():
 		var spell := active_spells[n] as Spell
-		# If that spellslot is empty, go to next one immediately.
+		# If that spellslot is empty, go next to avoid crashes.
 		if(spell == null):
 			continue
-		# Get the corresponding HUD icon - it's needed regardless
+		# Get the corresponding HUD icon - it's needed regardless of spell type
 		var spell_icon := hud_manager.spell_icons[n] as SpellIcon
 		# TODO Set up a format_spell_icon() function in spell_icon.gd
 		# which enables either the "is active" border or the cooldown indicator
@@ -359,16 +355,12 @@ func active_spell_management(_delta_time:float) -> void:
 		## spell.is_on_cooldown = false will be maintained.
 			continue # onto the next spell in the list.
 		
-		## Getting here means the spell is a Toggle.
+		## Getting here means the spell is a Toggle or Channel.
 		## So we need to manage passive effects and mana costs.
 		else: 
-			# Disable the spell if the player has run out of mana to support it.
-			if(spell.suffix.is_active && spell.check_mana_cost() == false):
-				spell.suffix.set_active(false)
-			
 			# TODO Activate or deactive the "is active" indicator on the HUD Icon
-			spell_icon.update_cd_visual(1, 0)
-			if(spell.suffix.is_active):
+			spell_icon.update_cd_visual(1, 0) # hacky way to remove the cooldown indicator
+			if(spell.suffix.active_state == true):
 				# This function manages both behaviours and mana costs
 				spell.do_passive_effect(_delta_time)
 				print("Doing Effect for %s"%[spell.get_spell_name()]) 

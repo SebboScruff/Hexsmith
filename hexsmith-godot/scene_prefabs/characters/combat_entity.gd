@@ -122,7 +122,13 @@ func take_damage(_amount:float, _type:DAMAGE_TYPES):
 # Nullcheck then UI update,
 # since not every entity will have a visual health bar
 func update_health_visual() -> void:
-	if(health_bar_visual != null):
+	if(get_parent() is Player):
+		## TODO Pip-based HUD Update. Pseudocode is in Obsidian for now, gonna
+		## implement this soon.
+		pass
+	## Bosses will have big Dark-Souls-esque health bars, probably 
+	## along the bottom of the screen.
+	elif(health_bar_visual != null):
 		health_bar_visual.max_value = max_health
 		health_bar_visual.value = curr_health
 

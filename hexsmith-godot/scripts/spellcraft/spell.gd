@@ -1,3 +1,6 @@
+## A Container Class which combines a Prefix and Suffix into a single spell after Spellcrafting.
+## Has a variety of functions that are accessed directly by the player, and are used to pass
+## Prefix Data into Suffix Behaviours.
 class_name Spell extends Node
 
 var player: Player
@@ -9,8 +12,11 @@ var spell_name:String
 # mana costs respectively.
 # NOTE: Must be kept consistent with the player's Mana Value Tracker 
 var mana_cost:Array[float]
-var is_on_cooldown:bool = false
 
+# NOTE: Largely irrelevant for all non-SINGLE_CAST spells 
+var is_on_cooldown := false
+
+#region Set-Up Functions
 # Constructor to assemble the spell's basic definition and get an access point
 # to the player's controller.
 func _init(_player:Player, _prefix:SpellPrefix, _suffix:SpellSuffix):
@@ -20,14 +26,13 @@ func _init(_player:Player, _prefix:SpellPrefix, _suffix:SpellSuffix):
 	player = _player # Player reference so that the Suffix can determine cast origin & direction, or apply the correct effects.
 	suffix.player = _player # As above.
 	
-	suffix.get_prefix_colors(prefix.colors) # Access the prefix's visual colors so shaders can be set up correctly
-	suffix.get_prefix_mana_values(prefix.get_mana_values())
+	## Pass the colors (TODO and sounds) straight into the Suffix as part of Spell Initialisation.
+	suffix.colors_from_prefix = prefix.colors
 	
 	# After spell definition, determine both its name and mana cost(s)
 	determine_spell_name()
 	mana_cost = calculate_mana_cost()
 
-#region Spell Setup Functions
 func determine_spell_name():
 	spell_name = prefix.prefix_name + " " + suffix.suffix_name
 	## TODO There is an edge-case where if the suffix is Summon Familiar.
@@ -40,68 +45,74 @@ func calculate_mana_cost() -> Array[float]:
 	# Add mana costs based on A) Prefix Mana Input and B) Suffix basic cost.
 	# This means that complex spells can have different mana costs even if their names are the same,
 	# i.e. RRB Steam Spells are different to RBB (or RBC).
-	# TODO There's definitely a more efficient way to do this
-	costs[0] = suffix.base_mana_cost * prefix.num_red_mana
-	costs[1] = suffix.base_mana_cost * prefix.num_blue_mana
-	costs[2] = suffix.base_mana_cost * prefix.num_green_mana
-	costs[3] = suffix.base_mana_cost * prefix.num_white_mana
-	costs[4] = suffix.base_mana_cost * prefix.num_black_mana
-	costs[5] = suffix.base_mana_cost * prefix.num_colorless_mana
-	
+	for i in 6:
+		costs[i] = suffix.base_mana_cost * prefix.get_mana_values()[i]
+		
 	return costs
 #endregion
 
 #region Spellcasting and Spell State Management
-
-# Behaviours for SINGLE_CAST spells between key-down and key-up. Also sets
-# PRESS_AND_HOLD spells to be active
-func on_precast_spell():
-	suffix.precast()
-
-# Either cast the spell if SINGLE_CAST, switch value of is_active if TOGGLE, or
-# deactivate PRESS_AND_HOLD spells.
-func on_cast_spell():
-	# Actual behaviour here determined by the spell cast type. This behavioural split has to 
-	# happen here because the player just activates this generic function from their input hotkey.
+# Either start precast behaviours if SINGLE_CAST, or activate spell effects
+# if CHANNEL. No effect for TOGGLE.
+func precast_spell():
 	match(suffix.cast_type):
-		# "One-and-done" spells require colour input here to determine their 
-		# specific numbers, and cannot be cast if on cooldown.
 		SpellSuffix.CAST_TYPES.SINGLE_CAST:
-			if(!is_on_cooldown):
-				suffix.cast(prefix.num_red_mana, prefix.num_blue_mana, 
-				prefix.num_green_mana, prefix.num_white_mana, 
-				prefix.num_black_mana, prefix.num_colorless_mana)
-			else:
-				print("%s Spells are on Cooldown!")
-				return
-		
-		# NOTE: Toggles have their numbers passed into suffix.do_effect. Subject to
-		# change depending on how tedious it gets.
+			suffix.on_precast()
+			
 		SpellSuffix.CAST_TYPES.TOGGLE:
-			# Need to track what state this spell was in originally, so we
-			# know where it should end up after this toggle takes place.
-			var original_state := suffix.is_active
-			# Turn off every Toggled Spell with the same suffix as this spell, then
-			# set the value for this spell accordingly
-			for s in player.active_spells:
-				if(s == null || s.suffix.cast_type != SpellSuffix.CAST_TYPES.TOGGLE):
-					continue
-				if(s.get_suffix_id() == suffix.suffix_id):
-					s.suffix.set_active(false)
-					print("Toggled %s off"%[s.get_spell_name()])
-			if(original_state == false):
-				suffix.set_active(true)
-				print("Toggled %s on"%[get_spell_name()])
-		SpellSuffix.CAST_TYPES.PRESS_AND_HOLD:
-			suffix.set_active(false)
+			print("No Precast Behaviours for Toggles Spells")
+			pass
+			
+		SpellSuffix.CAST_TYPES.CHANNEL:
+			suffix.set_active_state(true, prefix.get_mana_values())
+			
+		_:
+			# This should never be reached but it's included as a 100% failsafe
+			print("Invalid Cast Type on Precast Call!")
+			return
 
-# Create the a continual effect within the world. TOGGLE and PRESS_AND_HOLD spells
+# Either cast the spell if SINGLE_CAST, flip the value of active_state if TOGGLE, or
+# deactivate if CHANNEL.
+func cast_spell():
+	match(suffix.cast_type):
+		## All failchecks are done via player_controller.cast_active_spell()
+		## so we can just go straight into spellcasting here.
+		SpellSuffix.CAST_TYPES.SINGLE_CAST:
+			suffix.on_cast(prefix.get_mana_values())
+		
+		## Turn off all Toggled Spells of the same type, then toggle this spell on.
+		SpellSuffix.CAST_TYPES.TOGGLE:
+			## If the spell was already on, it can just be turned off instantly.
+			if(suffix.active_state == true):
+				suffix.set_active_state(false, prefix.get_mana_values())
+				return
+			## If the spell is being turned on, we have to turn off every other
+			## spell of that type before turning this one on.
+			else: # i.e. spell is not currently active
+				for s in player.active_spells:
+					if(s == null || s.suffix.cast_type != SpellSuffix.CAST_TYPES.TOGGLE):
+						continue
+					if(s.get_suffix_id() == suffix.suffix_id):
+						s.suffix.set_active_state(false, prefix.get_mana_values())
+						print("Toggled %s off"%[s.get_spell_name()])
+				suffix.set_active_state(true, prefix.get_mana_values())
+				print("Toggled %s on"%[get_spell_name()])
+		
+		## Deactivate Channeled Spells on Key Up. Gives the effect of being a Press
+		## and Hold activation system.
+		SpellSuffix.CAST_TYPES.CHANNEL:
+			suffix.set_active_state(false, prefix.get_mana_values())
+		
+		_:
+			print("Invalid Cast Type in Cast Call!")
+
+# Create the a continual effect within the world. TOGGLE and CHANNEL spells
 # use this for their actual in-game effect rather than on_cast_spell().
 func do_passive_effect(_delta:float):
-	suffix.do_effect(prefix.num_red_mana, prefix.num_blue_mana, prefix.num_green_mana, 
-	prefix.num_white_mana, prefix.num_black_mana, prefix.num_colorless_mana)
+	suffix.on_passive_effect(prefix.get_mana_values())
 	
-	do_mana_cost(_delta)
+	if(suffix.is_mana_cost_active):
+		do_mana_cost(_delta)
 
 #endregion
 
@@ -110,7 +121,6 @@ func do_passive_effect(_delta:float):
 # into a single function to reduce the number of iterative loops per frame.
 ## Check whether the player has enough mana to cast a spell or keep it active.
 func check_mana_cost() -> bool:
-	
 	for i in 6:
 		var color_mana_cost := mana_cost[i]
 		var color_mana_bar := player.mana_value_trackers[i] as ManaValueTracker
@@ -119,6 +129,7 @@ func check_mana_cost() -> bool:
 			# or continue having this spell active.
 			return false 
 	
+	# Gone through every mana bar without returning false, so we're good to go
 	return true
 
 ## Remove the appropriate amount of mana from each of the player's mana bars.
@@ -133,12 +144,14 @@ func do_mana_cost(delta:=1.0):
 
 #endregion
 
-#region Assorted Getters
+#region Assorted Quick Getters
 func get_spell_name() -> String:
 	return spell_name
 
-func get_mana_cost() -> float:
-	return suffix.mana_cost
+func get_mana_color_cost(_cost_index:int) -> float:
+	return mana_cost[_cost_index]
+func get_mana_cost() -> Array[float]:
+	return mana_cost
 
 func get_prefix_name() -> String:
 	return self.prefix.prefix_name

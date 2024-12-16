@@ -1,3 +1,10 @@
+## The Bolt Suffix fires a projectile which carries both elemental damage and a varied
+## secondary effect depending on Mana Input:
+## Red (Blazing Bolt): Projectile is a Fire System Entity, carrying the Igniter tag
+## Blue (Aqua Bolt): Projectile is a Fire System Entity, carrying the Extinguisher tag
+## Green (Phyto Bolt): Projectile is a Fire System Entity, carrying the Flammable tag
+## White (Lumina Bolt): Projectile carries a point light that pierces dark caverns
+## Black (Noctis Bolt): Projectile does not collide with terrain
 class_name BoltSuffix extends SpellSuffix
 
 const PROJECTILE_PREFAB = preload("res://scene_prefabs/spell_objects/projectiles/bolt_projectile.tscn")
@@ -7,29 +14,32 @@ func _init() -> void:
 	suffix_id = 0
 	
 	cast_type = CAST_TYPES.SINGLE_CAST
-	is_active = true
-	target_type = TARGET_TYPES.RAW_DIRECTION
+	active_state = true
 	base_mana_cost = 10
 	
 	spell_icon = preload(icon_root_path + "bolt_icon.png")
 	
 	cooldown_max = 2.0
 
-func calc_mana_cost():
-	print("NOTE: Using Mana Calc from inherited class.")
+## Overridden Function from base class spell_suffix.gd
+func on_precast():
+	## NOTE: Player Controller changes are all done via the player's State Machines.
+	# TODO Instantiate Precast Particles
+	# TODO Visualise Mana Cost on relevant Mana Bar(s)
+	pass
 
-func cast(num_red:int, num_blue:int, 
-num_green:int, num_white:int, num_black:int, 
-num_colourless:int) -> void:
-	# Spell Functionality here:
-	# Instantiate Bolt prefab with correct shader and
-	# colour bonuses.
+## Overridden Function from base class spell_suffix.gd
+func on_cast(_mana_values:Array[float]) -> void:
+	# Instantiate new Bolt Projectile, and assign relevant values to it
+	# then send it on its way
 	var new_projectile = PROJECTILE_PREFAB.instantiate()
+	
 	new_projectile.position = player.cast_origin.global_position
 	new_projectile.rotation = player.get_dir_to_crosshair()
+	
+	## NOTE: Function Bodies in bolt_projectile.gd
 	new_projectile.initialise_shader(self.colors_from_prefix)
-	#print("Initialising Bolt with %d Red/ %d Blue/ %d Green/ %d White/ %d Black/ %d CL"%[num_red, num_blue, num_green, num_white, num_black, num_colourless])
-	new_projectile.initialise_prefix_effects(num_red, num_blue, num_green, num_white, num_black, num_colourless)
+	new_projectile.initialise_prefix_effects(_mana_values[0], _mana_values[1], 
+	_mana_values[2], _mana_values[3], _mana_values[4], _mana_values[5])
 	
 	player.add_sibling(new_projectile)
-	# TODO Start Cooldown.

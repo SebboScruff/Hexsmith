@@ -1,4 +1,4 @@
-## The Channel State is activated when the player casts a spell of Cast Type: PRESS_AND_HOLD.
+## The Channel State is activated when the player casts a spell of Cast Type: CHANNEL.
 ## It 
 
 ## NOTE:
@@ -19,7 +19,7 @@ func _init() -> void:
 ## Removing Momentum.
 func on_state_enter() -> void:
 	super.on_state_enter()
-	# Precast for PRESS_AND_HOLD spells just sets them to be active.
+	# Precast for CHANNEL spells just sets them to be active.
 	player.precast_active_spell(spell_slot_index)
 	player.accept_movement_input = false
 
@@ -32,7 +32,7 @@ func on_state_process(delta:float) -> void:
 func on_state_physics_process(delta:float) -> void:
 	# This is so that all States can transition into Pause, Spellcraft, or Cutscene.
 	super.on_state_physics_process(delta)
-	## NOTE: Cast Behaviours for PRESS_AND_HOLD spells set them to be inactive
+	## NOTE: Cast Behaviours for CHANNEL spells set them to be inactive
 	match(spell_slot_index):
 		0:
 			if(Input.is_action_just_released("overworld_cast_spellslot1")):
