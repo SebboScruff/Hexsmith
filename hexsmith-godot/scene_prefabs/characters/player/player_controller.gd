@@ -15,19 +15,9 @@ var is_paused:= false # Turned on when in System Pause
 var is_in_loadout:=false # Turned on when in Loadout/Inventory Pause
 var is_climbing := false # Turned on when within a climbable zone
 var is_swimming := false # Turns on when within a swimming zone
-var can_surface := false # Subset of swimming zones for when you can jump out
+@export var can_exit_water := false # Subset of swimming zones for when you can jump out
 
 #region Movement Parameters
-# Used for altering the player's fundamental movement behaviours.
-enum MOVEMENT_STYLES{ 
-	NORMAL,		# default Movement State
-	CUTSCENE,	# Movement disabled (reading a sign, talking to an NPC, etc.)
-	SWIMMING,	# Free vertical movement, reduced gravity. Underwater. Toggled with Zones. Priority over Climbing.
-	CLIMBING,	# Free vertical movement, no gravity. Ladders, rugged walls, etc. Toggled with Zones.
-	FLYING		# Free vertical movement, no gravity. Flight Spell. Movement costs Mana.
-}
-var current_movement_style:MOVEMENT_STYLES
-
 # Different Speed declarations
 const BASE_SPEED = 150.0 # Standard Walking
 const RUN_SPEED = 200.0 # Sprinting (Shift Held)
@@ -231,16 +221,6 @@ func _apply_vertical_input(delta:float, _v_dir:float = 0) -> void:
 	else:
 		velocity.y = move_toward(velocity.y, 0, current_speed)
 
-# Simple State Switch
-func set_movement_style(new_style:MOVEMENT_STYLES):
-	
-	current_movement_style = new_style
-	
-	# Kill all current velocity-altering effects
-	# so gravity doesn't continue to affect the player's velocity during state changes
-	# Basically stops the player dropping like a rock if they switch to swimming or climbing.
-	velocity = Vector2.ZERO
-
 # Allow the player to cast after exiting Spellcraft. Has a short delay to prevent autocasting.
 func _on_spellcraft_cast_cd_timeout() -> void:
 	can_cast = true
@@ -253,7 +233,7 @@ func precast_active_spell(spell_index:int):
 		# TODO Play a "start-up" particle system and animation.
 		# The animation will be tied to the player; the particles tied to the prefix.
 		is_precasting = true
-		active_spells[spell_index].precast_spell()
+		active_spells[spell_index].on_precast_spell()
 
 # Mana management and external function call.
 func cast_active_spell(spell_index:int):
@@ -279,7 +259,7 @@ func cast_active_spell(spell_index:int):
 	## All failchecks passed; now the spell can be cast.
 	# Call that spell's Cast function - specific spell behaviours
 	# are determined on a per-class basis
-	active_spells[spell_index].cast_spell()
+	active_spells[spell_index].on_cast_spell()
 	
 	# If the casted spell has a cooldown, apply it after casting
 	# by adding a new cooldown timer to the list.

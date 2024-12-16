@@ -16,13 +16,17 @@ extends Node2D
 
 @onready var water_max_height: Marker2D = $water_max_height
 
-# Into basic Swim State.
+#region Surface Area Collision Events
 func _on_water_surface_body_entered(body: Node2D) -> void:
 	if(body is Player):
 		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "swim")
 		body.movement_state_machine.current_state.max_height = water_max_height.global_position.y
 
-# In and out of Underwater State
+func _on_water_surface_body_exited(body: Node2D) -> void:
+	if(body is Player && !body.is_underwater):
+		body.movement_state_machine.reset_to_idle()
+#endregion
+#region Underwater Area Collision Events
 func _on_underwater_area_body_entered(body: Node2D) -> void:
 	if(body is Player):
 		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "underwater")
@@ -31,7 +35,13 @@ func _on_underwater_area_body_exited(body: Node2D) -> void:
 	if(body is Player):
 		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "swim")
 		body.movement_state_machine.current_state.max_height = water_max_height.global_position.y
-
+#endregion
+#region Exit Area Collision Events 
 func _on_exit_zone_body_entered(body: Node2D) -> void:
 	if(body is Player):
-		body.movement_state_machine.change_state(body.movement_state_machine.current_state, "water exit")
+		body.can_exit_water = true
+
+func _on_exit_zone_body_exited(body: Node2D) -> void:
+	if(body is Player):
+		body.can_exit_water = false
+#endregion

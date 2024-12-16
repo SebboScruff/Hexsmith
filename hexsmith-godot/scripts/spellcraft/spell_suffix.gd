@@ -39,6 +39,7 @@ var cooldown_max: float
 # Pass in stuff from Prefix, for use in things like particle/ projectile instantiation
 # and Shader Initialisation.
 var colors_from_prefix:Array[Color]
+var prefix_mana_values:Array[float]
 
 # TODO Pass in a "Damage Multiplier Matrix" from the Prefix. Each Prefix wants to have
 # a different set of effectivenesses (e.g. Red resisted by Blue; Red-White strong against Blue)
@@ -74,14 +75,28 @@ num_green:int, num_white:int, num_black:int,
 num_colourless:int) -> void:
 	print("Casted a %s Spell. No cast behaviour implemented in inherited class!"%[suffix_name])
 
-## This must be overridden along with do_effect() into Toggled Suffixes.
+## This must be overridden along with do_effect() into TOGGLE and PRESS_AND_HOLD Suffixes.
 ## Use this instead of cast() so you dont have to pass a bunch of meaningless 
 ## Mana Data
-## May be able to utilise this for some cool bosses as well (they could break a spell slot temporarily)
+## May be able to utilise this for some cool bosses as well.
+## for example, they could break a spell slot temporarily
 func set_active(new_state:bool):
 	is_active = new_state
+	if(is_active == true):
+		on_toggle_on(prefix_mana_values)
+	else: # is active = false
+		on_toggle_off(prefix_mana_values)
 
-## This must be overridden in all Toggled suffixes.
+## Any special effects that happen when the spell is activated go here. For example,
+## many Strider spells directly affect the player body in a number of ways when activated.
+func on_toggle_on(mana_values:Array[float]) -> void:
+	pass
+
+## For removing any special effects that happened in on_toggle_on()
+func on_toggle_off(mana_values:Array[float]) -> void:
+	pass
+
+## This must be overridden in all TOGGLE and PRESS_AND_HOLD suffixes.
 ## As long as isActive is true, this will take place.
 ## Requires a Delta-Time pass-in to deal with any over-time effects like Mana Costs.
 @warning_ignore("unused_parameter")
@@ -90,5 +105,9 @@ num_green:int, num_white:int, num_black:int,
 num_colourless:int):
 	print("A %s Spell is currently active. No effect implemented yet."%[suffix_name])
 
+## Grab important data from the Prefixes.
 func get_prefix_colors(_colors:Array[Color]) -> void:
 	colors_from_prefix = _colors
+	
+func get_prefix_mana_values(_values:Array[float]) -> void:
+	prefix_mana_values = _values

@@ -34,3 +34,10 @@ var num_colorless_mana : int
 ## Can be found in scripts/spellcraft/spell_prefixes/  ##
 ## May be able to refactor and clean up a little bit   ##
 #########################################################
+
+# Universal getter for Mana Values as a compact float.
+# Values are in order Red (index 0), Blue, Green, White, Black, Colorless (index 5)
+func get_mana_values() -> Array[float]:
+	var mana_values = [num_red_mana,num_blue_mana,num_green_mana,
+	num_white_mana,num_black_mana,num_colorless_mana]
+	return mana_values

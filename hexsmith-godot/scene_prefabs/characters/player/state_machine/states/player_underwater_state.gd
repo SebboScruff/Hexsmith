@@ -8,9 +8,7 @@
 ## Activate movement per frame with player._apply_gravity and player._apply_movement()
 
 class_name PlayerUnderwaterState
-extends PlayerState
-
-var movement_dir:Vector2
+extends PlayerSwimState
 
 func _init() -> void:
 	self.state_name = "Underwater" # This is used as the dictionary Key
@@ -21,6 +19,7 @@ func _init() -> void:
 ## Removing Momentum.
 func on_state_enter() -> void:
 	# Activate oxygen reduction in the player resource management processing
+	super.on_state_enter()
 	player.is_underwater = true
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
@@ -33,28 +32,14 @@ func on_state_physics_process(delta:float) -> void:
 	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
 	super.on_state_physics_process(delta)
 #region STATE TRANSITIONS
-	## NOTE: As with Swim State, transitions in and out of Underwater are dealt 
-	## with via collision detection in water_area.gd.
+	## NOTE: As with Swim State, state transitions are dealt with via collision
+	## detection in water_area.gd
 #endregion
 
 #region PHYSICS BEHAVIOURS
-	movement_dir.x = Input.get_axis("overworld_move_left", "overworld_move_right")
-	change_player_sprite_direction(movement_dir.x)
-	
-	movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
-	if(movement_dir.y != 0):
-		# Cancel out gravity and replace with vertical swim speed
-		player.velocity -= player.get_gravity() * delta * player.gravity_scale
-		player._apply_horizontal_input(delta, movement_dir.x)
-		player._apply_vertical_input(delta, movement_dir.y)
-		player.move_and_slide()
-	else:
-		# Apply the (weakened) gravity to make the player sink
-		player.velocity.y = player.get_gravity().y * delta * player.gravity_scale
-		player._apply_horizontal_input(delta, movement_dir.x)
-		player.move_and_slide()
+	## NOTE: Inherits from Swim State, and uses its physics process behaviours.
 #endregion
 
 func on_state_exit() -> void:
-	print("Player exited %s State"%[state_name])
+	super.on_state_exit()
 	player.is_underwater = false

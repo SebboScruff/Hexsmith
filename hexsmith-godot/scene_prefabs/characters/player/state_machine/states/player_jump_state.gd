@@ -24,7 +24,7 @@ func on_state_enter() -> void:
 	## NOTE: There is a floor check here in case the player returns to jump as a previous state.
 	## This stops weird edge cases like jump -> pause -> unpause -> automatically jump again
 	## aka The Sonic Frontiers Bug
-	if(player.is_on_floor()):
+	if(player.is_on_floor() || player.can_exit_water):
 		player.body_sprite.play("jump_start")
 		player.velocity.y = player.JUMP_VELOCITY
 
@@ -39,7 +39,7 @@ func on_state_physics_process(delta:float) -> void:
 	super.on_state_physics_process(delta)
 #region STATE TRANSITIONS
 	# Fall if moving downwards
-	if(!player.is_on_floor() && player.velocity.y > 0):
+	if(!player.is_on_floor() && player.can_exit_water && player.velocity.y > 0):
 		State_Transition.emit(self, "fall")
 	# If the player somehow jumps directly up onto a floor, go straight to idle
 	elif(player.is_on_floor()):

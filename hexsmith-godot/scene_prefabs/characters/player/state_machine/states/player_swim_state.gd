@@ -39,6 +39,10 @@ func on_state_physics_process(delta:float) -> void:
 #region STATE TRANSITIONS
 	## NOTE: State Transitions out of Swim State are done via collision
 	## detection in water_area.gd
+	if(player.accept_movement_input && Input.is_action_just_pressed("overworld_jump")):
+		State_Transition.emit(self, "jump")
+	if(player.position.y < max_height):
+		State_Transition.emit(self, "idle")
 #endregion
 #region PHYSICS BEHAVIOURS
 	if(player.accept_movement_input):
