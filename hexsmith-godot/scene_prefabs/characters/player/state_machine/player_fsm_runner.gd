@@ -12,6 +12,8 @@ var states = {} #NOTE: String Names as keys, State Classes as values.
 
 # Track current state to determine runtime behaviours
 var current_state:PlayerState = null
+var current_index:int = 0 # Used in Spellcasting State Machine to monitor Spell Slot Index. Unused in other machine thus far
+
 # Track previous state so that the runner doesn't necessarily have to default to Idle
 # e.g. after unpausing, we can return to whichever state the player was already in before pausing
 var previous_state:PlayerState = null

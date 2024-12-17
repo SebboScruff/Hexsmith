@@ -25,15 +25,7 @@ func on_state_process(delta:float) -> void:
 ## If the state has processes that need stable update rate, like
 ## Input processing or movement, put them in here.
 func on_state_physics_process(delta:float) -> void:
-	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
-	super.on_state_physics_process(delta)
-#region STATE TRANSITIONS
-	
-#endregion
-
-#region PHYSICS BEHAVIOURS
-	
-#endregion
+	pass
 
 func on_state_exit() -> void:
 	pass

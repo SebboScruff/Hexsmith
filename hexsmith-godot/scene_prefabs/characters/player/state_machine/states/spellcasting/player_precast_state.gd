@@ -20,8 +20,8 @@ func _init() -> void:
 ## Removing Momentum.
 func on_state_enter() -> void:
 	super.on_state_enter()
-	player.precast_active_spell(spell_slot_index)
-	can_move = true
+	player.precast_active_spell(player.spellcast_state_machine.current_index)
+	hud_manager.spell_icons[player.spellcast_state_machine.current_index].set_highlight_state(true)
 	# TODO Small-duration time slow for JUICE and easier aiming
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
@@ -31,26 +31,24 @@ func on_state_process(delta:float) -> void:
 ## If the state has processes that need stable update rate, like
 ## Input processing or movement, put them in here.
 func on_state_physics_process(delta:float) -> void:
-	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
-	super.on_state_physics_process(delta)
 #region STATE TRANSITIONS
-	match(spell_slot_index):
+	match(player.spellcast_state_machine.current_index):
 		0:
-			if(Input.is_action_just_released("overworld_cast_spellslot1")):
-				player.cast_active_spell(spell_slot_index)
-				player.spellcast_state_machine.reset_to_previous_state()
+			if(Input.is_action_just_released("overworld_cast_spellslot0")):
+				player.cast_active_spell(0)
+				player.spellcast_state_machine.reset_to_idle()
 		1:
-			if(Input.is_action_just_released("overworld_cast_spellslot2")):
-				player.cast_active_spell(spell_slot_index)
-				player.spellcast_state_machine.reset_to_previous_state()
+			if(Input.is_action_just_released("overworld_cast_spellslot1")):
+				player.cast_active_spell(1)
+				player.spellcast_state_machine.reset_to_idle()
 		2:
-			if(Input.is_action_just_released("overworld_cast_spellslot3")):
-				player.cast_active_spell(spell_slot_index)
-				player.spellcast_state_machine.reset_to_previous_state()
+			if(Input.is_action_just_released("overworld_cast_spellslot2")):
+				player.cast_active_spell(2)
+				player.spellcast_state_machine.reset_to_idle()
 		3:
-			if(Input.is_action_just_released("overworld_cast_spellslot4")):
-				player.cast_active_spell(spell_slot_index)
-				player.spellcast_state_machine.reset_to_previous_state()
+			if(Input.is_action_just_released("overworld_cast_spellslot3")):
+				player.cast_active_spell(3)
+				player.spellcast_state_machine.reset_to_idle()
 		_:
 			print("Invalid state index in Precast State!")
 			player.spellcast_state_machine.reset_to_idle()
@@ -66,3 +64,4 @@ func on_state_physics_process(delta:float) -> void:
 
 func on_state_exit() -> void:
 	super.on_state_exit()
+	hud_manager.spell_icons[player.spellcast_state_machine.current_index].set_highlight_state(false)

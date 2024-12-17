@@ -26,16 +26,63 @@ func on_state_process(delta:float) -> void:
 ## If the state has processes that need stable update rate, like
 ## Input processing or movement, put them in here.
 func on_state_physics_process(delta:float) -> void:
-	pass
 #region STATE TRANSITIONS
-	# Function body in player_state.gd
 	check_spellcast_transitions()
 #endregion
 
 #region PHYSICS BEHAVIOURS
-	
+	# No Physics behaviours for Spellcast Idle
 #endregion
 
 func on_state_exit() -> void:
 	## No exit behaviours for Spellcast Idle.
 	pass
+	
+func check_spellcast_transitions():
+	if(Input.is_action_just_pressed("overworld_cast_spellslot0")):
+		if(player.active_spells[0] != null):
+			match(player.active_spells[0].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					player.spellcast_state_machine.current_index = 0
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
+					player.spellcast_state_machine.current_index = 0
+					State_Transition.emit(self, "channel")
+		
+	elif(Input.is_action_just_pressed("overworld_cast_spellslot1")):
+		if(player.active_spells[1] != null):
+			match(player.active_spells[1].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					player.spellcast_state_machine.current_index = 1
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
+					player.spellcast_state_machine.current_index = 1
+					State_Transition.emit(self, "channel")
+		
+	elif(Input.is_action_just_pressed("overworld_cast_spellslot2")):
+		if(player.active_spells[2] != null):
+			match(player.active_spells[2].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					player.spellcast_state_machine.current_index = 2
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
+					player.spellcast_state_machine.current_index = 2
+					State_Transition.emit(self, "channel")
+		
+	elif(Input.is_action_just_pressed("overworld_cast_spellslot3")):
+		if(player.active_spells[3] != null):
+			match(player.active_spells[3].get_cast_type()):
+				SpellSuffix.CAST_TYPES.SINGLE_CAST:
+					player.spellcast_state_machine.current_index = 3
+					State_Transition.emit(self, "precast")
+				SpellSuffix.CAST_TYPES.TOGGLE:
+					pass ## No state change needed if toggling a spell
+				SpellSuffix.CAST_TYPES.CHANNEL:
+					player.spellcast_state_machine.current_index = 3
+					State_Transition.emit(self, "channel")

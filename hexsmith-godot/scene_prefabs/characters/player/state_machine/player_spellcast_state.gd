@@ -10,12 +10,9 @@
 class_name PlayerSpellcastState
 extends PlayerState
 
-var spell_slot_index:int  # which spell is being casted
-
 var cast_direction:float # angle between player and crosshair
 
 var h_dir:float # allow for movement input
-var can_move:bool # whether or not the player can move
 
 func _init() -> void:
 	self.state_name = "SpellcastBase" # This is used as the dictionary Key
@@ -25,7 +22,7 @@ func _init() -> void:
 ## for example changing the HUD Style, setting bools, altering the game's Time Scale, or
 ## Removing Momentum.
 func on_state_enter() -> void:
-	hud_manager.set_spell_slot_highlight(spell_slot_index, true)
+	hud_manager.set_spell_slot_highlight(player.spellcast_state_machine.current_index, true)
 	# pass
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
@@ -36,16 +33,8 @@ func on_state_process(delta:float) -> void:
 ## If the state has processes that need stable update rate, like
 ## Input processing or movement, put them in here.
 func on_state_physics_process(delta:float) -> void:
-	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
-	super.on_state_physics_process(delta)
-#region STATE TRANSITIONS
-	
-#endregion
-	
-#region PHYSICS BEHAVIOURS
-	
-#endregion
+	pass
 
 func on_state_exit() -> void:
-	hud_manager.set_spell_slot_highlight(spell_slot_index, false)
+	hud_manager.set_spell_slot_highlight(player.spellcast_state_machine.current_index, false)
 	# pass

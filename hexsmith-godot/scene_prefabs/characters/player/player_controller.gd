@@ -230,7 +230,7 @@ func _on_spellcraft_cast_cd_timeout() -> void:
 ## should not ever be highter than active_spells.length
 func precast_active_spell(spell_index:int):
 	if(active_spells[spell_index] == null):
-		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
+		print("No or Invalid spell in slot " + var_to_str(spell_index))
 	else:
 		active_spells[spell_index].precast_spell()
 
@@ -239,7 +239,7 @@ func precast_active_spell(spell_index:int):
 func cast_active_spell(spell_index:int):
 	# Fail check 1: Player doesn't have a spell in that spell slot
 	if(active_spells[spell_index] == null):
-		print("No or Invalid spell in slot " + var_to_str(spell_index + 1))
+		print("No or Invalid spell in slot " + var_to_str(spell_index))
 	# Checks 2 and 3 only apply to Casted Spells with Cooldowns.
 	elif(active_spells[spell_index].get_cast_type() == SpellSuffix.CAST_TYPES.SINGLE_CAST):
 		# Fail check 2: That spell is on Cooldown.

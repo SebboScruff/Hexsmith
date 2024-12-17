@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cogpts60jbjbf"]
+[gd_scene load_steps=6 format=3 uid="uid://cogpts60jbjbf"]
 
 [ext_resource type="Texture2D" uid="uid://rvreceorq8gv" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png" id="1_j3x5s"]
 [ext_resource type="Texture2D" uid="uid://bhnj52ci1micl" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/spell_slot_frame.png" id="2_3nrxk"]
 [ext_resource type="Script" path="res://scene_prefabs/menus_and_guis/spell_icon.gd" id="2_ubrqu"]
 [ext_resource type="Texture2D" uid="uid://cuuw2dghws6qh" path="res://third_party/spell_slot_1_atlas.tres" id="4_goepq"]
+[ext_resource type="Texture2D" uid="uid://dwptu335oc3fe" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_highlight.png" id="5_optng"]
 
 [node name="SpellIcon" type="Control"]
 custom_minimum_size = Vector2(400, 400)
@@ -61,3 +62,15 @@ fill_mode = 5
 nine_patch_stretch = true
 texture_progress = ExtResource("1_j3x5s")
 tint_progress = Color(0.32549, 0.32549, 0.32549, 0.745098)
+
+[node name="active_highlight" type="TextureRect" parent="."]
+unique_name_in_owner = true
+visible = false
+self_modulate = Color(1, 1, 1, 0.72549)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_optng")
