@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drbtrmg3cmhk2"
-path="res://.godot/imported/transmutation_icon.png-b12d516adbd583d6cbf82565732ef58e.ctex"
+uid="uid://brw2icesafqol"
+path="res://.godot/imported/focus_icon.png-6b78d4461c6410ae1235605e66c58afe.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/transmutation_icon.png"
-dest_files=["res://.godot/imported/transmutation_icon.png-b12d516adbd583d6cbf82565732ef58e.ctex"]
+source_file="res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/focus_icon.png"
+dest_files=["res://.godot/imported/focus_icon.png-6b78d4461c6410ae1235605e66c58afe.ctex"]
 
 [params]
 

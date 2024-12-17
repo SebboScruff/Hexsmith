@@ -109,7 +109,7 @@ func cast_spell():
 # Create the a continual effect within the world. TOGGLE and CHANNEL spells
 # use this for their actual in-game effect rather than on_cast_spell().
 func do_passive_effect(_delta:float):
-	suffix.on_passive_effect(prefix.get_mana_values())
+	suffix.on_passive_effect(_delta, prefix.get_mana_values())
 	
 	if(suffix.is_mana_cost_active):
 		do_mana_cost(_delta)

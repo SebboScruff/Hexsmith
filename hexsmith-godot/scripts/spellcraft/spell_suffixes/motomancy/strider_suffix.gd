@@ -34,7 +34,7 @@ func on_deactivate(_mana_values:Array[float]) -> void:
 	
 	# TODO Undo all the changes from on_activate.
 
-func on_passive_effect(_mana_values:Array[float]):
+func on_passive_effect(_delta:float, _mana_values:Array[float]):
 	# change value of is_mana_cost_active based on A) mana inputs and B) other things:
 	# NOTE: Reference player movement state machine here for easy access.
 	# RED - on when moving, off when not moving

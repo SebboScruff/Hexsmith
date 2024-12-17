@@ -49,7 +49,7 @@ func _init() -> void:
 func on_precast() -> void:
 	pass
 
-func on_cast(_mana_values:Array[float]) -> void:
+func on_cast(_mana_inputs:Array[float]) -> void:
 	pass
 #endregion
 
@@ -66,13 +66,13 @@ func set_active_state(_new_state:bool, _mana_values:Array[float]):
 
 ## Any special effects that happen when the spell is activated go here. For example,
 ## many Strider spells directly affect the player body in a number of ways when activated.
-func on_activate(_mana_values:Array[float]) -> void:
+func on_activate(_mana_inputs:Array[float]) -> void:
 	active_state = true
 
 ## For removing any special effects that happened in on_toggle_on()
-func on_deactivate(_mana_values:Array[float]) -> void:
+func on_deactivate(_mana_inputs:Array[float]) -> void:
 	active_state = false
 
-func on_passive_effect(_mana_values:Array[float]):
+func on_passive_effect(_delta:float, _mana_inputs:Array[float]):
 	pass
 #endregion
