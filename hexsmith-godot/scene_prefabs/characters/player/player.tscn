@@ -1,4 +1,4 @@
-[gd_scene load_steps=56 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=57 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
@@ -14,6 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://dhmu3mcksydtt" path="res://assets/sprites/menus_and_gui/overworld_hud_imgs/hp_bar.png" id="5_doyrg"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_pause_state.gd" id="5_xuwid"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_run_state.gd" id="8_228p4"]
+[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_coyote_state.gd" id="9_bh20u"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_jump_state.gd" id="9_lxw88"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_fall_state.gd" id="10_0g12v"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_climb_state.gd" id="11_hppqs"]
@@ -436,6 +437,7 @@ unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
 debug_current_state = NodePath("../CurrentMovementState")
 debug_previous_state = NodePath("../PreviousMovementState")
+show_debug_info = true
 
 [node name="PlayerIdleState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("3_pidp4")
@@ -451,6 +453,9 @@ script = ExtResource("4_ow5mu")
 
 [node name="PlayerRunState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("8_228p4")
+
+[node name="PlayerCoyoteState" type="Node" parent="MovementStateMachine"]
+script = ExtResource("9_bh20u")
 
 [node name="PlayerJumpState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("9_lxw88")
@@ -475,7 +480,6 @@ unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
 debug_current_state = NodePath("../CurrentCastState")
 debug_previous_state = NodePath("../PreviousCastState")
-show_debug_info = true
 
 [node name="PlayerIdleCastState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("17_0goyt")

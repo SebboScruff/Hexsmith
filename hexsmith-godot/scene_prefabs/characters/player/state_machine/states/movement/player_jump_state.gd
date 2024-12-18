@@ -24,7 +24,8 @@ func on_state_enter() -> void:
 	## NOTE: There is a floor check here in case the player returns to jump as a previous state.
 	## This stops weird edge cases like jump -> pause -> unpause -> automatically jump again
 	## aka The Sonic Frontiers Bug
-	if(player.is_on_floor() || player.can_exit_water):
+	if(player.is_on_floor() || player.can_exit_water ## Grounded Check, then water shore check
+	|| player.movement_state_machine.get_previous_state_name() == "coyote time"): ## Allow midair jumps if in coyote time
 		player.body_sprite.play("jump_start")
 		player.velocity.y = player.JUMP_VELOCITY
 

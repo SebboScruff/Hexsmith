@@ -237,36 +237,46 @@ func craft_and_bind(spell_index: int):
 	var crafted_spell_prefix:SpellPrefix = determine_prefix()
 	var crafted_spell_suffix:SpellSuffix = determine_suffix()
 	
-	# Just a WIP catch-all, this can be removed when all 
-	# prefixes and suffixes have been implemented
+	# Just a WIP catch-all for unimplemented spell components
+	# TODO Remove this once all prefixes and suffixes are implemented.
 	if(crafted_spell_prefix == null || crafted_spell_suffix == null):
 		print("Prefix or Suffix is Null. Check Debug Logs")
 		menu_cleanup()
 		return
 	
-	# Physically create the new Spell Instance
+	## Create the new Spell Class Instance and bind it to the player
 	var crafted_spell:Spell = Spell.new(player, crafted_spell_prefix, crafted_spell_suffix)
 	
 	# After checking if the spell is valid, make sure the player doesn't
-	# already have it in a different spell slot. Must be a number check because
-	# every crafted Spell is a new class instance.
-	# [TODO This could potentially have other functionality, like
-	# moving the existing spell to their chosen slot, or switching
-	# the two spells around. Also probably want to refactor away from a name check.]
-	for n in 4:
+	# already have it in a different spell slot. 
+	## NOTE: Must be a weird name check because every crafted Spell is a new class instance
+	## so checking crafted_spell == player.active_spells[index] wouldn't work.
+	
+	for n in 4: # Technically this should be for n in player.active_spells.size()
 		if(player.active_spells[n] != null
 		&& player.active_spells[n].spell_name == crafted_spell.spell_name):
-			print("Already have that spell in slot " + var_to_str(n+1))
-			return
+			## If the player is trying to craft a spell into a slot that already has that
+			## exact spell, call early exit from Spellcraft Menu
+			if(n == spell_index):
+				print("You already have that spell in that slot! Exiting Spellcraft...")
+				menu_cleanup()
+				return
+			## Otherwise, they are trying to craft a spell that they already have.
+			## Therefore, the spell needs to move slots (and maybe swap slots with
+			## another spell). All of this is managed via the function call
+			## to player.move_spell_to_new_slot()
+			else:
+				print("You already have that spell in a different slot! Moving it to a new slot...")
+				player.move_spell_to_new_slot(n, spell_index)
+				menu_cleanup()
+				return
 	
-	# All potential fail-cases have been accounted for by this point.
+	# All potential fail-cases/ early exits have been accounted for by this point.
 	# New Spell can be assigned to the associated spell slot passed in as a parameter
-	# to this function.
-	player.active_spells[spell_index] = crafted_spell
-	#print("Spell Slot %d is now %s" %[spell_index, crafted_spell.spell_name])
-	
-	# Change GUI Spell Icon via the Hud Manager
-	hud_manager.change_spell_icon(spell_index, crafted_spell_prefix.spell_icon_frame, crafted_spell_suffix.spell_icon)
+	# to this function. 
+	## NOTE: This assignment function also manages unassigning pre-existing spells
+	## as well as HUD changes.
+	player.assign_spell_to_slot(spell_index, crafted_spell)
 	
 	# And finally, clear and close the Spellcraft Menu
 	menu_cleanup()
@@ -280,8 +290,8 @@ func craft_and_bind(spell_index: int):
 ## Questionably more efficient than just a big if-chain, but definitely
 ## more readable.
 # TODO Run some internal speed tests to see which version is actually more performant
-# between A) Constantly updating then reading from a dictionary. Worst case would be 5-mana Toxic
-# or B) just doing an if-chain at the end. Worst case would be Mono-Black
+# between A) Constantly updating then reading from a dictionary. (Worst case would be 5-mana Toxic)
+# or B) just doing an if-chain at the end. (Worst case would be Mono-Black)
 func update_prefix_dict():
 	prefix_dictionary = {
 			# Mono-Colour Prefixes
@@ -338,6 +348,7 @@ func determine_prefix() -> SpellPrefix:
 
 ## This will definitely need refactoring and optimising,
 ## I'd really rather not have a million if/switch-chains
+## Maybe look into two-key dicts?
 func determine_suffix() -> SpellSuffix:
 	var suffix : SpellSuffix = null
 	

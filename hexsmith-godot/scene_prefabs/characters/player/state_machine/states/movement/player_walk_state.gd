@@ -30,7 +30,7 @@ func on_state_physics_process(delta:float) -> void:
 		State_Transition.emit(self, "jump")
 	# Fall
 	elif(!player.is_on_floor()):
-		State_Transition.emit(self, "fall")
+		State_Transition.emit(self, "coyote time")
 	# Crawl
 	elif(player.is_on_floor() && Input.is_action_just_pressed("overworld_down")):
 		State_Transition.emit(self, "crawl")

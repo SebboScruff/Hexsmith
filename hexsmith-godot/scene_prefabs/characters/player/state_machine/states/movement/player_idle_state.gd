@@ -34,11 +34,11 @@ func on_state_physics_process(delta:float) -> void:
 		State_Transition.emit(self, "crawl")
 	## 3 - Jumping
 	elif(Input.is_action_pressed("overworld_jump")):
-		if(player.is_on_floor() || player.can_surface):
+		if(player.is_on_floor()):
 			State_Transition.emit(self, "jump")
 	## 4 - Falling
 	elif(!player.is_on_floor && player.velocity.y > 0):
-		State_Transition.emit(self, "fall")
+		State_Transition.emit(self, "coyote time")
 	## 5 - Climbing
 	elif(player.is_climbing):
 		State_Transition.emit(self, "climb")

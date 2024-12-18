@@ -10,15 +10,18 @@ extends CharacterBody2D
 ## Bools used for FSM State Management
 ## TODO Try and find a way to remove these because it kinda removes the purpose of the
 ## State Machine in a couple of ways. Most of them are unnecessary I think.
-var accept_movement_input:= true # turned off when channeling a PRESS AND HOLD spell.
+var accept_movement_input:= true # turned off when channelling a PRESS AND HOLD spell.
 var is_paused:= false # Turned on when in System Pause
 var is_in_loadout:=false # Turned on when in Loadout/Inventory Pause
 var is_climbing := false # Turned on when within a climbable zone
 var is_swimming := false # Turns on when within a swimming zone
-@export var can_exit_water := false # Subset of swimming zones for when you can jump out
+var can_exit_water := false # Subset of swimming zones for when you can jump out
 
 #region Movement Parameters
-# Different Speed declarations
+const BASE_COYOTE_TIME := 0.2 # How long in seconds is the grace period after leaving a platform
+var coyote_time := BASE_COYOTE_TIME # if coyote time is ever changed, it can easily be reset to default
+
+## Different Movement Speeds
 const BASE_SPEED = 150.0 # Standard Walking
 const RUN_SPEED = 200.0 # Sprinting (Shift Held)
 const CRAWL_SPEED = 75.0 # Crouching/Crawling (S Held)
@@ -31,9 +34,7 @@ var external_speed_mult:float = 1.0
 var current_speed : float # this will be set to any of the const SPEED values above.
 
 	#region Underwater Parameters
-# SWIM_SPEED must be multiplied and made negative to overcome
-# gravity and move in the correct direction
-var is_underwater := false
+var is_underwater := false ## Turned on/off by Movement State Machine
 const MAX_OXYGEN = 5 ## Number of seconds the player can remain underwater by default
 var current_oxygen:float
 @onready var oxygen_meter:TextureProgressBar = %OxygenMeter # on-HUD meter for monitoring time left.
@@ -41,7 +42,7 @@ var current_oxygen:float
 
 const JUMP_VELOCITY = -200.0 # this is jump height against gravity, in pixels, which is why it's quite high.
 
-# Gravity strength is adjusted in different game states e.g. 0 when paused.
+# Gravity strength is adjusted in different game states e.g. 0 when paused, weaker when underwater.
 var gravity_scale:float = 1.0
 #endregion
 
@@ -220,6 +221,55 @@ func _apply_vertical_input(_delta:float, _v_dir:float = 0) -> void:
 	else:
 		velocity.y = move_toward(velocity.y, 0, current_speed)
 #endregion
+
+
+func assign_spell_to_slot(_slot_index:int, _new_spell:Spell) -> void:
+	## Manage all unassignment behaviours first, then set the new spell
+	# Don't bother doing unassignment call if the slot is already empty
+	if(active_spells[_slot_index] != null):
+		unassign_spell_from_slot(_slot_index)
+	
+	active_spells[_slot_index] = _new_spell
+	hud_manager.change_spell_icon(_slot_index, _new_spell.prefix.spell_icon_frame, _new_spell.suffix.spell_icon)
+
+func unassign_spell_from_slot(_slot_index:int) -> void:
+	if(active_spells[_slot_index] == null):
+		print("Attempting to unassign empty spell slot!")
+		return
+		
+	var spell = active_spells[_slot_index]
+	## Turn off the spell if it is TOGGLE or CHANNEL
+	if(spell.get_cast_type() != SpellSuffix.CAST_TYPES.SINGLE_CAST):
+		# This manages all the spell cleanup by itself. Function body is different
+		# in all suffixes.
+		spell.suffix.set_active_state(false, spell.prefix.get_mana_values())
+	
+	active_spells[_slot_index] = null
+	hud_manager.reset_spell_icon_to_default(_slot_index)
+
+func move_spell_to_new_slot(_current_index:int, _new_index:int) -> void:
+	if(active_spells[_current_index] == null):
+		print("Attempting to move empty spell slot!")
+		return
+	if(active_spells[_new_index] == null):
+		assign_spell_to_slot(_new_index, active_spells[_current_index])
+		unassign_spell_from_slot(_current_index)
+		hud_manager.reset_spell_icon_to_default(_current_index)
+	else: # i.e. new index already has a spell assigned
+		swap_spell_slots(_current_index, _new_index)
+	
+func swap_spell_slots(_index_a:int, _index_b:int):
+	if(active_spells[_index_a] == null || active_spells[_index_b] == null):
+		print("Empty spell slot passed into Spell Swap Function!")
+		return
+		
+	## Swap(a,b) => {temp = a; a = b; b = temp}
+	# temp = a
+	var temp_spell:Spell = active_spells[_index_a]
+	# a = b
+	assign_spell_to_slot(_index_a, active_spells[_index_b])
+	# b = temp
+	assign_spell_to_slot(_index_b, temp_spell)
 
 #region Spellcasting Functions
 # Allow the player to cast after exiting Spellcraft. Has a short delay to prevent autocasting.

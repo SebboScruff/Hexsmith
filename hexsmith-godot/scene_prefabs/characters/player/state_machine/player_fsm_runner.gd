@@ -74,3 +74,6 @@ func reset_to_previous_state():
 		return
 	
 	change_state(current_state, previous_state.state_name.to_lower())
+	
+func get_previous_state_name() -> String:
+	return previous_state.state_name.to_lower()

@@ -17,6 +17,8 @@ var current_active_menu
 
 # OVERWORLD HUD ASPECTS
 @export var spell_icons : Array[SpellIcon]
+const DEFAULT_SPELL_SLOT_FRAME = preload("res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/frames/spell_slot_frame.png")
+const DEFAULT_SPELL_SLOT_ICON = preload("res://assets/sprites/menus_and_gui/overworld_hud_imgs/spell_slots/icons/spell_slot_icon.png")
 
 ## TODO Implement Mana Bars in here.
 #var mana_bars : Array[ManaValueTracker]
@@ -60,6 +62,17 @@ func change_spell_icon(_index:int, _frame:CompressedTexture2D, _icon:CompressedT
 	
 	spell_icons[_index].set_icon(_icon)
 	spell_icons[_index].set_frame(_frame)
+
+func reset_spell_icon_to_default(_index:int) -> void:
+	if(spell_icons[_index] == null):
+		print("Spell Icons were not correctly assigned. Breaking out of GUI Assignment.")
+		return
+	
+	spell_icons[_index].set_icon(DEFAULT_SPELL_SLOT_ICON)
+	spell_icons[_index].set_frame(DEFAULT_SPELL_SLOT_FRAME)
+	set_spell_slot_highlight(_index, false)
+	spell_icons[_index].update_cd_visual(1, 0)
+	
 
 func set_spell_slot_highlight(_index:int, _new_highlight_state:bool):
 	if(spell_icons[_index] == null):
