@@ -11,6 +11,8 @@ func _init() -> void:
 func on_state_enter() -> void:
 	player.current_speed = player.BASE_SPEED
 	player.body_sprite.play("run") # TODO Change this to walk animation rather than run
+	## TODO Set interval timer duration to higher value
+	player.footstep_interval_timer.start()
 
 func on_state_process(delta:float) -> void:
 	super.on_state_process(delta)
@@ -49,5 +51,4 @@ func on_state_physics_process(delta:float) -> void:
 #endregion
 
 func on_state_exit() -> void:
-	# No behaviours needed for exiting Walk
-	pass
+	player.footstep_interval_timer.stop()

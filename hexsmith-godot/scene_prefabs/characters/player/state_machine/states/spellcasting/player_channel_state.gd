@@ -21,8 +21,9 @@ func on_state_enter() -> void:
 	super.on_state_enter()
 	# Precast for CHANNEL spells just sets them to be active.
 	player.precast_active_spell(player.spellcast_state_machine.current_index)
-	hud_manager.spell_icons[player.spellcast_state_machine.current_index].set_highlight_state(true)
+	#hud_manager.spell_icons[player.spellcast_state_machine.current_index].set_highlight_state(true)
 	player.accept_movement_input = false
+	player.velocity.x = 0 # stops the player from sliding if entering channel from walk/run
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
 func on_state_process(delta:float) -> void:

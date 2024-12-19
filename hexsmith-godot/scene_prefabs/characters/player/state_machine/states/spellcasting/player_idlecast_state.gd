@@ -46,7 +46,9 @@ func check_spellcast_transitions():
 					player.spellcast_state_machine.current_index = 0
 					State_Transition.emit(self, "precast")
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## No state change needed if toggling a spell
+					## NOTE: Although no state changes are required, all spellcasting input is
+					## done here to minimise the amount of input check if-chains per frame
+					player.cast_active_spell(0) # This will toggle the spell on or off
 				SpellSuffix.CAST_TYPES.CHANNEL:
 					player.spellcast_state_machine.current_index = 0
 					State_Transition.emit(self, "channel")
@@ -58,7 +60,7 @@ func check_spellcast_transitions():
 					player.spellcast_state_machine.current_index = 1
 					State_Transition.emit(self, "precast")
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## No state change needed if toggling a spell
+					player.cast_active_spell(1)
 				SpellSuffix.CAST_TYPES.CHANNEL:
 					player.spellcast_state_machine.current_index = 1
 					State_Transition.emit(self, "channel")
@@ -70,7 +72,7 @@ func check_spellcast_transitions():
 					player.spellcast_state_machine.current_index = 2
 					State_Transition.emit(self, "precast")
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## No state change needed if toggling a spell
+					player.cast_active_spell(2)
 				SpellSuffix.CAST_TYPES.CHANNEL:
 					player.spellcast_state_machine.current_index = 2
 					State_Transition.emit(self, "channel")
@@ -82,7 +84,7 @@ func check_spellcast_transitions():
 					player.spellcast_state_machine.current_index = 3
 					State_Transition.emit(self, "precast")
 				SpellSuffix.CAST_TYPES.TOGGLE:
-					pass ## No state change needed if toggling a spell
+					player.cast_active_spell(3)
 				SpellSuffix.CAST_TYPES.CHANNEL:
 					player.spellcast_state_machine.current_index = 3
 					State_Transition.emit(self, "channel")

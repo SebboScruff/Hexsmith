@@ -22,8 +22,7 @@ func _init() -> void:
 ## for example changing the HUD Style, setting bools, altering the game's Time Scale, or
 ## Removing Momentum.
 func on_state_enter() -> void:
-	hud_manager.set_spell_slot_highlight(player.spellcast_state_machine.current_index, true)
-	# pass
+	pass
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
 func on_state_process(delta:float) -> void:
@@ -36,5 +35,4 @@ func on_state_physics_process(delta:float) -> void:
 	pass
 
 func on_state_exit() -> void:
-	hud_manager.set_spell_slot_highlight(player.spellcast_state_machine.current_index, false)
-	# pass
+	pass

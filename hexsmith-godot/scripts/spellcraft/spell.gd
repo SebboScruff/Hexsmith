@@ -87,16 +87,16 @@ func cast_spell():
 				suffix.set_active_state(false, prefix.get_mana_values())
 				return
 			## If the spell is being turned on, we have to turn off every other
-			## spell of that type before turning this one on.
+			## spell of that type before turning this one on. Otherwise, players
+			## could have multiple Cloaks active (for example) which would probably
+			## be too powerful
 			else: # i.e. spell is not currently active
 				for s in player.active_spells:
 					if(s == null || s.suffix.cast_type != SpellSuffix.CAST_TYPES.TOGGLE):
-						continue
+						continue # break out instantly for irrelevant spells
 					if(s.get_suffix_id() == suffix.suffix_id):
 						s.suffix.set_active_state(false, prefix.get_mana_values())
-						print("Toggled %s off"%[s.get_spell_name()])
 				suffix.set_active_state(true, prefix.get_mana_values())
-				print("Toggled %s on"%[get_spell_name()])
 		
 		## Deactivate Channeled Spells on Key Up. Gives the effect of being a Press
 		## and Hold activation system.

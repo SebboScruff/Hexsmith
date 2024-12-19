@@ -37,7 +37,7 @@ func on_state_physics_process(delta:float) -> void:
 		elif(Input.is_action_just_pressed("overworld_jump")):
 			State_Transition.emit(self, "jump")
 		else:
-			State_Transition.emit(self, "fall")
+			State_Transition.emit(self, "coyote time")
 #endregion
 
 #region PHYSICS BEHAVIOURS

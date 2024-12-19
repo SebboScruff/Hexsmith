@@ -390,39 +390,41 @@ spellcast_state_machine = NodePath("SpellcastStateMachine")
 [node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
 unique_name_in_owner = true
 
-[node name="CurrentMovementState" type="Label" parent="."]
+[node name="StateMachineReadouts" type="Node" parent="."]
+
+[node name="CurrentMovementState" type="Label" parent="StateMachineReadouts"]
 visible = false
 offset_left = -18.0
 offset_top = -32.0
-offset_right = 129.0
+offset_right = 176.0
 offset_bottom = -9.0
 scale = Vector2(0.263351, 0.288206)
 text = "Current Move State: IDLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PreviousMovementState" type="Label" parent="."]
+[node name="PreviousMovementState" type="Label" parent="StateMachineReadouts"]
 visible = false
 offset_left = -18.0
 offset_top = -38.0
-offset_right = 129.0
+offset_right = 132.0
 offset_bottom = -15.0
 scale = Vector2(0.263351, 0.288206)
 text = "Prev Move State: ---"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="CurrentCastState" type="Label" parent="."]
+[node name="CurrentCastState" type="Label" parent="StateMachineReadouts"]
 offset_left = -18.0
 offset_top = -32.0
-offset_right = 129.0
+offset_right = 167.0
 offset_bottom = -9.0
 scale = Vector2(0.263351, 0.288206)
 text = "Current Cast State: IDLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="PreviousCastState" type="Label" parent="."]
+[node name="PreviousCastState" type="Label" parent="StateMachineReadouts"]
 offset_left = -18.0
 offset_top = -38.0
 offset_right = 129.0
@@ -435,8 +437,8 @@ vertical_alignment = 1
 [node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
-debug_current_state = NodePath("../CurrentMovementState")
-debug_previous_state = NodePath("../PreviousMovementState")
+debug_current_state = NodePath("../StateMachineReadouts/CurrentMovementState")
+debug_previous_state = NodePath("../StateMachineReadouts/PreviousMovementState")
 show_debug_info = true
 
 [node name="PlayerIdleState" type="Node" parent="MovementStateMachine"]
@@ -478,8 +480,8 @@ script = ExtResource("3_eykxq")
 [node name="SpellcastStateMachine" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
-debug_current_state = NodePath("../CurrentCastState")
-debug_previous_state = NodePath("../PreviousCastState")
+debug_current_state = NodePath("../StateMachineReadouts/CurrentCastState")
+debug_previous_state = NodePath("../StateMachineReadouts/PreviousCastState")
 
 [node name="PlayerIdleCastState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("17_0goyt")
@@ -544,6 +546,19 @@ one_shot = true
 
 [node name="cast_origin" type="Marker2D" parent="BodySprite"]
 position = Vector2(6, 9)
+
+[node name="player_foot_location" type="Marker2D" parent="BodySprite"]
+position = Vector2(-1, 24)
+
+[node name="footstep_interval_timer" type="Timer" parent="BodySprite/player_foot_location"]
+unique_name_in_owner = true
+wait_time = 0.5
+
+[node name="underfoot_raycast" type="RayCast2D" parent="BodySprite/player_foot_location"]
+unique_name_in_owner = true
+position = Vector2(0, -4)
+collision_mask = 550
+collide_with_areas = true
 
 [node name="OxygenMeter" type="TextureProgressBar" parent="."]
 unique_name_in_owner = true

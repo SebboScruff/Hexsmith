@@ -65,7 +65,7 @@ func change_state(_old_state:PlayerState, _new_state_name:String, _delay_seconds
 	current_state.on_state_enter()
 
 func reset_to_idle():
-	print("Reset To Idle called!")
+	# print("Reset To Idle called!")
 	change_state(current_state, "idle")
 
 func reset_to_previous_state():
@@ -75,5 +75,8 @@ func reset_to_previous_state():
 	
 	change_state(current_state, previous_state.state_name.to_lower())
 	
+func get_current_state_name() -> String:
+	return current_state.state_name.to_lower()
+
 func get_previous_state_name() -> String:
 	return previous_state.state_name.to_lower()

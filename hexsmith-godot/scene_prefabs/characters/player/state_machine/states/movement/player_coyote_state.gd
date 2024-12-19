@@ -45,8 +45,10 @@ func on_state_physics_process(delta:float) -> void:
 		change_player_sprite_direction(direction)
 		if(direction != 0):
 			player.body_sprite.play("run")
+			player.footstep_interval_timer.start()
 		else:
 			player.body_sprite.play("idle")
+			player.footstep_interval_timer.stop()
 		
 		player._apply_horizontal_input(delta, direction)
 #endregion

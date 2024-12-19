@@ -24,6 +24,8 @@ func _init() -> void:
 func on_state_enter() -> void:
 	player.current_speed = player.RUN_SPEED
 	player.body_sprite.play("run")
+	## TODO Set interval timer duration to lower value
+	player.footstep_interval_timer.start()
 	
 
 ## Anything that the state does that doesn't care about stable update rate goes here.
@@ -66,5 +68,4 @@ func on_state_physics_process(delta:float) -> void:
 #endregion
 
 func on_state_exit() -> void:
-	# No behaviours needed for exiting Run state.
-	pass
+	player.footstep_interval_timer.stop()

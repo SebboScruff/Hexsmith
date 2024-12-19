@@ -82,26 +82,29 @@ var is_melee_ready:bool # melee attacks have a short cooldown.
 #endregion
 
 #region Child Node References
-# The Animation Player is used for any time-sensitive interactions, or anything
-# that wants an inbuilt, controllable delay. For example, melee attacks and dying.
+## The Animation Player is used for any time-sensitive interactions, or anything
+## that wants an inbuilt, controllable delay. For example, melee attacks and dying.
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 
-# Reference to the player's visual body, for animation work and projectile instantiation
-@onready var body_sprite: AnimatedSprite2D = $BodySprite
+## Reference to the player's visual body, for animation work and projectile instantiation
+@onready var body_sprite: AnimatedSprite2D = $BodySprite # TODO Eventually split into Upper Body and Lower Body
 @onready var cast_origin: Marker2D = $BodySprite/cast_origin # this is where spell projectiles originate from. Child of Body Sprite.
+@onready var foot_location: Marker2D = $BodySprite/player_foot_location # If particles need to be instantiated at the player's feet, like dust clouds or Strider effects.
+@onready var footstep_interval_timer: Timer = %footstep_interval_timer # Used for Strider effects, footstep sound clips, etc.
+@onready var underfoot_raycast: RayCast2D = %underfoot_raycast # Used to extract the current underfoot terrain type.
 
-# Player's on-screen HUD and the manager script behind it, used for 
-# accessing which game state they are in currently and adjusting controls accordingly.
-@onready var player_hud: CanvasLayer = $PlayerHUD
+## Player's on-screen HUD and the manager script behind it, used for 
+## accessing which game state they are in currently and adjusting controls accordingly.
+@onready var player_hud: CanvasLayer = %PlayerHUD
 @export var hud_manager : HudManager = player_hud as HudManager
 
-# The player's Spellcraft Manager (SCM) is the backbone of the game's spellcrafting system.
-# Main behavioural body is in spellcraft_manager.gd
+## The player's Spellcraft Manager (SCM) is the backbone of the game's spellcrafting system.
+## Main behavioural body is in spellcraft_manager.gd
 @onready var scm: Node = %SpellcraftManager
 @export var spellcrafter := scm as SpellcraftManager
 
-# The player's State Machine Runners for determining basically all
-# runtime behaviours and state transitions.
+## The player's State Machine Runners for determining basically all
+## runtime behaviours and state transitions.
 @onready var movement_sm: PlayerFSMRunner = %MovementStateMachine
 @export var movement_state_machine:PlayerFSMRunner = movement_sm as PlayerFSMRunner
 
@@ -369,49 +372,44 @@ func get_dir_to_crosshair() -> float:
 	
 	return aim_angle
 
-
 func active_spell_management(_delta_time:float) -> void:
 	for n in active_spells.size():
 		var spell := active_spells[n] as Spell
-		# If that spellslot is empty, go next to avoid crashes.
+		## If that spellslot is empty, for minor optimisation and to avoid crashes/errors.
 		if(spell == null):
 			continue
-		# Get the corresponding HUD icon - it's needed regardless of spell type
+		## Get the corresponding HUD icon - it's needed for HUD updates regardless of spell type
 		var spell_icon := hud_manager.spell_icons[n] as SpellIcon
-		# TODO Set up a format_spell_icon() function in spell_icon.gd
-		# which enables either the "is active" border or the cooldown indicator
-		# and disables the other.
-		
-		# - Further Behaviours Depend On Cast Type - #
-		
+
 		## If the spell is a Cooldown Cast, we need to check if its suffix is currently on cooldown:
 		if(spell.suffix.cast_type == SpellSuffix.CAST_TYPES.SINGLE_CAST):
 			# Set the spell to be off-cooldown initially, then overwrite to being 
 			# on cooldown where necessary.
 			spell.is_on_cooldown = false
-			# Iterate through all current Cooldown Timers.
 			for t in spell_cooldowns_parent.get_children():
-				var cdt := t as SpellCooldownTimer # cast as specialised timer with ID
 				# Check for matching internal IDs
 				# These are instantiated as soon as a spell is cast, and destroyed
-				# when they time out, so there will never be more than 1 per suffix
-				if(cdt.timer_id == spell.get_suffix_id()):
+				# when they time out, so there will never be more than 1 per suffix (or 9 total)
+				if(t is SpellCooldownTimer && t.timer_id == spell.get_suffix_id()):
 					## Corresponding Cooldown Timer found, that spell is now on cooldown.
 					spell.is_on_cooldown = true
-					spell_icon.update_cd_visual(cdt.wait_time, cdt.time_left)
+					spell_icon.update_cd_visual(t.wait_time, t.time_left)
 					break # and proceed to next spell in the list
-		## Having gone through every timer without finding an ID match,
-		## this spell is not on cooldown. The previously declared
-		## spell.is_on_cooldown = false will be maintained.
-			continue # onto the next spell in the list.
+		# NOTE: Having gone through every timer without finding an ID match,
+		# this spell is not on cooldown. The previously declared
+		# spell.is_on_cooldown = false will be maintained, and we can go
+		# to the next spell in the list.
+			continue
 		
-		## Getting here means the spell is a Toggle or Channel.
-		## So we need to manage passive effects and mana costs.
-		else: 
-			# TODO Activate or deactive the "is active" indicator on the HUD Icon
+		## If not a SINGLE_CAST, need to check if the spell is active and 
+		## do its over-time effects accordingly
+		else: # i.e. Currently interrogated Spell is TOGGLE or CHANNEL
+			## UI Management First
 			spell_icon.update_cd_visual(1, 0) # hacky way to remove the cooldown indicator
+			spell_icon.set_highlight_state(spell.suffix.active_state)
 			if(spell.suffix.active_state == true):
-				# This function manages both behaviours and mana costs
+				# This function manages both behaviours, auto-turn-off conditions,
+				# and mana cost activation
 				spell.do_passive_effect(_delta_time)
 				print("Doing Effect for %s"%[spell.get_spell_name()]) 
 #endregion
