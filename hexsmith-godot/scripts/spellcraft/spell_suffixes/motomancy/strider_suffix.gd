@@ -13,6 +13,7 @@ func _init() -> void:
 	
 	cast_type = CAST_TYPES.TOGGLE
 	active_state = false
+	is_mana_cost_active = false
 	
 	## For Toggles, this is generally per second and should be relatively low.
 	base_mana_cost = 20
@@ -73,10 +74,7 @@ func on_passive_effect(_delta:float, _mana_values:Array[float]):
 			is_mana_cost_active = false
 	## BLUE - on when standing/moving on water
 	elif(_mana_values[1] > 0):
-		if(player.underfoot_raycast.get_collision_mask_value(6)):
-			is_mana_cost_active = true
-		else:
-			is_mana_cost_active = false
+		pass
 	## GREEN - on when moving on grass, off otherwise
 	elif(_mana_values[2] > 0):
 		pass

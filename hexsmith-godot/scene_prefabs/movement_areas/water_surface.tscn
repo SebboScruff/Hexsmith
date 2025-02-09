@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://dlscd3ogx00bs"]
+
+[ext_resource type="Texture2D" uid="uid://ddkd3clehwbj1" path="res://third_party/testing_ground_assets/platformertiles2.png" id="1_etm5s"]
+[ext_resource type="Script" path="res://scene_prefabs/movement_areas/water_surface.gd" id="2_odwwx"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nyie"]
+atlas = ExtResource("1_etm5s")
+region = Rect2(128, 80, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_umsui"]
+size = Vector2(16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r0sr6"]
+size = Vector2(16, 8)
+
+[node name="water_surface" type="Area2D"]
+collision_layer = 16
+collision_mask = 129
+script = ExtResource("2_odwwx")
+
+[node name="max_height" type="Marker2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.588235)
+z_index = 7
+texture = SubResource("AtlasTexture_7nyie")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_umsui")
+debug_color = Color(0, 0.62776, 0.498842, 0.42)
+
+[node name="surface_collider" type="StaticBody2D" parent="."]
+collision_layer = 32
+collision_mask = 129
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="surface_collider"]
+position = Vector2(0, -4)
+shape = SubResource("RectangleShape2D_r0sr6")
+one_way_collision = true
+debug_color = Color(1, 0.654461, 0.381043, 0.42)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

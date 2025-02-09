@@ -1,16 +1,20 @@
-[gd_scene load_steps=3 format=3 uid="uid://dfx1jxj6g8eos"]
+[gd_scene load_steps=4 format=3 uid="uid://dfx1jxj6g8eos"]
 
 [ext_resource type="Script" path="res://scene_prefabs/movement_areas/surfaceable_water.gd" id="1_pfwnc"]
+[ext_resource type="Texture2D" uid="uid://ddkd3clehwbj1" path="res://third_party/testing_ground_assets/platformertiles2.png" id="2_v0bgn"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2m3id"]
+[sub_resource type="AtlasTexture" id="AtlasTexture_ma8ow"]
+atlas = ExtResource("2_v0bgn")
+region = Rect2(128, 80, 16, 16)
 
-[node name="SurfaceableWater" type="Area2D"]
+[node name="WaterSurface" type="Area2D"]
 collision_layer = 16
 script = ExtResource("1_pfwnc")
 
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_ma8ow")
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_2m3id")
-debug_color = Color(0.682353, 0.501961, 0, 0.419608)
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

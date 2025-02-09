@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://dbny3m1cfunfx"]
+
+[ext_resource type="Texture2D" uid="uid://ddkd3clehwbj1" path="res://third_party/testing_ground_assets/platformertiles2.png" id="1_knvih"]
+[ext_resource type="Script" path="res://scene_prefabs/movement_areas/water_body.gd" id="2_soc4b"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0ar74"]
+atlas = ExtResource("1_knvih")
+region = Rect2(128, 96, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_v18uu"]
+size = Vector2(16, 16)
+
+[node name="water_body" type="Area2D"]
+collision_layer = 16
+collision_mask = 129
+script = ExtResource("2_soc4b")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.784314)
+z_index = 7
+texture = SubResource("AtlasTexture_0ar74")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_v18uu")
+debug_color = Color(0, 0.532032, 0.984331, 0.42)
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

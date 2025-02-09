@@ -34,18 +34,15 @@ func on_state_physics_process(delta:float) -> void:
 		State_Transition.emit(self, "crawl")
 	## 3 - Jumping
 	elif(Input.is_action_pressed("overworld_jump")):
-		if(player.is_on_floor()):
-			State_Transition.emit(self, "jump")
+		State_Transition.emit(self, "jump")
 	## 4 - Falling
 	elif(!player.is_on_floor && player.velocity.y > 0):
-		State_Transition.emit(self, "coyote time")
+		if(player.movement_state_machine.get_previous_state_name() != "swim"):
+			State_Transition.emit(self, "coyote time")
 	## 5 - Climbing
-	elif(player.is_climbing):
+	elif(player.is_in_climb_zone):
 		State_Transition.emit(self, "climb")
-	## 6 - Swimming
-	elif(player.is_swimming):
-		State_Transition.emit(self, "swim")
-	## 7 - Basic Melee Attack
+	## 6 - Basic Melee Attack
 	elif(player.is_melee_ready && Input.is_action_just_pressed("overworld_melee_attack")):
 		State_Transition.emit(self, "basic melee")
 #endregion

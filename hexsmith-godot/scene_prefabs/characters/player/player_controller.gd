@@ -10,12 +10,10 @@ extends CharacterBody2D
 ## Bools used for FSM State Management
 ## TODO Try and find a way to remove these because it kinda removes the purpose of the
 ## State Machine in a couple of ways. Most of them are unnecessary I think.
-var accept_movement_input:= true # turned off when channelling a PRESS AND HOLD spell.
-var is_paused:= false # Turned on when in System Pause
-var is_in_loadout:=false # Turned on when in Loadout/Inventory Pause
-var is_climbing := false # Turned on when within a climbable zone
-var is_swimming := false # Turns on when within a swimming zone
-var can_exit_water := false # Subset of swimming zones for when you can jump out
+var accept_movement_input := true
+var is_paused := false
+var is_in_loadout := false
+var is_in_climb_zone := false
 
 #region Movement Parameters
 const BASE_COYOTE_TIME := 0.2 # How long in seconds is the grace period after leaving a platform
@@ -39,8 +37,6 @@ const MAX_OXYGEN = 5 ## Number of seconds the player can remain underwater by de
 var current_oxygen:float
 @onready var oxygen_meter:TextureProgressBar = %OxygenMeter # on-HUD meter for monitoring time left.
 	#endregion
-
-const JUMP_VELOCITY = -200.0 # this is jump height against gravity, in pixels, which is why it's quite high.
 
 # Gravity strength is adjusted in different game states e.g. 0 when paused, weaker when underwater.
 var gravity_scale:float = 1.0

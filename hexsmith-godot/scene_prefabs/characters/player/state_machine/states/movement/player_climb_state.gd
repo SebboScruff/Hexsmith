@@ -31,7 +31,7 @@ func on_state_physics_process(delta:float) -> void:
 	super.on_state_physics_process(delta)
 	
 #region STATE TRANSITIONS
-	if(!player.is_climbing):
+	if(!player.is_in_climb_zone):
 		if(player.is_on_floor()):
 			State_Transition.emit(self, "idle")
 		elif(Input.is_action_just_pressed("overworld_jump")):

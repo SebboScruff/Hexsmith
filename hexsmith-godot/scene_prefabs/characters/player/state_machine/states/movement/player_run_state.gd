@@ -54,7 +54,7 @@ func on_state_physics_process(delta:float) -> void:
 	elif(player.is_on_floor() && Input.is_action_just_pressed("overworld_down")):
 		State_Transition.emit(self, "crawl")
 	# Climb
-	elif(player.is_climbing):
+	elif(player.is_in_climb_zone):
 		State_Transition.emit(self, "climb")
 #endregion
 

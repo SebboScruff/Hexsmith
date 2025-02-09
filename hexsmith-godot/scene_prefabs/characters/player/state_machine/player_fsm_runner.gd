@@ -57,12 +57,16 @@ func change_state(_old_state:PlayerState, _new_state_name:String, _delay_seconds
 	if(_delay_seconds != 0.0):
 		await get_tree().create_timer(abs(_delay_seconds)).timeout
 	
+	
 	if(current_state):
 		current_state.on_state_exit()
 	
 	previous_state = current_state
 	current_state = new_state
 	current_state.on_state_enter()
+	
+	if(show_debug_info && previous_state != null && current_state != null):
+		print("Changed from %s to %s"%[previous_state.state_name, current_state.state_name])
 
 func reset_to_idle():
 	# print("Reset To Idle called!")

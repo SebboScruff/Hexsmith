@@ -9,7 +9,8 @@ class_name PlayerSwimState
 extends PlayerState
 
 var movement_dir:Vector2
-@export var max_height:float # This is set by water_area.gd upon entry into this state
+@export var max_height:float # The player cannot swim higher than this point
+var underwater_height:float # The player starts losing oxygen if underneath this point.
 
 func _init() -> void:
 	self.state_name = "Swim" # This is used as the dictionary Key
@@ -28,8 +29,11 @@ func on_state_enter() -> void:
 ## Anything that the state does that doesn't care about stable update rate goes here.
 func on_state_process(delta:float) -> void:
 	super.on_state_process(delta)
-	## NOTE: Oxygen Management is dealt with in player_controller.gd
-	## alongsde other replenishable resources like Health and Mana.
+	## Activate player's oxygen depletion if beneath a certain height
+	if(player.position.y >= underwater_height):
+		player.is_underwater = true
+	elif(player.is_underwater):
+		player.is_underwater = false
 
 ## If the state has processes that need stable update rate, like
 ## Input processing or movement, put them in here.
@@ -37,12 +41,13 @@ func on_state_physics_process(delta:float) -> void:
 	#NOTE: This is so that all States can transition into Pause, Spellcraft, or Cutscene.
 	super.on_state_physics_process(delta)
 #region STATE TRANSITIONS
-	## NOTE: State Transitions out of Swim State are done via collision
-	## detection in water_area.gd
-	if(player.accept_movement_input && Input.is_action_just_pressed("overworld_jump")):
-		State_Transition.emit(self, "jump")
+	## NOTE: State Transitions into Swim State are done via collision
+	## detection in water_surface, water_body, and water_exitzone
 	if(player.position.y < max_height):
-		State_Transition.emit(self, "idle")
+		if(player.accept_movement_input && Input.is_action_pressed("overworld_jump")):
+			State_Transition.emit(self, "jump")
+		else:
+			State_Transition.emit(self, "idle")
 #endregion
 #region PHYSICS BEHAVIOURS
 	if(player.accept_movement_input):
@@ -52,14 +57,10 @@ func on_state_physics_process(delta:float) -> void:
 		
 		movement_dir.y = Input.get_axis("overworld_up", "overworld_down")
 		# As long as player is below the maximum height, allow free vertical movement.
-		if(movement_dir.y != 0 && player.position.y >= max_height):
-			# Cancel out gravity and replace with vertical swim speed
-			player.velocity -= player.get_gravity() * delta * player.gravity_scale
+		if(player.position.y >= max_height):
 			player._apply_vertical_input(delta, movement_dir.y)
-		else:
-			# Apply the (weakened) gravity to make the player sink
-			player.velocity.y = player.get_gravity().y * delta * player.gravity_scale
 #endregion
 
 func on_state_exit() -> void:
 	player.gravity_scale = 1.0
+	player.is_underwater = false

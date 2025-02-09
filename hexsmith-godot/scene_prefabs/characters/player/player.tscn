@@ -1,11 +1,10 @@
-[gd_scene load_steps=57 format=3 uid="uid://bhapy03ndyqo8"]
+[gd_scene load_steps=55 format=3 uid="uid://bhapy03ndyqo8"]
 
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/player_controller.gd" id="1_nvfm5"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/player_fsm_runner.gd" id="2_4j2m3"]
 [ext_resource type="PackedScene" uid="uid://c40hu3eo4mat3" path="res://scene_prefabs/characters/combat_entity.tscn" id="2_egjb3"]
 [ext_resource type="Texture2D" uid="uid://demtv6w3ggw33" path="res://third_party/testing_ground_assets/test_character_spritesheet/MV-SquireStyleOne-Transparent.png" id="2_mr4py"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/spellcraft_manager.gd" id="3_ckdda"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_underwater_state.gd" id="3_eykxq"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_idle_state.gd" id="3_pidp4"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/melee_attack_hitbox.gd" id="3_x6rab"]
 [ext_resource type="PackedScene" uid="uid://d3e57kxopdxv5" path="res://scene_prefabs/menus_and_guis/player_hud.tscn" id="4_2or54"]
@@ -19,7 +18,6 @@
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_fall_state.gd" id="10_0g12v"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_climb_state.gd" id="11_hppqs"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_swim_state.gd" id="12_jc20l"]
-[ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/movement/player_water_exit_state.gd" id="13_5hxvw"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_precast_state.gd" id="15_70npk"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_channel_state.gd" id="16_qivuu"]
 [ext_resource type="Script" path="res://scene_prefabs/characters/player/state_machine/states/spellcasting/player_idlecast_state.gd" id="17_0goyt"]
@@ -380,7 +378,9 @@ radius = 9.0
 
 [node name="Player" type="CharacterBody2D" node_paths=PackedStringArray("hud_manager", "spellcrafter", "movement_state_machine", "spellcast_state_machine") groups=["Player"]]
 z_index = 6
-collision_mask = 711
+collision_mask = 706
+platform_floor_layers = 4294965798
+platform_wall_layers = 2
 script = ExtResource("1_nvfm5")
 hud_manager = NodePath("PlayerHUD")
 spellcrafter = NodePath("SpellcraftManager")
@@ -389,56 +389,13 @@ spellcast_state_machine = NodePath("SpellcastStateMachine")
 
 [node name="PlayerHUD" parent="." instance=ExtResource("4_2or54")]
 unique_name_in_owner = true
-
-[node name="StateMachineReadouts" type="Node" parent="."]
-
-[node name="CurrentMovementState" type="Label" parent="StateMachineReadouts"]
 visible = false
-offset_left = -18.0
-offset_top = -32.0
-offset_right = 176.0
-offset_bottom = -9.0
-scale = Vector2(0.263351, 0.288206)
-text = "Current Move State: IDLE"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PreviousMovementState" type="Label" parent="StateMachineReadouts"]
-visible = false
-offset_left = -18.0
-offset_top = -38.0
-offset_right = 132.0
-offset_bottom = -15.0
-scale = Vector2(0.263351, 0.288206)
-text = "Prev Move State: ---"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="CurrentCastState" type="Label" parent="StateMachineReadouts"]
-offset_left = -18.0
-offset_top = -32.0
-offset_right = 167.0
-offset_bottom = -9.0
-scale = Vector2(0.263351, 0.288206)
-text = "Current Cast State: IDLE"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="PreviousCastState" type="Label" parent="StateMachineReadouts"]
-offset_left = -18.0
-offset_top = -38.0
-offset_right = 129.0
-offset_bottom = -15.0
-scale = Vector2(0.263351, 0.288206)
-text = "Prev Cast State: ---"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="MovementStateMachine" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
-debug_current_state = NodePath("../StateMachineReadouts/CurrentMovementState")
-debug_previous_state = NodePath("../StateMachineReadouts/PreviousMovementState")
+debug_current_state = NodePath("../CurrentMovementState")
+debug_previous_state = NodePath("../PreviousMovementState")
 show_debug_info = true
 
 [node name="PlayerIdleState" type="Node" parent="MovementStateMachine"]
@@ -471,17 +428,33 @@ script = ExtResource("11_hppqs")
 [node name="PlayerSwimState" type="Node" parent="MovementStateMachine"]
 script = ExtResource("12_jc20l")
 
-[node name="PlayerWaterExitState" type="Node" parent="MovementStateMachine"]
-script = ExtResource("13_5hxvw")
+[node name="CurrentMovementState" type="Label" parent="."]
+visible = false
+offset_left = -18.0
+offset_top = -32.0
+offset_right = 176.0
+offset_bottom = -9.0
+scale = Vector2(0.263351, 0.288206)
+text = "Current Move State: IDLE"
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="PlayerUnderwaterState" type="Node" parent="MovementStateMachine"]
-script = ExtResource("3_eykxq")
+[node name="PreviousMovementState" type="Label" parent="."]
+visible = false
+offset_left = -18.0
+offset_top = -38.0
+offset_right = 132.0
+offset_bottom = -15.0
+scale = Vector2(0.263351, 0.288206)
+text = "Prev Move State: ---"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="SpellcastStateMachine" type="Node" parent="." node_paths=PackedStringArray("debug_current_state", "debug_previous_state")]
 unique_name_in_owner = true
 script = ExtResource("2_4j2m3")
-debug_current_state = NodePath("../StateMachineReadouts/CurrentCastState")
-debug_previous_state = NodePath("../StateMachineReadouts/PreviousCastState")
+debug_current_state = NodePath("../CurrentCastState")
+debug_previous_state = NodePath("../PreviousCastState")
 
 [node name="PlayerIdleCastState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("17_0goyt")
@@ -495,8 +468,29 @@ script = ExtResource("16_qivuu")
 [node name="PlayerNoCastState" type="Node" parent="SpellcastStateMachine"]
 script = ExtResource("18_0c5lk")
 
+[node name="CurrentCastState" type="Label" parent="."]
+offset_left = -18.0
+offset_top = -32.0
+offset_right = 167.0
+offset_bottom = -9.0
+scale = Vector2(0.263351, 0.288206)
+text = "Current Cast State: IDLE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PreviousCastState" type="Label" parent="."]
+offset_left = -18.0
+offset_top = -38.0
+offset_right = 129.0
+offset_bottom = -15.0
+scale = Vector2(0.263351, 0.288206)
+text = "Prev Cast State: ---"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="CombatEntity" parent="." instance=ExtResource("2_egjb3")]
 unique_name_in_owner = true
+visible = false
 position = Vector2(-33, 0)
 show_damage_debug = true
 max_health = 100.0

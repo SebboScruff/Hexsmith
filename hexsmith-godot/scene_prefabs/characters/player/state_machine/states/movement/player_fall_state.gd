@@ -36,7 +36,7 @@ func on_state_physics_process(delta:float) -> void:
 	if(player.is_on_floor()):
 		State_Transition.emit(self, "idle")
 	# 2 - Climb
-	elif(player.is_climbing):
+	elif(player.is_in_climb_zone):
 		State_Transition.emit(self, "climb")
 	# 3 - Swim
 	elif(player.is_swimming):
